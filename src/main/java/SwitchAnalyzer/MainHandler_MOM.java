@@ -25,7 +25,7 @@ public class MainHandler_MOM {
         /*
             run the Mapping algorithm between ports and HPCs
          */
-        GlobalVariable.portHpcMap.put(new SwitchPort(1), new MasterOfHPC(1));
+        GlobalVariable.portHpcMap.put(1, new MasterOfHPC(1));
     }
 
     public static void main(String[] args)
