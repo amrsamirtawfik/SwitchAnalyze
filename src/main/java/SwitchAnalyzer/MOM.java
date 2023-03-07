@@ -20,14 +20,15 @@ import java.util.ArrayList;
  * the mainHandler creates a thread for producing the command and another thread for consuming the rates from singleMachines
  */
 public class MOM {
-    public static ArrayList<HPCinfo> HPCsList = new ArrayList<HPCinfo>();
+    public static ArrayList<MasterOfHPC> HPCsList = new ArrayList<MasterOfHPC>();
     private static int noOfHPCs=1;
     static String readMessage;
     static byte[] readBytes;
     static WebSocketServer websocket;
     static String consumerGroup = "MoM-consumer-group";
-    public static void main(String[] args) {
-         websocket = new WebSocketServer(GlobalVariable.webSocketPort);
+    public static void main(String[] args)
+    {
+        websocket = new WebSocketServer(GlobalVariable.webSocketPort);
         while(true)
         {
             readBytes = websocket.readFromSocket(GlobalVariable.webSocketMaxMessages);
@@ -39,31 +40,23 @@ public class MOM {
             else{
                 websocket.HandShake();
             }
-
         }
-
-
     }
 
     static void mainHandler()
     {
-
         readMessage = new String(readBytes);
-
         initializeHPCs();
-
         Logger logger = LoggerFactory.getLogger(MOM.class.getName());
-
-
         Thread t1 = new Thread(() -> commandsProducer());
         t1.start();
-
         Thread t2 = new Thread(() -> ratesConsumer());
         t2.start();
     }
-    private static void initializeHPCs(){
+    private static void initializeHPCs()
+    {
         for (int i=0;i<noOfHPCs;i++){
-            HPCsList.add(new HPCinfo(i));
+            HPCsList.add(new MasterOfHPC(i));
         }
     }
     private static void commandsProducer(){
@@ -83,7 +76,7 @@ public class MOM {
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
                 String json = record.value();
-                HPCinfo HPCprop = JSONConverter.fromJSON(json, HPCinfo.class);
+                MasterOfHPC HPCprop = JSONConverter.fromJSON(json, MasterOfHPC.class);
                 HPCsList.set(HPCprop.getHPCID(),HPCprop);
                 for(int i = 0 ; i < noOfHPCs; i++) {
                     String s = Float.toString(HPCsList.get(i).getCurrentOverallRate());

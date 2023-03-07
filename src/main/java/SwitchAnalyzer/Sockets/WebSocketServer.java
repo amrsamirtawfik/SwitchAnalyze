@@ -1,5 +1,8 @@
 package SwitchAnalyzer.Sockets;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +12,7 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,7 +54,18 @@ public class WebSocketServer {
             Matcher get = Pattern.compile("^GET").matcher(data);
 
             if (get.find()) {
-                Matcher match = Pattern.compile("Sec-WebSocket-Key: (.*)").matcher(data);
+
+//                System.out.println(data);
+//                System.out.println();
+//                System.out.println();
+//                Matcher pattern = Pattern.compile("sec-websocket-key: (.*)").matcher(data);
+//                pattern.find();
+//                System.out.println(pattern.group(1));
+//                System.out.println();
+//                System.out.println();
+
+                //It's Sec-WebSocket-Key in other formats
+                Matcher match = Pattern.compile("sec-websocket-key: (.*)").matcher(data);
                 match.find();
                 byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
                         + "Connection: Upgrade\r\n"
@@ -199,6 +214,7 @@ public class WebSocketServer {
             //Copying the payload to the message frame that will be written
             for (int i = 0; i < payLoadToClient.length; i++) {
                 messageToClient[i + 2] = payLoadToClient[i];
+                conctPayLoadWritten.add(payLoadToClient[i]);
             }
         }
 
@@ -224,6 +240,60 @@ public class WebSocketServer {
         return messageToClient;
     }
 
+    public static void main(String[] args) throws JsonProcessingException {
+
+        WebSocketServer x = new WebSocketServer(8080);
+
+        //Test Mode2 with (read/write)
+        byte[] testMode2 = "Mohamed Ayman".getBytes();
+
+        //boolean matched = true;
+
+        while (true) {
+            x.writeToSocket(testMode2);
+            byte[] readMessage = x.readFromSocket(100000);
+
+            //if readMessage returned NULL, it means that the client disconnected
+            if (readMessage != null) {
+                System.out.print("Message Received: ");
+
+                for (int i = 0; i < readMessage.length; i++) {
+                    System.out.print((char) (Byte.toUnsignedInt(readMessage[i])));
+//                    if (Byte.toUnsignedInt(readMessage[i]) != Byte.toUnsignedInt(testMode2[i]))
+//                        matched = false;
+                }
+
+                System.out.println();
+                System.out.println("Number of Bytes Received: " + readMessage.length);
+
+//                if (matched){
+//                    System.out.println("Received Correctly!");
+//                }
+            } else {
+                ArrayList<Byte> conctPayLoadReceived = x.getConctPayLoadReceived();
+                System.out.print("All Messages Received Throughout the Connection with This Client: ");
+
+                for (int i = 0; i < conctPayLoadReceived.size(); i++) {
+                    System.out.print((char) (Byte.toUnsignedInt(conctPayLoadReceived.get(i))));
+                }
+
+                System.out.println();
+                System.out.println("Total Bytes Received: " + conctPayLoadReceived.size());
+
+                ArrayList<Byte> conctPayLoadWritten = x.getConctPayLoadWritten();
+                System.out.print("All Messages Written Throughout the Connection with This Client: ");
+
+                for (int i = 0; i < conctPayLoadWritten.size(); i++) {
+                    System.out.print((char) (Byte.toUnsignedInt(conctPayLoadWritten.get(i))));
+                }
+
+                System.out.println();
+                System.out.println("Total Bytes Written: " + conctPayLoadWritten.size());
+
+                x.HandShake();
+            }
+        }
 
 
+    }
 }

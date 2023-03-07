@@ -13,6 +13,7 @@ import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.*;
 import org.pcap4j.packet.namednumber.*;
 import org.pcap4j.util.MacAddress;
+import SwitchAnalyzer.miscellaneous.GlobalVariable;
 
 import javax.crypto.Mac;
 

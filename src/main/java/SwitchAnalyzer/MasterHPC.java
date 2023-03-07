@@ -19,9 +19,9 @@ public class MasterHPC {
 
     private static int noOfMachines=2;
     private static int myHPCID = 0;
-    public static HPCinfo myHPC ;
+    public static MasterOfHPC myHPC ;
     //initialized with zeros
-    public static ArrayList<MachineInfo> sharedList = new ArrayList<MachineInfo>();
+    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
     public static String consumerGroup = "command-consumer-group";
 
 
@@ -59,10 +59,10 @@ public class MasterHPC {
     }
     private static void initializeHPC(){
         //get this information from the configuration file of the HPC
-        myHPC =new HPCinfo(myHPCID,noOfMachines,400);
+        myHPC =new MasterOfHPC(myHPCID,noOfMachines,400);
         // initialize the arraylist
-        for(int i=0;i<myHPC.getNoOfMachines();i++){
-            sharedList.add(new MachineInfo(i,0));
+        for(int i = 0; i<myHPC.getNoOfChilNodes(); i++){
+            sharedList.add(new MachineNode(i,0));
         }
 
     }
@@ -115,7 +115,7 @@ public class MasterHPC {
                 System.out.println(json);
                 System.out.println(json);
 
-                MachineInfo machineInfo = JSONConverter.fromJSON(json, MachineInfo.class);
+                MachineNode machineInfo = JSONConverter.fromJSON(json, MachineNode.class);
                 System.out.println(machineInfo.getMachineID() + " " + machineInfo.getRate());
                 System.out.println(machineInfo.getMachineID() + " " + machineInfo.getRate());
                 System.out.println(machineInfo.getMachineID() + " " + machineInfo.getRate());
