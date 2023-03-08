@@ -8,7 +8,8 @@ public abstract class DataLinkHeader extends Header
     MacAddress srcMac;
     MacAddress dstMac;
 
-    public DataLinkHeader(MacAddress srcMac, MacAddress dstMac) {
+    public DataLinkHeader(MacAddress srcMac, MacAddress dstMac)
+    {
         this.srcMac = srcMac;
         this.dstMac = dstMac;
     }

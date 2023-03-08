@@ -7,9 +7,12 @@ import SwitchAnalyzer.Network.Utilities;
 import java.util.ArrayList;
 
 public class SwitchPortConfig {
-    ArrayList<PacketInfo> packetInfos;
-    ArrayList<Utilities> utilities;
-    int rate;
+   public ArrayList<PacketInfo> packetInfos;
+    public ArrayList<Utilities> utilities;
+   public int rate;
+
+   public String mode; // sender or receiver
+
 }
 
 

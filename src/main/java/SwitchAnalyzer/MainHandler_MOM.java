@@ -1,20 +1,17 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Commands.ICommand;
+import SwitchAnalyzer.Commands.ICommandMOM;
 import SwitchAnalyzer.Commands.ProcessCmd;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 
-import javax.swing.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class MainHandler_MOM {
-    static Queue<ICommand> commands = new LinkedList<>();
+    static Queue<ICommandMOM> commands = new LinkedList<>();
     static volatile int x;
     public static void init()
     {
@@ -39,7 +36,7 @@ public class MainHandler_MOM {
             {
                 x++;
             }
-            ICommand c = commands.poll();
+            ICommandMOM c = commands.poll();
             ProcessCmd.processCmd(c);
         }
     }

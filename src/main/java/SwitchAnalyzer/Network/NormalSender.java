@@ -3,7 +3,7 @@ import org.pcap4j.packet.Packet;
 
 public class NormalSender extends Sender implements Runnable
 {
-    public NormalSender(Packet packet , int numPackets)
+    public NormalSender(Packet packet , long numPackets)
     {
         super(packet , numPackets);
     }

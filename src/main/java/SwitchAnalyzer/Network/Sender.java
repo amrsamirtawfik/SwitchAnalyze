@@ -7,9 +7,9 @@ public abstract class Sender
 {
     Packet packet;
 
-    int numPackets;
+    long numPackets;
 
-    public Sender(Packet packet , int numPackets)
+    public Sender(Packet packet , long numPackets)
     {
         this.packet = packet;
         this.numPackets = numPackets;

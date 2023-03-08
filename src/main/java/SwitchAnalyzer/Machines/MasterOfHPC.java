@@ -6,7 +6,7 @@ import java.net.Inet4Address;
 import java.util.ArrayList;
 
 public class MasterOfHPC {
-    private ArrayList<MachineNode> childNodes = new ArrayList<MachineNode>();
+    public ArrayList<MachineNode> childNodes = new ArrayList<MachineNode>();
     private int HPCID;
     private int noOfChilNodes;
     private float CurrentOverallRate;

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class MasterHPC {
 
 
-    private static int noOfMachines=2;
+    public static int noOfMachines = 2;
     private static int myHPCID = 0;
     public static MasterOfHPC myHPC ;
     //initialized with zeros

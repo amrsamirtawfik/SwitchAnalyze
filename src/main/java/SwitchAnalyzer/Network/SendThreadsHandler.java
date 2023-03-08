@@ -36,7 +36,7 @@ public class SendThreadsHandler
             }
             else
             {
-                NormalSender sender = new NormalSender(packet , 1000);
+                NormalSender sender = new NormalSender(packet , packetInfo.numberOfPackets);
                 threads.add (new Thread(sender));
                 threads.get(threads.size()-1).start();
             }
