@@ -1,5 +1,6 @@
 package SwitchAnalyzer;
 
+import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.ICommandMOM;
 import SwitchAnalyzer.Commands.ProcessCmd;
 import SwitchAnalyzer.Network.Ports;

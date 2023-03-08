@@ -1,6 +1,6 @@
 package SwitchAnalyzer.Commands;
 
-public class MachineCommand {
+public class                                                                                                                                                                                                                                                    MachineCommand {
     private int MachineId;
     private float rates;
     private String mode;

@@ -36,7 +36,8 @@ public class MainHandler_Master
         PCAP.initialize();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         init();
         int commandTypeIndex;
         while (true)
