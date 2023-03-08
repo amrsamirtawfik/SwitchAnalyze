@@ -19,6 +19,8 @@ import java.util.ArrayList;
  * it then takes messages (commands) from websockets and then initiate the mainHandler
  * the mainHandler creates a thread for producing the command and another thread for consuming the rates from singleMachines
  */
+
+// fares
 public class MOM {
     public static ArrayList<MasterOfHPC> HPCsList = new ArrayList<MasterOfHPC>();
     private static int noOfHPCs=1;
