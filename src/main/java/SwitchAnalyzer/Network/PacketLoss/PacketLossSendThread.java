@@ -1,4 +1,4 @@
-package SwitchAnalyzer.Network;
+package SwitchAnalyzer.Network.PacketLoss;
 
 import java.net.UnknownHostException;
 

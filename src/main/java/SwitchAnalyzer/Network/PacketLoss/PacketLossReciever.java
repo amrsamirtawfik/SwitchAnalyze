@@ -1,10 +1,13 @@
-package SwitchAnalyzer.Network;
+package SwitchAnalyzer.Network.PacketLoss;
 
+import SwitchAnalyzer.Network.EchoPacket;
+import SwitchAnalyzer.Network.PacketGenerator;
+import SwitchAnalyzer.Network.PacketSniffer;
 import org.pcap4j.packet.Packet;
 
-public class PacketLossReciever implements EchoPacket{
+public class PacketLossReciever implements EchoPacket {
     PacketSniffer packetSniffer;
-    PacketLossReciever(PacketSniffer sniffer)
+    public PacketLossReciever(PacketSniffer sniffer)
     {
         this.packetSniffer = sniffer;
     }

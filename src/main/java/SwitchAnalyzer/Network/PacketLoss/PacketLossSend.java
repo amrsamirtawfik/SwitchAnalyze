@@ -1,10 +1,12 @@
-package SwitchAnalyzer.Network;
+package SwitchAnalyzer.Network.PacketLoss;
 
+import SwitchAnalyzer.Network.PacketGenerator;
+import SwitchAnalyzer.Network.Ping;
 import org.pcap4j.packet.EthernetPacket;
 
 import java.net.UnknownHostException;
 
-public class PacketLossSend extends  Ping
+public class PacketLossSend extends Ping
 {
     public static int windowSize = 1000;
     @Override

@@ -23,15 +23,10 @@ public class NormalSender extends Sender implements Runnable
             System.out.println("Error in sending");
             e.printStackTrace();
         }
-
     }
-
     @Override
     public void run()
     {
         send();
-
     }
-
-
 }

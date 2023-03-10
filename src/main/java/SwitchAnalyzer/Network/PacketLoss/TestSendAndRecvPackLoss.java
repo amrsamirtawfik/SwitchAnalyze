@@ -1,4 +1,6 @@
-package SwitchAnalyzer.Network;
+package SwitchAnalyzer.Network.PacketLoss;
+
+import SwitchAnalyzer.Network.PacketSniffer;
 
 public class TestSendAndRecvPackLoss
 {

@@ -1,4 +1,4 @@
-package SwitchAnalyzer.Network;
+package SwitchAnalyzer.Network.PacketLoss;
 
 public class PacketLossRecThread implements Runnable{
     PacketLossReciever packetLossReciever;
