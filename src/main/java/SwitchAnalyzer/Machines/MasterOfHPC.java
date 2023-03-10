@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 public class MasterOfHPC {
     public ArrayList<MachineNode> childNodes = new ArrayList<MachineNode>();
-    private int HPCID;
-    private int noOfChilNodes;
-    private float CurrentOverallRate;
+    public HPC_INFO hpcInfo;
+    private Integer HPCID;
+    private Integer noOfChilNodes;
+    private Float CurrentOverallRate;
     private MacAddress HPCMacAddr;
     private Inet4Address HPCIp;
     private String status;

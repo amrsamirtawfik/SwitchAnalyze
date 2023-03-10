@@ -27,9 +27,7 @@ public class MasterHPC {
 
 
     public static void main(String[] args) {
-
         initializeHPC();
-
         Logger logger = LoggerFactory.getLogger(MasterHPC.class.getName());
         GenericConsumer consumer=new GenericConsumer(IP.ip1 + ":" + Ports.port1,consumerGroup);
         consumer.selectTopic(Topics.cmdFromMOM);
@@ -38,23 +36,18 @@ public class MasterHPC {
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
                 String json = record.value();
-
                 Command command = JSONConverter.fromJSON(json, Command.class);
                 if(command.getHPCID()==myHPC.getHPCID())
                 {
                     logger.info("Key: " + record.key() + "value: " +record.value());
-
                     // Start a new thread to process the command
                     Thread t1 = new Thread(() -> processCommand(command));
                     t1.start();
                     // Start a new thread to compute the Overall HPC rate
                     Thread t2 = new Thread(() -> consumeAndSend());
                     t2.start();
-
                 }
-
             }
-
         }
     }
     private static void initializeHPC(){
@@ -95,7 +88,6 @@ public class MasterHPC {
      * this function receives the rates from single machines and sum them up and  then send them to Master of masters
      */
     private static void consumeAndSend(){
-
         GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
         // Send the JSON string as a message to the "CMDFromMOM" Kafka topic
 
@@ -122,19 +114,13 @@ public class MasterHPC {
                 System.out.println(machineInfo.getMachineID() + " " + machineInfo.getRate());
                 MasterHPC.sharedList.set(machineInfo.getMachineID(), machineInfo);
             }
-
             OverallRate= 0;
             for (int i = 0; i < sharedList.size(); i++) {
                 OverallRate += sharedList.get(i).getRate();
             }
             myHPC.setCurrentOverallRate(OverallRate);
-
             String json = JSONConverter.toJSON(myHPC);
             producer.send(Topics.ratesFromHPCs, json);
-
         }
-
     }
-
-
 }

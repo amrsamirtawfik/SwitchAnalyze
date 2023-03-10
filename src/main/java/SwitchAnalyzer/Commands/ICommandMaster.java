@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import static SwitchAnalyzer.MasterHPC.consumerGroup;
 
-public abstract class ICommandMaster implements ICommand
+public interface ICommandMaster extends ICommand
 {
-    public int portID;
-    public SwitchPortConfig portConfig ;
-
-    public abstract void GenCmd(MachineNode node);
+    public void GenCmd();
 }

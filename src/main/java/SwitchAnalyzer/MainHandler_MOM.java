@@ -1,7 +1,7 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Commands.ICommand;
-import SwitchAnalyzer.Commands.ICommandMOM;
+import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.ProcessCmd;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MainHandler_MOM {
-    static Queue<ICommandMOM> commands = new LinkedList<>();
+    static Queue<ICommand> commands = new LinkedList<>();
     static volatile int x;
     public static void init()
     {
@@ -29,7 +29,7 @@ public class MainHandler_MOM {
     public static void main(String[] args)
     {
         init();
-        Thread t1 = new Thread(() -> UserRequestHandler.readCommands(Ports.webSocketPort, 8888, commands));
+        Thread t1 = new Thread(() -> UserRequestHandler.readCommands(Ports.webSocketPort, 8888,   ));
         t1.start();
         while(true)
         {
@@ -37,7 +37,7 @@ public class MainHandler_MOM {
             {
                 x++;
             }
-            ICommandMOM c = commands.poll();
+            ICommand c = commands.poll();
             ProcessCmd.processCmd(c);
         }
     }

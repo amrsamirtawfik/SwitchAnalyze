@@ -7,8 +7,11 @@ import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
+import java.util.ArrayList;
+
 public class StartRunCommand_MOM implements ICommandMOM
 {
+    ArrayList<SwitchPort> ports= new ArrayList<>();
     @Override
     public void processCmd()
     {

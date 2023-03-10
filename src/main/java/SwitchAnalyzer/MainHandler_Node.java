@@ -1,8 +1,10 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Commands.*;
+import SwitchAnalyzer.Commands.ICommandMaster;
+import SwitchAnalyzer.Commands.StartRunCommand_Master;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
+import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.PCAP;
@@ -17,21 +19,22 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-public class MainHandler_Master
+public class MainHandler_Node
 {
+
     public static String consumerGroup = "command-consumer-group";
     static ArrayList<Class<? extends ICommandMaster>> commandClasses = new ArrayList<>();
     static GenericConsumer consumer;
-    public static MasterOfHPC master;
+    public static MachineNode node;
 
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        master = new MasterOfHPC(1,3,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
+        node = new MachineNode(1,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
         //and also add mac and ip address in the constructor
         Logger logger = LoggerFactory.getLogger(MasterHPC.class.getName());
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
-        consumer.selectTopic(Topics.cmdFromMOM);
+        consumer.selectTopic(Topics.cmdFromHpcMaster);
         commandClasses.add(StartRunCommand_Master.class);
         PCAP.initialize();
     }
@@ -58,5 +61,3 @@ public class MainHandler_Master
         }
     }
 }
-
-

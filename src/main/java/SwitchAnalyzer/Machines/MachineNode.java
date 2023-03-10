@@ -5,6 +5,7 @@ import org.pcap4j.util.MacAddress;
 import java.net.Inet4Address;
 
 public class MachineNode {
+    public MachineInfo machineInfo;
     private int MachineID;
     private float rate;
     private MacAddress nodeMacAddress;

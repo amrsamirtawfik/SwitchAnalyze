@@ -18,8 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 
-public class StartRunCommand_Master extends ICommandMaster
+public class StartRunCommand_Master implements ICommandMaster
 {
+    public int portID;
+    public SwitchPortConfig portConfig;
     GenericProducer producer ;
 
     public StartRunCommand_Master(int portID , SwitchPortConfig portConfig)
