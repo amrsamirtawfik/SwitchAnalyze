@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -20,12 +21,12 @@ import java.util.ArrayList;
 
 
 public class WebSocketServer {
-    private ServerSocket server;
+    private final ServerSocket server;
     private Socket client;
     private InputStream in;
     private OutputStream out;
-    private ArrayList<Byte> conctPayLoadReceived = new ArrayList<Byte>();
-    private ArrayList<Byte> conctPayLoadWritten = new ArrayList<Byte>();
+    private final ArrayList<Byte> conctPayLoadReceived = new ArrayList<Byte>();
+    private final ArrayList<Byte> conctPayLoadWritten = new ArrayList<Byte>();
 
     public WebSocketServer(int portNumber) {
         try {
@@ -46,7 +47,7 @@ public class WebSocketServer {
             //InputOutput Streams
             in = client.getInputStream();
             out = client.getOutputStream();
-            Scanner s = new Scanner(in, "UTF-8");
+            Scanner s = new Scanner(in, StandardCharsets.UTF_8);
 
             //HandShaking
 
@@ -71,8 +72,8 @@ public class WebSocketServer {
                         + "Connection: Upgrade\r\n"
                         + "Upgrade: websocket\r\n"
                         + "Sec-WebSocket-Accept: "
-                        + Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-1").digest((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes("UTF-8")))
-                        + "\r\n\r\n").getBytes("UTF-8");
+                        + Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-1").digest((match.group(1) + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").getBytes(StandardCharsets.UTF_8)))
+                        + "\r\n\r\n").getBytes(StandardCharsets.UTF_8);
                 out.write(response, 0, response.length);
             }
 
@@ -116,11 +117,7 @@ public class WebSocketServer {
 
     private boolean checkDisconnection(byte[] messageReceived) {
         int disconnectingValue = 136;
-        if (Byte.toUnsignedInt(messageReceived[0]) == disconnectingValue) {
-            return true;
-        } else {
-            return false;
-        }
+        return Byte.toUnsignedInt(messageReceived[0]) == disconnectingValue;
     }
 
 

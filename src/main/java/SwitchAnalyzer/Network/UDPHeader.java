@@ -12,10 +12,10 @@ public class UDPHeader extends TransportHeader
     @Override
     public  Packet.Builder buildHeader(Packet.Builder prevBuilder)
     {
-        UdpPacket.Builder udpBuilder = new UdpPacket.Builder();;
+        UdpPacket.Builder udpBuilder = new UdpPacket.Builder();
         udpBuilder
-                .dstPort(UdpPort.getInstance((short) dstPort))
-                .srcPort(UdpPort.getInstance((short) srcPort))
+                .dstPort(UdpPort.getInstance(dstPort))
+                .srcPort(UdpPort.getInstance(srcPort))
                 .payloadBuilder(prevBuilder)
                 .correctChecksumAtBuild(addChecksum)
                 .correctLengthAtBuild(true);

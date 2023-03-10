@@ -1,7 +1,7 @@
 package SwitchAnalyzer.Sockets;
 
 
-import SwitchAnalyzer.Commands.ICommandMOM;
+import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.StartRunCommand_MOM;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import java.util.Queue;
 public class UserRequestHandler {
     static volatile int x = 0;
-    static ArrayList<Class<? extends ICommandMOM>> classes = new ArrayList<>();
-    public static void readCommands(int portNumber, int maxMessageLength, Queue<ICommandMOM> cmdQueue)
+    static ArrayList<Class<? extends ICommand>> classes = new ArrayList<>();
+    public static void readCommands(int portNumber, int maxMessageLength, Queue<ICommand> cmdQueue)
     {
         WebSocketServer webSocketServer = new WebSocketServer(portNumber);
-        while (true) {
+        while (true)
+        {
             byte[] command = webSocketServer.readFromSocket(maxMessageLength);
             if (command == null){
                 webSocketServer.HandShake();
@@ -27,16 +28,12 @@ public class UserRequestHandler {
             }
         }
     }
-
-
-
-
-    public static void parseCommand(byte[] command, Queue<ICommandMOM> cmdQueue) throws JsonProcessingException
+    public static void parseCommand(byte[] command, Queue<ICommand> cmdQueue) throws JsonProcessingException
     {
         classes.add(StartRunCommand_MOM.class);
         String jsonStr = new String(command);
         ObjectMapper mapper = new ObjectMapper();
-        ICommandMOM c = mapper.readValue(jsonStr, classes.get(0));
+        ICommand c = mapper.readValue(jsonStr, classes.get(0));
         cmdQueue.add(c);
     }
     public static void main(String[] args) {

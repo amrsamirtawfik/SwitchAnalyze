@@ -4,7 +4,6 @@ import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.MasterHPC;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.IP;
@@ -18,9 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 
-public class StartRunCommand_Master implements ICommandMaster
+public class StartRunCommand_Master extends ICommandMaster
 {
-    public int portID;
     public SwitchPortConfig portConfig;
     GenericProducer producer ;
 
@@ -28,7 +26,6 @@ public class StartRunCommand_Master implements ICommandMaster
     {
         this.portID = portID;
         this.portConfig = portConfig;
-
     }
 
 

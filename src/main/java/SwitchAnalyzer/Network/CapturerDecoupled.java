@@ -17,9 +17,9 @@ public class CapturerDecoupled implements Runnable
     private  PcapNetworkInterface nif ;
     private BpfProgram pr;
 
-    private String filter;
+    private final String filter;
 
-    private int num_packets;
+    private final int num_packets;
 //    private producerFunc producer;
 
     public CapturerDecoupled(String s, int num_packets)
@@ -29,7 +29,7 @@ public class CapturerDecoupled implements Runnable
         /**
          * for every capturer thread there will be a queue
          */
-        queue = new LinkedBlockingQueue<byte[]>(20000);;
+        queue = new LinkedBlockingQueue<byte[]>(20000);
     }
 
 

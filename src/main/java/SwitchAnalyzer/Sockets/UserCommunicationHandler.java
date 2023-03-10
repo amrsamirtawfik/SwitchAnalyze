@@ -1,7 +1,11 @@
 package SwitchAnalyzer.Sockets;
 
+import SwitchAnalyzer.Commands.ICommand;
+import SwitchAnalyzer.Network.Command;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;

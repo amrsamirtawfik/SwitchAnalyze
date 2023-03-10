@@ -40,22 +40,22 @@ public class PacketGenerator {
     {
         MacAddress srcMac = buildMacAddress(MACAddr.srcMacAddr);
         MacAddress dstMac = buildMacAddress(MACAddr.dstMacAddr);
-        
+
         EthernetPacket.Builder etherBuilder = new EthernetPacket.Builder();
         etherBuilder
                 .srcAddr(srcMac)
                 .dstAddr(dstMac)
                 .payloadBuilder(builder)
                 .paddingAtBuild(true);
-        
+
         if (builder instanceof IpV4Packet.Builder)
-            etherBuilder.type(EtherType.IPV4); 
-        else 
-            etherBuilder.type(EtherType.IPV6); 
-        
-        return etherBuilder; 
+            etherBuilder.type(EtherType.IPV4);
+        else
+            etherBuilder.type(EtherType.IPV6);
+
+        return etherBuilder;
     }
-    
+
     private static UnknownPacket.Builder payLoadbuilder(int size)
     {
         UnknownPacket.Builder unknownBuilder = new UnknownPacket.Builder();
@@ -150,7 +150,7 @@ public class PacketGenerator {
 
 
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         sendPacket(1000000);
     }
 }

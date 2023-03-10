@@ -5,7 +5,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class GenericProducer {
-    private  KafkaProducer<String, String> producer;
+    private final KafkaProducer<String, String> producer;
 
     /**
      *

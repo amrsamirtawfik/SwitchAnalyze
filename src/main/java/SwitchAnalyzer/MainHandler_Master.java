@@ -47,10 +47,10 @@ public class MainHandler_Master
             {
                 String json = record.value();
                 commandTypeIndex = Character.getNumericValue(json.charAt(0));
-                json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
+                json = json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
                 ICommandMaster command = JSONConverter.fromJSON(json, commandClasses.get(commandTypeIndex));
                 //we need to re check mapping ,how to make it global in all masters and MOM or what should we do ?!
-                if (GlobalVariable.portHpcMap.get(Integer.valueOf(command.portID)).getHPCID() == master.getHPCID())
+                if (GlobalVariable.portHpcMap.get(command.portID).getHPCID() == master.getHPCID())
                 {
                     Thread t1 = new Thread(() -> command.processCmd());
                 }

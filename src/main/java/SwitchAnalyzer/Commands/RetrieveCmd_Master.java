@@ -3,27 +3,35 @@ package SwitchAnalyzer.Commands;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 
-public class RetrieveCmd_Master implements ICommandMaster{
+public class RetrieveCmd_Master extends ICommandMaster{
     GenericProducer producer;
+
+
+    public RetrieveCmd_Master(int portID)
+    {
+        this.portID = portID;
+    }
+
     @Override
     public void processCmd()
     {
         producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
         for (MachineNode node : master.childNodes)
         {
-            GenCmd();
+            GenCmd(node.getMachineID());
         }
         producer.close();
     }
 
     @Override
-    public void GenCmd()
+    public void GenCmd(int machineID)
     {
         RetrieveCmd_Node command = new RetrieveCmd_Node();
         String json = JSONConverter.toJSON(command);

@@ -8,7 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 public class GenericConsumer {
-    private  KafkaConsumer<String, String> consumer;
+    private final KafkaConsumer<String, String> consumer;
     private  String topic;
 
     public GenericConsumer(String IP,String groupId) {

@@ -1,7 +1,5 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.MasterHPC;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.PacketInfo;
 import SwitchAnalyzer.Network.PacketSniffer;
@@ -10,14 +8,15 @@ import org.pcap4j.packet.Packet;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 
-public class StartRunCommand_Node implements ICommandNode
+public class StartRunCommand_Node extends ICommandNode
 {
     SwitchPortConfig config;
 
-    StartRunCommand_Node (SwitchPortConfig config)
+    StartRunCommand_Node (SwitchPortConfig config, int ID)
     {
-       this.config = config ;
-       distNoPackets();
+        machineID = ID;
+        this.config = config ;
+        distNoPackets();
     }
 
     public void distNoPackets()
@@ -49,7 +48,6 @@ public class StartRunCommand_Node implements ICommandNode
                 //store p in kafka or database
             }
         }
-
 
     }
 }

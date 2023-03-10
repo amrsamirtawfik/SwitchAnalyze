@@ -29,7 +29,7 @@ public class MainHandler_MOM {
     public static void main(String[] args)
     {
         init();
-        Thread t1 = new Thread(() -> UserRequestHandler.readCommands(Ports.webSocketPort, 8888,   ));
+        Thread t1 = new Thread(() -> UserRequestHandler.readCommands(Ports.webSocketPort, 8888, commands));
         t1.start();
         while(true)
         {

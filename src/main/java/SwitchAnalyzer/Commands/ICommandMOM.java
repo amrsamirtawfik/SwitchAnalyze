@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public interface ICommandMOM extends ICommand
 {
-    public void GenCmd(SwitchPort port);
+    void GenCmd(SwitchPort port);
 }

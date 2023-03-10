@@ -2,7 +2,7 @@ package SwitchAnalyzer.Commands;
 
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 
-public class RetrieveCmd_Node implements ICommandNode{
+public class RetrieveCmd_Node extends ICommandNode{
 
     @Override
     public void processCmd()
