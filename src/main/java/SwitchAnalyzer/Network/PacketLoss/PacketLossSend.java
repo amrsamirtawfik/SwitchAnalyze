@@ -10,7 +10,8 @@ public class PacketLossSend extends Ping
 {
     public static int windowSize = 1000;
     @Override
-    public void ping() throws UnknownHostException {
+    public void ping() throws UnknownHostException
+    {
         //set udp or tcp ports by the port that will be assigned for packet loss pinging
         String payload = "1";
         int payloadIntValue;

@@ -1,6 +1,6 @@
 package SwitchAnalyzer.Commands;
 
-public interface ICommandNode extends ICommand
+public abstract class ICommandNode implements ICommand
 {
     public int machineID;
 }

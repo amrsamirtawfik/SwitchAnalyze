@@ -31,7 +31,7 @@ public class MainHandler_Node
         //read from config text file and construct HPC object from this config file
         node = new MachineNode(1,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
         //and also add mac and ip address in the constructor
-        Logger logger = LoggerFactory.getLogger(MasterHPC.class.getName());
+        Logger logger = LoggerFactory.getLogger("MasterHPC");
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromHpcMaster);
         commandClasses.add(StartRunCommand_Node.class);
@@ -54,7 +54,8 @@ public class MainHandler_Node
                 //we need to re check mapping ,how to make it global in all masters and MOM or what should we do ?
                 if (command.machineID == node.getMachineID())
                 {
-                    Thread t1 = new Thread(() -> command.processCmd());
+                    Thread t1 = new Thread(() -> ProcessCmd.processCmd(command));
+                    t1.start();
                 }
             }
         }

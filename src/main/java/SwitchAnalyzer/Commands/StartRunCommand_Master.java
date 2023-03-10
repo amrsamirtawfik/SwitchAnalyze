@@ -35,15 +35,15 @@ public class StartRunCommand_Master extends ICommandMaster
         producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
         for (MachineNode node : master.childNodes)
         {
-            GenCmd(node);
+            GenCmd(node.getMachineID());
         }
         producer.close();
     }
 
     @Override
-    public void GenCmd(MachineNode node)
+    public void GenCmd(int id)
     {
-        StartRunCommand_Node command = new StartRunCommand_Node(portConfig);
+        StartRunCommand_Node command = new StartRunCommand_Node(portConfig , id);
         String json = JSONConverter.toJSON(command);
         //dont forget to add number at the beginning of the json to indicate the type of the command
         producer.send(Topics.cmdFromHpcMaster, json);
