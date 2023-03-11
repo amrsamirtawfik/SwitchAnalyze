@@ -1,11 +1,10 @@
 package SwitchAnalyzer.Network;
-import org.pcap4j.packet.IpV4Packet;
-import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UdpPacket;
+import org.pcap4j.packet.*;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.Random;
 
 public class IPV4Header extends NetworkHeader
@@ -19,7 +18,6 @@ public class IPV4Header extends NetworkHeader
     {
         IpV4Packet.Builder ipBuilder = new IpV4Packet.Builder();
         ipBuilder
-                .version(IpVersion.IPV4)
                 .tos((IpV4Packet.IpV4Tos) () -> (byte) 0)
                 .identification((short) new Random().nextInt())
                 .ttl((byte) 100)
@@ -30,10 +28,17 @@ public class IPV4Header extends NetworkHeader
                 .correctLengthAtBuild(true);
 
         if (prevBuilder instanceof UdpPacket.Builder)
+        {
             ipBuilder.protocol(IpNumber.UDP);
-        else
+            ipBuilder.version(IpVersion.IPV4);
+        } else if (prevBuilder instanceof TcpPacket.Builder)
+        {
             ipBuilder.protocol(IpNumber.TCP);
-
+            ipBuilder.version(IpVersion.IPV4);
+        } else
+        {
+            ipBuilder.protocol(IpNumber.ICMPV4);
+        }
         return ipBuilder;
     }
 }

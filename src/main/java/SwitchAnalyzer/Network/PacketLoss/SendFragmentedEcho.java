@@ -2,10 +2,11 @@ package SwitchAnalyzer.Network.PacketLoss;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import SwitchAnalyzer.Network.PCAP;
+import SwitchAnalyzer.Network.*;
 import org.pcap4j.core.*;
 import org.pcap4j.core.BpfProgram.BpfCompileMode;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
@@ -25,7 +26,8 @@ import org.pcap4j.util.MacAddress;
 
 import static SwitchAnalyzer.Network.PCAP.nif;
 
-class SendFragmentedEcho {
+class SendFragmentedEcho
+{
 
     private static final String COUNT_KEY = SendFragmentedEcho.class.getName() + ".count";
     private static final int COUNT = Integer.getInteger(COUNT_KEY, 3);
@@ -43,17 +45,85 @@ class SendFragmentedEcho {
     private static final String MTU_KEY = SendFragmentedEcho.class.getName() + ".mtu";
     private static final int MTU = Integer.getInteger(MTU_KEY, 1403); // [bytes]
 
+    public static String strSrcIpAddress = "192.168.1.100"; // for InetAddress.getByName()
+    public static String strSrcMacAddress = "54:EE:75:DF:82:C4"; // e.g. 12:34:56:ab:cd:ef
+    public static String strDstIpAddress = "192.168.1.7"; // for InetAddress.getByName()
+    public static String strDstMacAddress = "2C:F0:5D:59:F9:7C"; // e.g. 12:34:56:ab:cd:ef
+    public static MacAddress srcMacAddr;
+    public static byte[] echoData;
+    static ExecutorService pool = Executors.newSingleThreadExecutor();
+
     private SendFragmentedEcho() {}
 
+    public static void startEchoLisitner(PcapHandle handle) throws PcapNativeException
+    {
+        try
+        {
+            handle.setFilter("icmp and ether dst " + Pcaps.toBpfString(srcMacAddr), BpfCompileMode.OPTIMIZE);
+            PacketListener listener = new PacketListener()
+            {
+                @Override
+                public void gotPacket(PcapPacket packet)
+                {
+                    System.out.println(packet);
+                }
+            };
+            Task t = new Task(handle, listener);
+            pool.execute(t);
+        }
+        catch (Exception ignored){}
+    }
+
+    public static void echo() throws PcapNativeException
+    {
+        PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+        PcapHandle sendHandle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
+        try
+        {
+            Packet.Builder payloadBuild = Builder.getBuilder(new PayloadBuilder(Arrays.toString(echoData)), new UnknownPacket.Builder());
+            Packet.Builder icmpBuilder = Builder.getBuilder(new IcmpEchoHeader(), payloadBuild);
+            Packet.Builder icmpCommonBuilder = Builder.getBuilder(new IcmpV4CommonHeader(), icmpBuilder);
+            Packet.Builder networkBuild = Builder.getBuilder
+                    (
+                        new IPV4Header(Builder.buildIpV4Address(strSrcIpAddress),Builder.buildIpV4Address(strDstIpAddress)),
+                        icmpCommonBuilder
+                    );
+            Packet.Builder etherBuild = Builder.getBuilder
+                    (
+                        new EthernetHeader(Builder.buildMacAddress(strSrcMacAddress), Builder.buildMacAddress(strDstMacAddress)),
+                        networkBuild
+                    );
+            for (int i = 0; i < COUNT; i++)
+            {
+                ((IcmpV4EchoPacket.Builder)icmpBuilder).sequenceNumber((short) i);
+                ((IpV4Packet.Builder)networkBuild).identification((short) i);
+                ((EthernetPacket.Builder)etherBuild).payloadBuilder(icmpBuilder);
+                Packet p = etherBuild.build();
+                sendHandle.sendPacket(p);
+                try { Thread.sleep(100); }
+                catch (InterruptedException e) { break; }
+                try { Thread.sleep(1000); }
+                catch (InterruptedException e) { break; }
+            }
+        }
+        catch(Exception ignored){}
+        finally
+        {
+            if (handle != null && handle.isOpen())
+            {
+                try { handle.breakLoop(); }
+                catch (NotOpenException noe) {}
+                try { Thread.sleep(1000); }
+                catch (InterruptedException e) {}
+                handle.close();
+            }
+            if (sendHandle != null && sendHandle.isOpen()) { sendHandle.close(); }
+            if (pool != null && !pool.isShutdown()) { pool.shutdown(); }
+        }
+    }
     public static void main(String[] args) throws PcapNativeException
     {
-        String strSrcIpAddress = "192.168.1.100"; // for InetAddress.getByName()
-        String strSrcMacAddress = "54:EE:75:DF:82:C4"; // e.g. 12:34:56:ab:cd:ef
-        String strDstIpAddress = "192.168.1.7"; // for InetAddress.getByName()
-        String strDstMacAddress = "2C:F0:5D:59:F9:7C"; // e.g. 12:34:56:ab:cd:ef
-
         PCAP.initialize();
-
         PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
         PcapHandle sendHandle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
         ExecutorService pool = Executors.newSingleThreadExecutor();
