@@ -1,9 +1,7 @@
 package SwitchAnalyzer.Collectors;
 
 import SwitchAnalyzer.Kafka.GenericConsumer;
-import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
@@ -28,7 +26,7 @@ public class MasterConsumer {
     static GenericConsumer consumer;
     static String consumerGroup = "Collectors";
     //arraylist of collectors
-    public static ArrayList<CollectorMaster> collectorMasters = new ArrayList<>();
+    public static ArrayList<CollectorMaster> collectors = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
 //    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
 
@@ -59,13 +57,13 @@ public class MasterConsumer {
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();
 
-        for (int i = 0; i < collectorMasters.size(); i++) {
+        for (int i = 0; i < collectors.size(); i++) {
             final int index = i; // Make a copy of i
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String res = collectorMasters.get(index).collect(Topics.ratesFromHPCs);
-                    results.put(collectorMasters.get(index).getName(), res);
+                    String res = collectors.get(index).collect();
+                    results.put(collectors.get(index).getName(), res);
                 }
             });
             threads.add(thread);
@@ -86,11 +84,11 @@ public class MasterConsumer {
     }
     //add collectors to the arraylist
     public static void addCollector(CollectorMaster collectorMaster){
-        collectorMasters.add(collectorMaster);
+        collectors.add(collectorMaster);
     }
     //remove collectors from the arraylist
     public static void removeCollector(CollectorMaster collectorMaster){
-        collectorMasters.remove(collectorMaster);
+        collectors.remove(collectorMaster);
     }
 
     public static Map<String, String> getResults() {

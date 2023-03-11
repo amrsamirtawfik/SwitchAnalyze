@@ -17,7 +17,7 @@ public class PLossCollectorMaster implements CollectorMaster {
         return name;
     }
     @Override
-    public String collect(String topic)
+    public String collect()
     {
 
         float packetLoss = 0;

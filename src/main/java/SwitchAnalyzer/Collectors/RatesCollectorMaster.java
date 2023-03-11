@@ -19,9 +19,8 @@ public class RatesCollectorMaster implements CollectorMaster {
     public String getName() {
         return name;
     }
-    //    static String consumerGroup = "Collectors";
     @Override
-    public String collect(String topic)
+    public String collect()
     {
             float OverallRate;
             // this variable is made because the result from is the map is a string
