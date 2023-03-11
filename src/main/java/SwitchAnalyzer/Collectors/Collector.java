@@ -4,4 +4,5 @@ import SwitchAnalyzer.Kafka.Topics;
 
 public interface Collector {
     String collect(String topic);
+    String getName();
 }
