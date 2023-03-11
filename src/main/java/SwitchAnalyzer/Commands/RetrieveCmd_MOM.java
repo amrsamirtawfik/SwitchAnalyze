@@ -48,6 +48,7 @@ public class RetrieveCmd_MOM implements ICommandMOM
     {
         RetrieveCmd_Master command = new RetrieveCmd_Master(port.ID);
         String json = JSONConverter.toJSON(command);
+        System.out.println("RetrieveCmd_MOM: "+ json);
         //dont forget to add number at the beginning of the json to indicate the type of the command
         json = "1" + json;
         GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);

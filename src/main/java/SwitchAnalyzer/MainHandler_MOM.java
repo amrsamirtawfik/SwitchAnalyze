@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class MainHandler_MOM {
+    public static WebSocketServer server;
     static Queue<ICommand> commands = new LinkedList<>();
     static ArrayList<Class<? extends ICommandMOM>> commandClasses = new ArrayList<>();
     static ArrayList<Collector> collectors = new ArrayList<>();
@@ -33,7 +34,7 @@ public class MainHandler_MOM {
         /*
             run the Mapping algorithm between ports and HPCs
          */
-
+        server = new WebSocketServer(Ports.webSocketPort);
         GlobalVariable.portHpcMap.put(1, new MasterOfHPC(0, 2));
         GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(0));
         GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(1));
@@ -48,8 +49,8 @@ public class MainHandler_MOM {
     public static void main(String[] args)
     {
         init();
-        Thread t1 = new Thread(() -> UserRequestHandler.readCommands( new WebSocketServer(Ports.webSocketPort),
-                Ports.webSocketPort, 8888, commands));
+        Thread t1 = new Thread(() -> UserRequestHandler.readCommands(server, Ports.webSocketPort,
+                8888, commands));
         t1.start();
         while(true)
         {

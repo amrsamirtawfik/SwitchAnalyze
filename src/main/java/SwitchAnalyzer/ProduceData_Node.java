@@ -32,6 +32,7 @@ public class ProduceData_Node {
                     node.machineInfo.map.put(NamingConventions.packetLoss,
                             String.valueOf((packetLossCalculate.COUNT - packetLossCalculate.recievedPacketCount)));
                     String json = JSONConverter.toJSON(node.machineInfo);
+                    System.out.println("ProduceData_Node: "+json);
                     producer.send(Topics.ratesFromMachines, json);
                 }
                 catch (Exception e) { e.printStackTrace(); }

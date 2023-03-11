@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 public class UserRequestHandler
 {
+
     static volatile int x = 0;
     static ArrayList<Class<? extends ICommand>> classes = new ArrayList<>();
     public static void readCommands(WebSocketServer webSocketServer,int portNumber, int maxMessageLength, Queue<ICommand> cmdQueue)
@@ -31,6 +32,7 @@ public class UserRequestHandler
         String jsonStr = new String(command);
         int commandTypeIndex = Character.getNumericValue(jsonStr.charAt(0));
         jsonStr = jsonStr.replaceFirst("[0-9]*","");
+        System.out.println("UserRequestHandler: "+ jsonStr);
         ObjectMapper mapper = new ObjectMapper();
         ICommand c = mapper.readValue(jsonStr, classes.get(commandTypeIndex));
         cmdQueue.add(c);

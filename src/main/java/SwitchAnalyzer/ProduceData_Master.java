@@ -29,6 +29,7 @@ public class ProduceData_Master
         GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
         JSONConverter jsonConverter = new JSONConverter();
         String json = JSONConverter.toJSON(master.hpcInfo);
+        System.out.println("ProduceData_Master: "+json);
         producer.send(Topics.ratesFromHPCs, json);
     }
 }

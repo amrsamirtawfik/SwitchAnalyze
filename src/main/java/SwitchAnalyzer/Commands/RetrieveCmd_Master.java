@@ -49,6 +49,7 @@ public class RetrieveCmd_Master extends ICommandMaster{
     {
         RetrieveCmd_Node command = new RetrieveCmd_Node(machineID);
         String json = JSONConverter.toJSON(command);
+        System.out.println("RetrieveCmd_Master: "+json);
         //dont forget to add number at the beginning of the json to indicate the type of the command
         json = "1"+json;
         producer.send(Topics.cmdFromHpcMaster, json);

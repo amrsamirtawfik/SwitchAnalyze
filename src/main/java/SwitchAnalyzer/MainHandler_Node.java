@@ -67,6 +67,7 @@ public class MainHandler_Node
                 String json = record.value();
                 commandTypeIndex = Character.getNumericValue(json.charAt(0));
                 json = json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
+                System.out.println("MainHandlerNode: "+ json);
                 ICommandNode command = JSONConverter.fromJSON(json, commandClasses.get(commandTypeIndex));
                 //we need to re check mapping ,how to make it global in all masters and MOM or what should we do ?
                 if (command.machineID == node.getMachineID())
