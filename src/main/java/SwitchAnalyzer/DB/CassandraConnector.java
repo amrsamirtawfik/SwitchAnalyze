@@ -10,15 +10,21 @@ public class CassandraConnector {
     private Session session;
     public void connect(ArrayList<String>IPS,Integer port) {
         /*add nodes to connect*/
-        Cluster.Builder b =Cluster.builder();
+        Cluster.Builder b ;
         for(int i=0;i< IPS.size();++i){
-            b =  b.addContactPoint(IPS.get(i));
+            try{
+                b=Cluster.builder().addContactPoint(IPS.get(i));
+                // we want to check what will happen if more than an IP is correct
+                if (port != null) {
+                    b.withPort(port);
+                }
+                cluster = b.build();
+                session = cluster.connect();
+            }
+            catch (Exception ex) {
+                System.out.println("can't connect to node with this IP " + IPS.get(i));
+            }
         }
-        if (port != null) {
-            b.withPort(port);
-        }
-        cluster = b.build();
-        session = cluster.connect();
     }
     public Session getSession() {
         return this.session;

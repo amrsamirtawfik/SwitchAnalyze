@@ -48,7 +48,7 @@ public class Frame implements Schema {
         {
             counter++;
 
-            //id = counter;
+            id = counter;
         }
 
     }

@@ -20,7 +20,7 @@ public class DBConnect {
     private static CassandraConnector connector;
     private static  Session session;
     private static KeyspaceRepository keySpaceRepo;
-
+    private static boolean connectedToDBFlag =false;
     public static Session getSession() {
         return session;
     }
@@ -35,12 +35,16 @@ public class DBConnect {
     }
     public static void connect() {
         try {
-            BasicConfigurator.configure();
-            connector = new CassandraConnector();
-            /* choose the node or nodes to connect with */
-            connector.connect(IPS,null);
-            session = connector.getSession();
-            keySpaceRepo = new KeyspaceRepository(session);
+            if(connectedToDBFlag==false){
+                connectedToDBFlag=true;
+                BasicConfigurator.configure();
+                connector = new CassandraConnector();
+                /* choose the node or nodes to connect with */
+                connector.connect(IPS,null);
+                session = connector.getSession();
+                keySpaceRepo = new KeyspaceRepository(session);
+            }
+
         } catch (Exception e) {
             System.out.println("Cant connect to DB server ");
             e.printStackTrace();
@@ -48,5 +52,6 @@ public class DBConnect {
     }
     public static void closeConnectionToDB() {
         connector.close();
+        connectedToDBFlag=false;
     }
 }

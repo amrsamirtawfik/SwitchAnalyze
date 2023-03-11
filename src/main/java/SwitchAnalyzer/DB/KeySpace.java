@@ -22,17 +22,17 @@ public class KeySpace {
         DBConnect.getKeySpaceRepo().createKeyspace(keySpaceName, replicationStrategy, numberOfReplicas);
     }
     public static void useKeyspace(String keySpaceName){
-        if(!isKeyspaceExists(keySpaceName)){
-            createKeyspace(keySpaceName , replicationStrategy , numberOfReplicas);
+        if(!isKeyspaceExists(keySpaceName.toLowerCase())){
+            createKeyspace(keySpaceName.toLowerCase() , replicationStrategy , numberOfReplicas);
         }
-        DBConnect.getKeySpaceRepo().useKeyspace(keySpaceName);
+        DBConnect.getKeySpaceRepo().useKeyspace(keySpaceName.toLowerCase());
     }
     static void deleteKeyspace(String keySpaceName){
         DBConnect.getKeySpaceRepo().deleteKeyspace(keySpaceName);
     }
     private static boolean isKeyspaceExists(String keySpaceName)
     {
-        StringBuilder sb = new StringBuilder("SELECT keyspace_name FROM system_schema.keyspaces WHERE keyspace_name = '").append(keySpaceName).append("';");
+        StringBuilder sb = new StringBuilder("SELECT keyspace_name FROM system_schema.keyspaces WHERE keyspace_name = '").append(keySpaceName.toLowerCase()).append("';");
         ResultSet rs = session.execute(sb.toString());
         Row row = rs.one();
         if(row != null)

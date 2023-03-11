@@ -1,6 +1,7 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Commands.*;
+import SwitchAnalyzer.DB.DBConnect;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
@@ -38,6 +39,8 @@ public class MainHandler_Node
         consumer.selectTopic(Topics.cmdFromHpcMaster);
         commandClasses.add(StartRunCommand_Node.class);
         PCAP.initialize();
+        //connect to DB
+        DBConnect.connectToDB("Switch");
     }
 
     public static void main(String[] args)
@@ -73,5 +76,6 @@ public class MainHandler_Node
                 }
             }
         }
+
     }
 }

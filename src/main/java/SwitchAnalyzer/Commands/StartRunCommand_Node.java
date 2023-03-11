@@ -1,5 +1,8 @@
 package SwitchAnalyzer.Commands;
 
+import SwitchAnalyzer.DB.DBConnect;
+import SwitchAnalyzer.DB.DBInsert;
+import SwitchAnalyzer.DB.Frame;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.PacketInfo;
 import SwitchAnalyzer.Network.PacketSniffer;
@@ -46,8 +49,8 @@ public class StartRunCommand_Node extends ICommandNode
             {
                 p = sniffer.readPacket();
                 //store p in kafka or database
+                DBInsert.insert(new Frame(p.getRawData()));
             }
         }
-
     }
 }

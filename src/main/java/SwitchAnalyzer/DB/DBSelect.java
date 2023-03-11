@@ -3,6 +3,8 @@ package SwitchAnalyzer.DB;
 import com.datastax.driver.core.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBSelect {
     //session is used in order to execute the query
@@ -307,7 +309,46 @@ public class DBSelect {
 //        }
         return rs;
     }
+    public static List<Frame> selectAllNormal() {
+        StringBuilder sb = new StringBuilder("SELECT * FROM ").append("switch.").append("frames");
+        final String query = sb.toString();
+        SimpleStatement x= new SimpleStatement(query);
+        x.setConsistencyLevel(ConsistencyLevel.ONE);
+        ResultSet rs = session.execute(x);
 
+        List<Frame> frames = new ArrayList<Frame>();
+        for (Row r : rs) {
+            //add id for each frame and put it in the constructor
+            long id =r.get("id", long.class);
+            List<Byte> tinyintList = r.getList("payload", Byte.class);
+            byte[] byteArray = new byte[tinyintList.size()];
+            for (int i = 0; i < tinyintList.size(); i++) {
+                byteArray[i] = tinyintList.get(i);
+            }
+            Frame frame = new Frame(id,byteArray);
+            frames.add(frame);
+        }
+        return frames;
+    }
+    public static String selectAllJSON() {
+        StringBuilder sb = new StringBuilder("SELECT JSON * FROM ").append("switch.").append("frames");
+        final String query = sb.toString();
+        SimpleStatement x= new SimpleStatement(query);
+        x.setConsistencyLevel(ConsistencyLevel.ONE);
+        ResultSet rs = session.execute(x);
+        //System.out.println("*************************************************");
+        StringBuilder result = new StringBuilder("{\n");
+        // Iterate over the ResultSet and print out the JSON data
+        for (Row row : rs) {
+            String jsonString = row.getString("[json]");
+            result.append(jsonString).append(",\n");
+            //System.out.println(jsonString);
+        }
+        result.deleteCharAt(result.length()-2);
+        result.append("}");
+        return result.toString();
+        //System.out.println("*************************************************");
+    }
 //    public static List<DB.Run> executeSelectRuns()
 //    {
 //        wholeSelectQuery = new StringBuilder();
