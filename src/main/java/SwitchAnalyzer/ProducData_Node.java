@@ -21,6 +21,7 @@ public class ProducData_Node {
             {
                 GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
                 node.machineInfo.map.put("Rates", Float.toString(Observer.getRate()));
+                // TODO : get the packet loss from the node
                 node.machineInfo.map.put("PacketLoss", "33");
                 String json = JSONConverter.toJSON(node.machineInfo);
                 producer.send(Topics.ratesFromMachines, json);

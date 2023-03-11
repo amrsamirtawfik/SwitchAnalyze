@@ -2,7 +2,7 @@ package SwitchAnalyzer.Collectors;
 
 import SwitchAnalyzer.Kafka.Topics;
 
-public interface Collector {
+public interface CollectorMaster {
     String collect(String topic);
     String getName();
 }

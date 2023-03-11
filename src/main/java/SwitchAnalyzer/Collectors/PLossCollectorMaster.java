@@ -1,13 +1,7 @@
 package SwitchAnalyzer.Collectors;
 
-import SwitchAnalyzer.Kafka.GenericProducer;
-import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.NamingConventions;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.Ports;
-
-import java.util.ArrayList;
 
 /**
  * this class is responsible for collecting the rates from the machines
@@ -15,7 +9,7 @@ import java.util.ArrayList;
  * the master can send it to the MOM
  * the collector must have a name so that the master can identify it
  */
-public class PLossCollector implements Collector{
+public class PLossCollectorMaster implements CollectorMaster {
     private String name = "PacketLoss";
     public String getName() {
         return name;

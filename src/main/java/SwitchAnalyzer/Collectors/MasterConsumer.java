@@ -12,13 +12,13 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * this class will consume the overall info (for now rates+packet loss) information coming from the machines through kafka
- * then it will call the appropriate collector to process the data
+ * then it will call all the  collectors available in the list to process the data
  * the collectors can be added using the addCollector method
  */
 
@@ -26,7 +26,7 @@ public class MasterConsumer {
     static GenericConsumer consumer;
     static String consumerGroup = "Collectors";
     //arraylist of collectors
-    public static ArrayList<Collector> collectors = new ArrayList<>();
+    public static ArrayList<CollectorMaster> collectorMasters = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
 //    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
     public static MasterOfHPC myHPC;
@@ -41,9 +41,11 @@ public class MasterConsumer {
         this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
     }
 
-    public static void consume() {
-        while (true) {
-            int numberOfOffMachines = 0;
+    public static Map<String, String> consume() {
+        /*
+        TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
+         */
+//        while (true) {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
@@ -54,28 +56,43 @@ public class MasterConsumer {
                 MasterOfHPC.childNodes.set(machineInfo.getMachineID(), machineInfo);
             }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
-            for (int i = 0; i < collectors.size(); i++) {
-                final int index = i; // Make a copy of i
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String res =collectors.get(index).collect(Topics.ratesFromHPCs);
-                        results.put(collectors.get(index).getName(),res);
-                    }
-                });
-                thread.start();
-            }
+        List<Thread> threads = new ArrayList<>();
 
+        for (int i = 0; i < collectorMasters.size(); i++) {
+            final int index = i; // Make a copy of i
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String res = collectorMasters.get(index).collect(Topics.ratesFromHPCs);
+                    results.put(collectorMasters.get(index).getName(), res);
+                }
+            });
+            threads.add(thread);
+            thread.start();
         }
 
+// Wait for all threads to finish
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                System.out.printf("in MasterConsumer: %s%n", e.getMessage());
+            }
+        }
+
+//        }
+        return results;
     }
     //add collectors to the arraylist
-    public static void addCollector(Collector collector){
-        collectors.add(collector);
+    public static void addCollector(CollectorMaster collectorMaster){
+        collectorMasters.add(collectorMaster);
     }
     //remove collectors from the arraylist
-    public static void removeCollector(Collector collector){
-        collectors.remove(collector);
+    public static void removeCollector(CollectorMaster collectorMaster){
+        collectorMasters.remove(collectorMaster);
     }
 
+    public static Map<String, String> getResults() {
+        return results;
+    }
 }
