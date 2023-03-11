@@ -6,7 +6,9 @@ import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.IP;
+import SwitchAnalyzer.Network.Observer;
 import SwitchAnalyzer.Network.PCAP;
+import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
@@ -42,6 +44,12 @@ public class MainHandler_Node
     {
         init();
         int commandTypeIndex;
+        /*
+            Open Utilites Threads
+         */
+        Thread packetLossThread = new Thread(new PacketLossCalculate());
+        Thread observerThread = new Thread(new Observer());
+
         while (true)
         {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);

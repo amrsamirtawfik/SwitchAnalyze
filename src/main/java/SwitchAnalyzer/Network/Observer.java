@@ -6,9 +6,11 @@ import SwitchAnalyzer.Kafka.*;
 import SwitchAnalyzer.Machines.*;
 import SwitchAnalyzer.miscellaneous.*;
 
-public class Observer {
+public class Observer implements Runnable
+{
     // Returns the send and receive rates in kilobits per second
-    public static float getRate() {
+    public static float getRate()
+    {
         float sendRate;
         String output;
         String buffSend = "";
@@ -29,5 +31,18 @@ public class Observer {
             outputIndx++;
         }
         return Float.parseFloat(buffSend);
+    }
+
+    public void run()
+    {
+        while (true)
+        {
+            float sendRate = getRate();
+            /*
+                save in DB & kafka if flag is set
+             */
+            try{ Thread.sleep(1000); }
+            catch(Exception ignored){}
+        }
     }
 }

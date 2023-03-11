@@ -30,6 +30,7 @@ class SendFragmentedEcho
 {
 
     private static final String COUNT_KEY = SendFragmentedEcho.class.getName() + ".count";
+    private static final int count = 4;
     private static final int COUNT = Integer.getInteger(COUNT_KEY, 3);
 
     private static final String READ_TIMEOUT_KEY =
@@ -123,11 +124,14 @@ class SendFragmentedEcho
     }
     public static void main(String[] args) throws PcapNativeException
     {
-        PCAP.initialize();
         PcapHandle handle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
         PcapHandle sendHandle = nif.openLive(SNAPLEN, PromiscuousMode.PROMISCUOUS, READ_TIMEOUT);
         ExecutorService pool = Executors.newSingleThreadExecutor();
         MacAddress srcMacAddr = MacAddress.getByName(strSrcMacAddress, ":");
+        System.out.println(COUNT_KEY);
+        System.out.println(SwitchAnalyzer.Network.PacketLoss.SendFragmentedEcho.count);
+        System.out.println(System.getProperty(COUNT_KEY));
+        System.out.println(COUNT);
 
         try
         {
