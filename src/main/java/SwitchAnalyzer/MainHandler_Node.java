@@ -28,7 +28,8 @@ public class MainHandler_Node
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        node = new MachineNode(1); // needs to be adjusted by setting these values from the config file and setting it children nodes
+        node = new MachineNode(0);
+        // needs to be adjusted by setting these values from the config file and setting it children nodes
         //and also add mac and ip address in the constructor
         Logger logger = LoggerFactory.getLogger("MasterHPC");
         GlobalVariable.packetInfoMap.put("udpHeader",new UDPHeader());
@@ -37,8 +38,8 @@ public class MainHandler_Node
         GlobalVariable.packetInfoMap.put("ipv4Header",new IPV6Header());
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromHpcMaster);
-        commandClasses.add(RetrieveCmd_Node.class);
         commandClasses.add(StartRunCommand_Node.class);
+        commandClasses.add(RetrieveCmd_Node.class);
         PCAP.initialize();
     }
 
@@ -53,7 +54,7 @@ public class MainHandler_Node
         {
             while (true)
             {
-            ProduceData_Node.produceData();
+                ProduceData_Node.produceData();
             }
         });
         utilitiesThread.start();

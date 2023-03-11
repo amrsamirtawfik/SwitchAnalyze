@@ -1,8 +1,10 @@
 package SwitchAnalyzer.Commands;
 
+import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
@@ -31,6 +33,8 @@ public class RetrieveCmd_Master extends ICommandMaster{
             GenCmd(node.getMachineID());
         }
         producer.close();
+        MasterConsumer.addCollector(MainHandler_Master.collectors.get(0));
+        MasterConsumer.addCollector(MainHandler_Master.collectors.get(1));
         listeningThread = new Thread (() ->
         {
            while(GlobalVariable.retrieveDataFromNode)

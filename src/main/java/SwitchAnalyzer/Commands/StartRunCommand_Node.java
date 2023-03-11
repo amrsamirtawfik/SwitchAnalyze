@@ -30,8 +30,10 @@ public class StartRunCommand_Node extends ICommandNode
 
     public void distNoPackets()
     {
-        for (PacketInfoGui packetInfo : config.packetInfos)
+        config.rate = config.rate/master.getNoOfChilNodes();
+        for (PacketInfoGui packetInfo : config.packetInfos) {
             packetInfo.numberOfPackets = packetInfo.numberOfPackets / master.getNoOfChilNodes();
+        }
     }
     @Override
     public void processCmd()

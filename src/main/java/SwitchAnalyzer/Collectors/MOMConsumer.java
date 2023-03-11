@@ -47,7 +47,7 @@ public class MOMConsumer {
         /*
         TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
          */
-//        while (true) {
+        while (true) {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
@@ -57,6 +57,9 @@ public class MOMConsumer {
                 // TODO: we need to add the machines first to the list of machines
                 masterOfMasters.HPCs.get(hpcInfo.HPCID).hpcInfo = hpcInfo;
             }
+            if(records.count() > 0)
+                break;
+        }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();
 

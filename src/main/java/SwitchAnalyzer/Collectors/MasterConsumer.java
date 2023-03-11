@@ -42,11 +42,13 @@ public class MasterConsumer {
         consumer.selectTopic(Topics.ratesFromMachines);
     }
 
-    public static Map<String, String> consume() {
+    public static Map<String, String> consume()
+    {
         /*
         TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
          */
-//        while (true) {
+        while (true)
+        {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
@@ -56,14 +58,20 @@ public class MasterConsumer {
                 // TODO: we need to add the machines first to the list of machines
                 master.childNodes.get(machineInfo.machineID).machineInfo = machineInfo;
             }
+            if(records.count() > 0)
+                break;
+        }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();
 
-        for (int i = 0; i < collectors.size(); i++) {
+        for (int i = 0; i < collectors.size(); i++)
+        {
             final int index = i; // Make a copy of i
-            Thread thread = new Thread(new Runnable() {
+            Thread thread = new Thread(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     String res = collectors.get(index).collect();
                     results.put(collectors.get(index).getName(), res);
                 }
@@ -73,27 +81,19 @@ public class MasterConsumer {
         }
 
 // Wait for all threads to finish
-        for (Thread thread : threads) {
-            try {
+        for (Thread thread : threads)
+        {
+            try
+            {
                 thread.join();
-            } catch (InterruptedException e) {
-                System.out.printf("in MasterConsumer: %s%n", e.getMessage());
-            }
+            } catch (InterruptedException e) {System.out.printf("in MasterConsumer: %s%n", e.getMessage());}
         }
-
-//        }
         return results;
     }
     //add collectors to the arraylist
-    public static void addCollector(Collector collectorMaster){
-        collectors.add(collectorMaster);
-    }
+    public static void addCollector(Collector collectorMaster){ collectors.add(collectorMaster); }
     //remove collectors from the arraylist
-    public static void removeCollector(Collector collectorMaster){
-        collectors.remove(collectorMaster);
-    }
+    public static void removeCollector(Collector collectorMaster){ collectors.remove(collectorMaster); }
 
-    public static Map<String, String> getResults() {
-        return results;
-    }
+    public static Map<String, String> getResults() { return results; }
 }

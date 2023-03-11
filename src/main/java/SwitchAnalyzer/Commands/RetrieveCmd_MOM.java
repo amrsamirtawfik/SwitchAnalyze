@@ -1,11 +1,14 @@
 package SwitchAnalyzer.Commands;
 
+import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
+import SwitchAnalyzer.ProduceData_MOM;
 import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
@@ -29,15 +32,15 @@ public class RetrieveCmd_MOM implements ICommandMOM
             GenCmd(port);
         }
 
+        MasterConsumer.addCollector(MainHandler_Master.collectors.get(0));
+        MasterConsumer.addCollector(MainHandler_Master.collectors.get(1));
         listeningThread = new Thread (() ->
         {
             while(GlobalVariable.retrieveDataFromNode)
             {
-                ProduceData_Master.produceData();
+                ProduceData_MOM.produceData();
             }
         });
-
-
     }
 
     @Override
