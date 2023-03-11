@@ -31,7 +31,7 @@ public class MainHandler_Master
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        master = new MasterOfHPC(1,3,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
+        //master = new MasterOfHPC(1,3,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
         //and also add mac and ip address in the constructor
         //Logger logger = LoggerFactory.getLogger(MasterHPC.class.getName());
         //replaced by string MasterHPC directly needs to be checked by  zoz

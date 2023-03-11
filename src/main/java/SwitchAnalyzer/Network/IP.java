@@ -12,6 +12,8 @@ public class IP {
     //this ip is used by the PacketGenerator in the SingleMachine class
     public static String receiverOfPackets ="192.168.1.2";
 
+
+        public static String ConfigurationsIP="192.168.1.3";
     /*
         This section of Ips is for the packet generating
      */

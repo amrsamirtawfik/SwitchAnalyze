@@ -31,7 +31,7 @@ public class MainHandler_Node
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        node = new MachineNode(1,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
+       // node = new MachineNode(1,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
         //and also add mac and ip address in the constructor
         Logger logger = LoggerFactory.getLogger("MasterHPC");
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);

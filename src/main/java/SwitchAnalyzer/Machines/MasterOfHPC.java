@@ -1,5 +1,7 @@
 package SwitchAnalyzer.Machines;
 
+import SwitchAnalyzer.Cluster.ClusterConfiguartions;
+import SwitchAnalyzer.Cluster.MachineConfigurations;
 import SwitchAnalyzer.NamingConventions;
 import org.pcap4j.util.MacAddress;
 
@@ -19,7 +21,13 @@ public class MasterOfHPC {
         this.HPCID = HPCID;
         this.noOfChilNodes = noOfMachines;
     }
-
+    public void setArrayListOfMachines(ArrayList<MachineConfigurations> ConfigurationsList){
+        for (MachineConfigurations machineConfig:ConfigurationsList) {
+            if(!machineConfig.Is_master()) {
+                childNodes.add(new MachineNode(machineConfig.getMachine_id(), 100));//rate still to be discussed
+            }
+        }
+        }
     public int getNoOfChilNodes() {
         return noOfChilNodes;
     }
