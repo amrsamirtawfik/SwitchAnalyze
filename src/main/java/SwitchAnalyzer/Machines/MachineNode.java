@@ -26,9 +26,14 @@ public class MachineNode {
                     if (macAddressBytes != null) {
                         nodeMacAddress =MacAddress.getByAddress(macAddressBytes);
                     }
+
+                    /*
+                    get ip address and set it
+                     */
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
             }
     public MacAddress getMyMacAddress() {
         return nodeMacAddress;

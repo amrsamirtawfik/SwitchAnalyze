@@ -17,9 +17,12 @@ public class MasterOfHPC {
     private MacAddress HPCMacAddr;
     private Inet4Address HPCIp;
     private String status;
-    public MasterOfHPC(int HPCID, int noOfMachines, int health) {
+    private MachineNode myNode;
+
+    public MasterOfHPC(int HPCID, int noOfMachines, int health,MachineNode myNode) {
         this.HPCID = HPCID;
         this.noOfChilNodes = noOfMachines;
+        this.myNode=myNode;
     }
     public void setArrayListOfMachines(ArrayList<MachineConfigurations> ConfigurationsList){
         for (MachineConfigurations machineConfig:ConfigurationsList) {
