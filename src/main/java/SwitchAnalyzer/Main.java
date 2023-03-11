@@ -40,11 +40,12 @@ public class Main {
                             master.setArrayListOfMachines(ClusterConfig.machines);
                             GlobalVariable.portHpcMap.put(Ports.HPCportNumber,master);
                             HandlerThread= new Thread(() -> MainHandler_Master.main(null));
+                            HandlerThread.start();
                         }else{
                             myNode.setRate(100);
                             MainHandler_Node.node=myNode;
                             HandlerThread= new Thread(() -> MainHandler_Node.main(null));
-
+                            HandlerThread.start();
                         }
 
                     }
