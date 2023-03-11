@@ -7,4 +7,9 @@ public class SwitchPort {
     {
         this.ID = ID;
     }
+
+    public SwitchPort(SwitchPortConfig portConfig, int ID) {
+        this.portConfig = portConfig;
+        this.ID = ID;
+    }
 }

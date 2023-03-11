@@ -4,6 +4,7 @@ import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.ProcessCmd;
 import SwitchAnalyzer.Machines.MOM;
+import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
@@ -28,7 +29,10 @@ public class MainHandler_MOM {
         /*
             run the Mapping algorithm between ports and HPCs
          */
-        GlobalVariable.portHpcMap.put(1, new MasterOfHPC(1));
+        GlobalVariable.portHpcMap.put(1, new MasterOfHPC(1, 1));
+        GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(1));
+        GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(2));
+
     }
 
     public static void main(String[] args)

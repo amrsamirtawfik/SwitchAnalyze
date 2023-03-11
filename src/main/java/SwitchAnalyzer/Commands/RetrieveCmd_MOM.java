@@ -3,50 +3,52 @@ package SwitchAnalyzer.Commands;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
+import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
+import java.util.ArrayList;
+
 import static SwitchAnalyzer.MainHandler_Master.master;
 
-public class RetrieveCmd_Master extends ICommandMaster{
-    GenericProducer producer;
+public class RetrieveCmd_MOM implements ICommandMOM
+{
     public static Thread listeningThread;
-
-    public RetrieveCmd_Master(int portID)
-    {
-        this.portID = portID;
-    }
+    ArrayList<SwitchPort> ports= new ArrayList<>();
 
     @Override
     public void processCmd()
     {
         GlobalVariable.retrieveDataFromNode = true;
-        producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
-        for (MachineNode node : master.childNodes)
+
+        for (SwitchPort port : ports)
         {
-            GenCmd(node.getMachineID());
+            GenCmd(port);
         }
-        producer.close();
+
         listeningThread = new Thread (() ->
         {
-           while(GlobalVariable.retrieveDataFromNode)
-           {
-               ProduceData_Master.produceData();
-           }
+            while(GlobalVariable.retrieveDataFromNode)
+            {
+                ProduceData_Master.produceData();
+            }
         });
+
+
     }
 
     @Override
-    public void GenCmd(int machineID)
+    public void GenCmd(SwitchPort port)
     {
-        RetrieveCmd_Node command = new RetrieveCmd_Node(machineID);
+        RetrieveCmd_Master command = new RetrieveCmd_Master(port.ID);
         String json = JSONConverter.toJSON(command);
         //dont forget to add number at the beginning of the json to indicate the type of the command
-        json = "1"+json;
-        producer.send(Topics.cmdFromHpcMaster, json);
+        json = "1" + json;
+        GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
+        producer.send(Topics.cmdFromMOM, json);
+        producer.close();
     }
 }

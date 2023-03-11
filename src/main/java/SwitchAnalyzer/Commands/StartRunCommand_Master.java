@@ -46,6 +46,7 @@ public class StartRunCommand_Master extends ICommandMaster
         StartRunCommand_Node command = new StartRunCommand_Node(portConfig , id);
         String json = JSONConverter.toJSON(command);
         //dont forget to add number at the beginning of the json to indicate the type of the command
+        json = "0"+json;
         producer.send(Topics.cmdFromHpcMaster, json);
     }
 }
