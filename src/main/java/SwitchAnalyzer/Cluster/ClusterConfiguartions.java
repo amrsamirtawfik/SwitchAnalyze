@@ -7,7 +7,7 @@ public class ClusterConfiguartions {
     String cluster_name;
 
     String cluster_Id;
-
+    //the mapped port id to a specific HPC
     //String port_id;
     public ArrayList<MachineConfigurations> machines;
 
