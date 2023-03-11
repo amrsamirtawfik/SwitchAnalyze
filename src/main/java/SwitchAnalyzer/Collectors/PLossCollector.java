@@ -3,6 +3,7 @@ package SwitchAnalyzer.Collectors;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
+import SwitchAnalyzer.NamingConventions;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 
@@ -24,9 +25,12 @@ public class PLossCollector implements Collector{
     {
 
         float packetLoss = 0;
+        String packetLossString;
 
         for (int i = 0; i < MasterOfHPC.childNodes.size(); i++) {
-            packetLoss += MasterOfHPC.childNodes.get(i).getPacketLoss();
+            //convert the string to a float
+            packetLossString = MasterOfHPC.childNodes.get(i).machineInfo.map.get(NamingConventions.packetLoss);
+            packetLoss += Float.parseFloat(packetLossString);
         }
         return String.valueOf(packetLoss);
 
