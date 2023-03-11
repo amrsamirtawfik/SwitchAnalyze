@@ -1,6 +1,7 @@
 package SwitchAnalyzer.Collectors;
 
 import SwitchAnalyzer.Kafka.GenericConsumer;
+import SwitchAnalyzer.Machines.MachineInfo;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
@@ -35,7 +36,6 @@ public class MasterConsumer {
     * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
      */
     static Map<String, String> results = new ConcurrentHashMap<>();
-
     public MasterConsumer() {
         this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
     }
@@ -50,9 +50,9 @@ public class MasterConsumer {
                 // Convert the JSON string to a Command object
                 String json = record.value();
 
-                MachineNode machineInfo = JSONConverter.fromJSON(json, MachineNode.class);
+                MachineInfo machineInfo = JSONConverter.fromJSON(json, MachineInfo.class);
                 // TODO: we need to add the machines first to the list of machines
-                master.childNodes.set(machineInfo.getMachineID(), machineInfo);
+                master.childNodes.get(machineInfo.machineID).machineInfo = machineInfo;
             }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();

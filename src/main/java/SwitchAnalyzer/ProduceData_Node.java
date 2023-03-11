@@ -4,9 +4,12 @@ import SwitchAnalyzer.Network.Observer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Network.IP;
+import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+
+import java.util.concurrent.ExecutionException;
 
 import static SwitchAnalyzer.MainHandler_Node.node;
 
@@ -15,16 +18,23 @@ import static SwitchAnalyzer.MainHandler_Node.node;
  * so that the master could collect them and send them to the MOM
  */
 public class ProduceData_Node {
-    public void produceData()
+    private static GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
+    public static void produceData()
     {
             if(GlobalVariable.retrieveDataFromNode)
             {
-                GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
-                node.machineInfo.map.put("Rates", Float.toString(Observer.getRate()));
-                // TODO : get the packet loss from the node
-                node.machineInfo.map.put("PacketLoss", "33");
-                String json = JSONConverter.toJSON(node.machineInfo);
-                producer.send(Topics.ratesFromMachines, json);
+                try
+                {
+                    node.machineInfo.map.put("Rates", Float.toString(Observer.getRate()));
+                    // TODO : get the packet loss from the node
+                    PacketLossCalculate packetLossCalculate = new PacketLossCalculate();
+                    packetLossCalculate.startPacketLossTest();
+                    node.machineInfo.map.put("PacketLoss",
+                            String.valueOf((packetLossCalculate.COUNT - packetLossCalculate.recievedPacketCount)));
+                    String json = JSONConverter.toJSON(node.machineInfo);
+                    producer.send(Topics.ratesFromMachines, json);
+                }
+                catch (Exception e) { e.printStackTrace(); }
             }
     }
 }

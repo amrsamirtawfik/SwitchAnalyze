@@ -11,9 +11,9 @@ import java.util.concurrent.Executors;
 
 import static SwitchAnalyzer.Network.PCAP.nif;
 
-public class PacketLossCalculate implements Runnable{
+public class PacketLossCalculate {
 
-    private static final int COUNT = 10;
+    public static final int COUNT = 10;
     private static final int READ_TIMEOUT = 10; //IN MS
     private static final int SNAPLEN = 65536;
     public  String strSrcIpAddress;
@@ -49,7 +49,7 @@ public class PacketLossCalculate implements Runnable{
         }
         catch (Exception ignored){}
     }
-    public void startEchoLisitner(PcapHandle handle) throws PcapNativeException
+    public void startEchoLisitner() throws PcapNativeException
     {
         try
         {
@@ -70,7 +70,8 @@ public class PacketLossCalculate implements Runnable{
 
     public void startPacketLossTest() throws PcapNativeException
     {
-        startEchoLisitner(handle);
+        init();
+        startEchoLisitner();
         try
         {
             Packet.Builder payloadBuild = Builder.getBuilder(new PayloadBuilder(echoData), new UnknownPacket.Builder());
@@ -112,23 +113,6 @@ public class PacketLossCalculate implements Runnable{
             }
             if (sendHandle != null && sendHandle.isOpen()) { sendHandle.close(); }
             if (pool != null && !pool.isShutdown()) { pool.shutdown(); }
-        }
-    }
-
-    public void run()
-    {
-        init();
-        while(true)
-        {
-            try { startPacketLossTest(); }
-            catch (Exception ignored){}
-            int packetLoss = COUNT - recievedPacketCount;
-            /*
-                store value for user in DB & Kafka if flag is set
-             */
-            recievedPacketCount = 0;
-            try{ Thread.sleep(1000); }
-            catch (Exception ignored){}
         }
     }
 

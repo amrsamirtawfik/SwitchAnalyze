@@ -47,8 +47,14 @@ public class MainHandler_Node
         /*
             Open Utilites Threads
          */
-        Thread packetLossThread = new Thread(new PacketLossCalculate());
-        Thread observerThread = new Thread(new Observer());
+        Thread utilitiesThread = new Thread(() ->
+        {
+            while (true)
+            {
+            ProduceData_Node.produceData();
+            }
+        });
+        utilitiesThread.start();
 
         while (true)
         {
@@ -57,7 +63,7 @@ public class MainHandler_Node
             {
                 String json = record.value();
                 commandTypeIndex = Character.getNumericValue(json.charAt(0));
-                json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
+                json = json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
                 ICommandNode command = JSONConverter.fromJSON(json, commandClasses.get(commandTypeIndex));
                 //we need to re check mapping ,how to make it global in all masters and MOM or what should we do ?
                 if (command.machineID == node.getMachineID())

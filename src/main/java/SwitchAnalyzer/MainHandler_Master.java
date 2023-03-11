@@ -1,5 +1,8 @@
 package SwitchAnalyzer;
 
+import SwitchAnalyzer.Collectors.Collector;
+import SwitchAnalyzer.Collectors.PLossCollectorMaster;
+import SwitchAnalyzer.Collectors.RatesCollectorMaster;
 import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
@@ -21,6 +24,7 @@ public class MainHandler_Master
 {
     public static String consumerGroup = "command-consumer-group";
     static ArrayList<Class<? extends ICommandMaster>> commandClasses = new ArrayList<>();
+    static ArrayList<Collector> collectors = new ArrayList<>();
     static GenericConsumer consumer;
     public static MasterOfHPC master;
 
@@ -35,6 +39,8 @@ public class MainHandler_Master
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromMOM);
         commandClasses.add(StartRunCommand_Master.class);
+        collectors.add(new RatesCollectorMaster());
+        collectors.add(new PLossCollectorMaster());
         PCAP.initialize();
     }
 
