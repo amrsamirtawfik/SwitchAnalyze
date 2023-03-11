@@ -1,6 +1,7 @@
 package SwitchAnalyzer.Collectors;
 
 import SwitchAnalyzer.Kafka.GenericConsumer;
+import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineInfo;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Network.IP;
@@ -38,6 +39,7 @@ public class MasterConsumer {
     static Map<String, String> results = new ConcurrentHashMap<>();
     public MasterConsumer() {
         this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
+        consumer.selectTopic(Topics.ratesFromMachines);
     }
 
     public static Map<String, String> consume() {

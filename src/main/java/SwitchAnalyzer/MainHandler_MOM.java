@@ -3,6 +3,7 @@ package SwitchAnalyzer;
 import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.ProcessCmd;
+import SwitchAnalyzer.Machines.MOM;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
@@ -14,6 +15,7 @@ import java.util.Queue;
 public class MainHandler_MOM {
     static Queue<ICommand> commands = new LinkedList<>();
     static volatile int x;
+    public static MOM masterOfMasters;
     //TODO: should have an object of MOM in order to be used by the collectors?
     public static void init()
     {
