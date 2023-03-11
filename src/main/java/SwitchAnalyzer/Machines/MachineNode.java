@@ -11,6 +11,12 @@ public class MachineNode {
     private MacAddress nodeMacAddress;
     private Inet4Address nodeIp;
 
+    public int getPacketLoss() {
+        return packetLoss;
+    }
+
+    private int packetLoss;
+
     public MachineNode(int machineID, float rate) {
         MachineID = machineID;
         this.rate = rate;

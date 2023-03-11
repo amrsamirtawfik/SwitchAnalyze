@@ -19,9 +19,10 @@ import java.util.ArrayList;
  * do some processing and then send return the overall rates so that
  * the master can send it to the MOM
  * the collector must have a name so that the master can identify it
+ * note I assumed that the the MasterOfHPC already have the machines in its list
  */
 public class RatesCollector implements Collector{
-    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
+//    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
     public static MasterOfHPC myHPC ;
     //the name of the collector is used to identify the collector in the results map
     private String name = "Rates";
@@ -34,14 +35,11 @@ public class RatesCollector implements Collector{
     @Override
     public String collect(String topic)
     {
-        GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
-        // Send the JSON string as a message to the "CMDFromMOM" Kafka topic
-
-        float OverallRate;
+            float OverallRate;
 
             OverallRate= 0;
-            for (int i = 0; i < sharedList.size(); i++) {
-                OverallRate += sharedList.get(i).getRate();
+            for (int i = 0; i < MasterOfHPC.childNodes.size(); i++) {
+                OverallRate += MasterOfHPC.childNodes.get(i).getRate();
             }
             return String.valueOf(OverallRate);
 
