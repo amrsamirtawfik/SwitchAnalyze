@@ -10,6 +10,10 @@ import SwitchAnalyzer.miscellaneous.JSONConverter;
 
 import static SwitchAnalyzer.MainHandler_Node.node;
 
+/**
+ * this class is responsible for sending the rates to kafka
+ * so that the master could collect them and send them to the MOM
+ */
 public class ProducData_Node {
     public void produceData()
     {
