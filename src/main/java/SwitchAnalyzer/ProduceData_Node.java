@@ -25,11 +25,11 @@ public class ProduceData_Node {
             {
                 try
                 {
-                    node.machineInfo.map.put("Rates", Float.toString(Observer.getRate()));
+                    node.machineInfo.map.put(NamingConventions.rates, Float.toString(Observer.getRate()));
                     // TODO : get the packet loss from the node
                     PacketLossCalculate packetLossCalculate = new PacketLossCalculate();
                     packetLossCalculate.startPacketLossTest();
-                    node.machineInfo.map.put("PacketLoss",
+                    node.machineInfo.map.put(NamingConventions.packetLoss,
                             String.valueOf((packetLossCalculate.COUNT - packetLossCalculate.recievedPacketCount)));
                     String json = JSONConverter.toJSON(node.machineInfo);
                     producer.send(Topics.ratesFromMachines, json);
