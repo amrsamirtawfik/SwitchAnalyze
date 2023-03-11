@@ -3,6 +3,8 @@ package SwitchAnalyzer.Collectors;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.NamingConventions;
 
+import static SwitchAnalyzer.MainHandler_Master.master;
+
 /**
  * this class is responsible for collecting the packetLoss from the machines
  * do some processing and then send return the overall packetLoss so that
@@ -25,9 +27,9 @@ public class RatesCollectorMaster implements CollectorMaster {
             // this variable is made because the result from is the map is a string
             String overAllRateString;
             OverallRate= 0;
-            for (int i = 0; i < MasterOfHPC.childNodes.size(); i++) {
+            for (int i = 0; i < master.childNodes.size(); i++) {
                 //convert the string to a float
-                overAllRateString = MasterOfHPC.childNodes.get(i).machineInfo.map.get(NamingConventions.rates);
+                overAllRateString = master.childNodes.get(i).machineInfo.map.get(NamingConventions.rates);
                 OverallRate += Float.parseFloat(overAllRateString);
             }
             return String.valueOf(OverallRate);

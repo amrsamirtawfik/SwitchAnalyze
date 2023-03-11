@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static SwitchAnalyzer.MainHandler_Master.master;
+
 /**
  * this class will consume the overall info (for now rates+packet loss) information coming from the machines through kafka
  * then it will call all the  collectors available in the list to process the data
@@ -29,7 +31,6 @@ public class MasterConsumer {
     public static ArrayList<CollectorMaster> collectorMasters = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
 //    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
-    public static MasterOfHPC myHPC;
 
     //this map will contain the results of the collectors
     /*the key will be the collector name and the value will be the result
@@ -53,7 +54,7 @@ public class MasterConsumer {
 
                 MachineNode machineInfo = JSONConverter.fromJSON(json, MachineNode.class);
                 // TODO: we need to add the machines first to the list of machines
-                MasterOfHPC.childNodes.set(machineInfo.getMachineID(), machineInfo);
+                master.childNodes.set(machineInfo.getMachineID(), machineInfo);
             }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();

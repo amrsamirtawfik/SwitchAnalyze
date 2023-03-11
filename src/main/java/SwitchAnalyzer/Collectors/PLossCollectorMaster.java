@@ -3,6 +3,8 @@ package SwitchAnalyzer.Collectors;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.NamingConventions;
 
+import static SwitchAnalyzer.MainHandler_Master.master;
+
 /**
  * this class is responsible for collecting the rates from the machines
  * do some processing and then send return the overall rates so that
@@ -21,9 +23,9 @@ public class PLossCollectorMaster implements CollectorMaster {
         float packetLoss = 0;
         String packetLossString;
 
-        for (int i = 0; i < MasterOfHPC.childNodes.size(); i++) {
+        for (int i = 0; i < master.childNodes.size(); i++) {
             //convert the string to a float
-            packetLossString = MasterOfHPC.childNodes.get(i).machineInfo.map.get(NamingConventions.packetLoss);
+            packetLossString = master.childNodes.get(i).machineInfo.map.get(NamingConventions.packetLoss);
             packetLoss += Float.parseFloat(packetLossString);
         }
         return String.valueOf(packetLoss);
