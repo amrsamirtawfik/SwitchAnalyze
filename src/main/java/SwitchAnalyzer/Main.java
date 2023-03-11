@@ -38,6 +38,7 @@ public class Main {
                         if (machineConfig.Is_master()) {
                             MasterOfHPC master=new MasterOfHPC(ClusterConfig.getCluster_Id(),ClusterConfig.machines.size(),100);
                             master.setArrayListOfMachines(ClusterConfig.machines);
+                            //port number must be sent with the cluster configuration
                             GlobalVariable.portHpcMap.put(Ports.HPCportNumber,master);
                             HandlerThread= new Thread(() -> MainHandler_Master.main(null));
                             HandlerThread.start();

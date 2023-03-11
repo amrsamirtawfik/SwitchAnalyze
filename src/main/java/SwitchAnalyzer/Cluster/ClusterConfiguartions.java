@@ -8,6 +8,7 @@ public class ClusterConfiguartions {
 
     String cluster_Id;
 
+    //String port_id;
     public ArrayList<MachineConfigurations> machines;
 
     public String getCluster_name() {
