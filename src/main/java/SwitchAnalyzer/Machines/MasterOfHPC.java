@@ -1,5 +1,6 @@
 package SwitchAnalyzer.Machines;
 
+import SwitchAnalyzer.NamingConventions;
 import org.pcap4j.util.MacAddress;
 
 import java.net.Inet4Address;
@@ -38,7 +39,7 @@ public class MasterOfHPC {
         this.HPCID = HPCID;
     }
     public float getCurrentOverallRate() {
-        return CurrentOverallRate;
+        return Float.parseFloat(hpcInfo.map.get(NamingConventions.rates));
     }
     public String getStatus() {
         return status;
