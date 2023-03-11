@@ -1,6 +1,5 @@
 package SwitchAnalyzer.Collectors;
 
-import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.NamingConventions;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
@@ -11,7 +10,7 @@ import static SwitchAnalyzer.MainHandler_Master.master;
  * the master can send it to the MOM
  * the collector must have a name so that the master can identify it
  */
-public class PLossCollectorMaster implements CollectorMaster {
+public class PLossCollectorMaster implements Collector {
     private String name = "PacketLoss";
     public String getName() {
         return name;

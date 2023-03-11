@@ -14,12 +14,15 @@ import java.util.Queue;
 public class MainHandler_MOM {
     static Queue<ICommand> commands = new LinkedList<>();
     static volatile int x;
+    //TODO: should have an object of MOM in order to be used by the collectors?
     public static void init()
     {
         /*
             read the config text file and initialize the Global variables.
          */
-
+        /*
+        TODO: should initialize MOM and add all HPCs to it?
+         */
         /*
             run the Mapping algorithm between ports and HPCs
          */

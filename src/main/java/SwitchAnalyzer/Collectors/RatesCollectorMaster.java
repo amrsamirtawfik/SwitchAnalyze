@@ -12,7 +12,7 @@ import static SwitchAnalyzer.MainHandler_Master.master;
  * the collector must have a name so that the master can identify it
  * note I assumed that the the MasterOfHPC already have the machines in its list
  */
-public class RatesCollectorMaster implements CollectorMaster {
+public class RatesCollectorMaster implements Collector {
     public static MasterOfHPC myHPC ;
     //the name of the collector is used to identify the collector in the results map
     private String name = "Rates";

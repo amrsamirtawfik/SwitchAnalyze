@@ -26,7 +26,7 @@ public class MasterConsumer {
     static GenericConsumer consumer;
     static String consumerGroup = "Collectors";
     //arraylist of collectors
-    public static ArrayList<CollectorMaster> collectors = new ArrayList<>();
+    public static ArrayList<Collector> collectors = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
 //    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
 
@@ -83,11 +83,11 @@ public class MasterConsumer {
         return results;
     }
     //add collectors to the arraylist
-    public static void addCollector(CollectorMaster collectorMaster){
+    public static void addCollector(Collector collectorMaster){
         collectors.add(collectorMaster);
     }
     //remove collectors from the arraylist
-    public static void removeCollector(CollectorMaster collectorMaster){
+    public static void removeCollector(Collector collectorMaster){
         collectors.remove(collectorMaster);
     }
 
