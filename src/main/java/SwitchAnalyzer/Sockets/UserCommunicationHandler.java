@@ -3,27 +3,30 @@ package SwitchAnalyzer.Sockets;
 import SwitchAnalyzer.Commands.ICommand;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 
 public class UserCommunicationHandler {
 
     private static volatile int x = 0;
     static ArrayList<Class<? extends ICommand>> classes = new ArrayList<>();
 
-    public static void listenToCommands(WebSocketServer server , int maxMessageLength, Queue<ICommand> cmdQueue)  {
-        while (true) {
+    public static void listenToCommands(WebSocketServer server , int maxMessageLength, Queue<ICommand> cmdQueue)
+    {
+        while (true)
+        {
             byte[] command = server.readFromSocket(maxMessageLength);
-            if (command == null){
+            if (command == null)
+            {
                 server.HandShake();
                 continue;
             }
-            try {
+            try
+            {
                 parseCommand(command, cmdQueue);
-            } catch (JsonProcessingException e) {
+            }
+            catch (JsonProcessingException e)
+            {
                 throw new RuntimeException(e);
             }
         }
