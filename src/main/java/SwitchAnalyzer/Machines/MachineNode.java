@@ -7,7 +7,7 @@ import java.net.Inet4Address;
 public class MachineNode {
     public MachineInfo machineInfo;
     private int MachineID;
-    private float rate;
+    private float sendRate; //rate from command
     private MacAddress nodeMacAddress;
     private Inet4Address nodeIp;
 
@@ -17,9 +17,9 @@ public class MachineNode {
 
     private int packetLoss;
 
-    public MachineNode(int machineID, float rate) {
+    public MachineNode(int machineID)
+    {
         MachineID = machineID;
-        this.rate = rate;
     }
     public int getMachineID() {
         return MachineID;
@@ -28,10 +28,10 @@ public class MachineNode {
         MachineID = machineID;
     }
     public float getRate() {
-        return rate;
+        return sendRate;
     }
     public void setRate(float rate) {
-        this.rate = rate;
+        this.sendRate = rate;
     }
 }
 

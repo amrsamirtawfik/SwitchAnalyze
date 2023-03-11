@@ -15,8 +15,8 @@ public class MasterOfHPC {
     private MacAddress HPCMacAddr;
     private Inet4Address HPCIp;
     private String status;
-    public MasterOfHPC(int HPCID, int noOfMachines, int health) {
-        this.HPCID = HPCID;
+    public MasterOfHPC(int HPCID, int noOfMachines) {
+        this.hpcInfo.HPCID= HPCID;
         this.noOfChilNodes = noOfMachines;
     }
 

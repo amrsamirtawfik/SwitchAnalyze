@@ -8,6 +8,9 @@ public class UDPHeader extends TransportHeader
     public UDPHeader(short dstPort, short srcPort) {
         super(dstPort, srcPort);
     }
+    public UDPHeader(){
+        super();
+    };
 
     @Override
     public  Packet.Builder buildHeader(Packet.Builder prevBuilder)

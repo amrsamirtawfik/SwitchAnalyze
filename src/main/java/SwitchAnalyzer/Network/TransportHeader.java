@@ -10,4 +10,5 @@ public abstract class TransportHeader extends Header
         this.dstPort = dstPort;
         this.srcPort = srcPort;
     }
+    public TransportHeader(){};
 }

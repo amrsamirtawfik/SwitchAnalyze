@@ -12,6 +12,7 @@ public class IPV4Header extends NetworkHeader
     public IPV4Header(Inet4Address srcIPADDR, Inet4Address dstIPPADDR) {
         super(srcIPADDR, dstIPPADDR);
     }
+    public IPV4Header(){}
 
     @Override
     public Packet.Builder buildHeader(Packet.Builder prevBuilder)

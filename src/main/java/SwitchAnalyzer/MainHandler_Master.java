@@ -7,9 +7,7 @@ import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MasterOfHPC;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.PCAP;
-import SwitchAnalyzer.Network.Ports;
+import SwitchAnalyzer.Network.*;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.Time;
@@ -31,7 +29,11 @@ public class MainHandler_Master
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        master = new MasterOfHPC(1,3,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
+        master = new MasterOfHPC(1,2);// needs to be adjusted by setting these values from the config file and setting it children nodes
+        GlobalVariable.packetInfoMap.put("udpHeader",new UDPHeader());
+        GlobalVariable.packetInfoMap.put("tcpHeader",new TCPHeader());
+        GlobalVariable.packetInfoMap.put("ipv4Header",new IPV4Header());
+        GlobalVariable.packetInfoMap.put("ipv6Header",new IPV6Header());
         //and also add mac and ip address in the constructor
         //Logger logger = LoggerFactory.getLogger(MasterHPC.class.getName());
         //replaced by string MasterHPC directly needs to be checked by  zoz
@@ -39,6 +41,7 @@ public class MainHandler_Master
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromMOM);
         commandClasses.add(StartRunCommand_Master.class);
+        commandClasses.add(RetrieveCmd_Master.class);
         collectors.add(new RatesCollectorMaster());
         collectors.add(new PLossCollectorMaster());
         PCAP.initialize();
