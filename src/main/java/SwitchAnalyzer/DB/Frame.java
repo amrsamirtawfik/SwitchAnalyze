@@ -10,14 +10,14 @@ import java.sql.Timestamp;
  */
 
 public class Frame implements Schema {
-    private long id ;
-    private byte[] bytes;
-    private long runNo;
+    private long id = -1;
+    private byte[] bytes ;
+    private long runNo = -1;
     private Timestamp timeStamp;
-    private int sendingPort;
-    private int recievingPort;
-    private String networkHeader;
-    private String transportHeader;
+    private int sendingPort = -1;
+    private int recievingPort = -1;
+    private String networkHeader = "";
+    private String transportHeader = "";
     private boolean errorInRouting;
     private boolean crcChecker;
     private final static Object obj = new Object();

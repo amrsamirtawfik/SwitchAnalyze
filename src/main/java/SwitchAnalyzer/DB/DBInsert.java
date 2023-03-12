@@ -3,6 +3,9 @@ package SwitchAnalyzer.DB;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.utils.UUIDs;
+
+import java.util.UUID;
 
 public class DBInsert
 {
@@ -12,12 +15,10 @@ public class DBInsert
         {
             DBCreate.createRunsTable();
         }
-        else
-        {
-            //opinion check if this run row already exists
-        }
+        insertRun(run);
     }
     public static void beginInsert(Frame frame){
+        // shof 7war el runNo
         if(!IsTableExists("frames_run"+String.valueOf(frame.getRunNo())))
         {
             DBCreate.createFrames_RunTable(frame.getRunNo());
@@ -26,6 +27,7 @@ public class DBInsert
         {
 
         }
+        insertFrame(frame,frame.getRunNo());
     }
     private static boolean IsTableExists(String tableName){
         StringBuilder sb = new StringBuilder("SELECT table_name FROM system_schema.tables WHERE table_name = '").append(tableName).append("'ALLOW FILTERING;");
@@ -35,6 +37,27 @@ public class DBInsert
             return true;
         }
         return false;
+    }
+
+    private static void insertFrame(Frame frame , long runNo)
+    {
+        UUID timeUuid = UUIDs.timeBased();
+        String bytesStrings = frame.byteArrToString();
+        StringBuilder sb = new StringBuilder("INSERT INTO ")
+                            .append("frames")
+                            .append("(id,payload) ")
+                            .append("VALUES (")
+                            .append(String.valueOf(timeUuid.toString()))
+                            .append(", ")
+                            .append(bytesStrings)
+                            .append(");");
+        final String query = sb.toString();
+        session.execute(query);
+    }
+    private static void insertRun(Run run)
+    {
+
+
     }
     /**
      * Input : DB.Frame
