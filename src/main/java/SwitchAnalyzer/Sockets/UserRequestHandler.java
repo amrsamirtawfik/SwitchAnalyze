@@ -3,6 +3,8 @@ package SwitchAnalyzer.Sockets;
 
 import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Commands.StartRunCommand_MOM;
+import SwitchAnalyzer.MainHandler_MOM;
+import SwitchAnalyzer.miscellaneous.JSONConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,8 +35,7 @@ public class UserRequestHandler
         int commandTypeIndex = Character.getNumericValue(jsonStr.charAt(0));
         jsonStr = jsonStr.replaceFirst("[0-9]*","");
         System.out.println("UserRequestHandler: "+ jsonStr);
-        ObjectMapper mapper = new ObjectMapper();
-        ICommand c = mapper.readValue(jsonStr, classes.get(commandTypeIndex));
+        ICommand c= JSONConverter.fromJSON(jsonStr, MainHandler_MOM.commandClasses.get(commandTypeIndex));
         cmdQueue.add(c);
     }
 
