@@ -17,9 +17,9 @@ import java.util.Queue;
 
 public class MainHandler_MOM {
     public static WebSocketServer server;
-    static Queue<ICommand> commands = new LinkedList<>();
-    static ArrayList<Class<? extends ICommandMOM>> commandClasses = new ArrayList<>();
-    static ArrayList<Collector> collectors = new ArrayList<>();
+    public static Queue<ICommand> commands = new LinkedList<>();
+    public static ArrayList<Class<? extends ICommandMOM>> commandClasses = new ArrayList<>();
+    public static ArrayList<Collector> collectors = new ArrayList<>();
     static volatile int x;
     public static MOM masterOfMasters;
     //TODO: should have an object of MOM in order to be used by the collectors?
@@ -35,7 +35,8 @@ public class MainHandler_MOM {
             run the Mapping algorithm between ports and HPCs
          */
         server = new WebSocketServer(Ports.webSocketPort);
-        GlobalVariable.portHpcMap.put(1, new MasterOfHPC(0, 2));
+
+        GlobalVariable.portHpcMap.put(1, new MasterOfHPC(0));
         GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(0));
         GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(1));
         MOM masterOfMasters = new MOM();
@@ -50,7 +51,7 @@ public class MainHandler_MOM {
     {
         init();
         Thread t1 = new Thread(() -> UserRequestHandler.readCommands(server, Ports.webSocketPort,
-                8888, commands));
+                10000, commands));
         t1.start();
         while(true)
         {

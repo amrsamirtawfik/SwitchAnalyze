@@ -25,25 +25,20 @@ import static SwitchAnalyzer.MainHandler_Master.master;
  */
 
 public class MasterConsumer {
-    static GenericConsumer consumer;
     static String consumerGroup = "Collectors";
+    static GenericConsumer consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);;
+
     //arraylist of collectors
     public static ArrayList<Collector> collectors = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
-//    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
-
     //this map will contain the results of the collectors
     /*the key will be the collector name and the value will be the result
     * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
      */
     static Map<String, String> results = new ConcurrentHashMap<>();
-    public MasterConsumer() {
-        this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
-        consumer.selectTopic(Topics.ratesFromMachines);
-    }
-
     public static Map<String, String> consume()
     {
+        consumer.selectTopic(Topics.ratesFromMachines);
         /*
         TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
          */

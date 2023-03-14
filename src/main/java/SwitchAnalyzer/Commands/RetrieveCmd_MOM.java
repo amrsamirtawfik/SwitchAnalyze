@@ -4,6 +4,7 @@ import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.IP;
@@ -19,21 +20,16 @@ import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class RetrieveCmd_MOM implements ICommandMOM
 {
+    public int id;
     public static Thread listeningThread;
     ArrayList<SwitchPort> ports= new ArrayList<>();
-
     @Override
     public void processCmd()
     {
         GlobalVariable.retrieveDataFromNode = true;
-
-        for (SwitchPort port : ports)
-        {
-            GenCmd(port);
-        }
-
-        MasterConsumer.addCollector(MainHandler_Master.collectors.get(0));
-        MasterConsumer.addCollector(MainHandler_Master.collectors.get(1));
+        GenCmd(new SwitchPort(id));
+        MasterConsumer.addCollector(MainHandler_MOM.collectors.get(0));
+        MasterConsumer.addCollector(MainHandler_MOM.collectors.get(1));
         listeningThread = new Thread (() ->
         {
             while(GlobalVariable.retrieveDataFromNode)
@@ -41,6 +37,7 @@ public class RetrieveCmd_MOM implements ICommandMOM
                 ProduceData_MOM.produceData();
             }
         });
+        listeningThread.start();
     }
 
     @Override

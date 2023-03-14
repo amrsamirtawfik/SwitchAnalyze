@@ -26,8 +26,9 @@ import static SwitchAnalyzer.MainHandler_Master.master;
  */
 
 public class MOMConsumer {
-    static GenericConsumer consumer;
     static String consumerGroup = "MOMCollector";
+    static GenericConsumer consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);;
+
     //arraylist of collectors
     public static ArrayList<Collector> collectors = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
@@ -38,12 +39,9 @@ public class MOMConsumer {
     * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
      */
     static Map<String, String> results = new ConcurrentHashMap<>();
-    public MOMConsumer() {
-        this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
-        consumer.selectTopic(Topics.ratesFromHPCs);
-    }
 
     public static Map<String, String> consume() {
+        consumer.selectTopic(Topics.ratesFromHPCs);
         /*
         TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
          */

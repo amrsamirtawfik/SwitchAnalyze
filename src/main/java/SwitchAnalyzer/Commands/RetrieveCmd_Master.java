@@ -42,6 +42,7 @@ public class RetrieveCmd_Master extends ICommandMaster{
                ProduceData_Master.produceData();
            }
         });
+        listeningThread.start();
     }
 
     @Override

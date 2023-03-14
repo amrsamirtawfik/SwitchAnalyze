@@ -9,32 +9,16 @@ import java.net.Inet4Address;
  */
 public class MachineNode {
     public MachineInfo machineInfo;
-    private int MachineID;
-    private float sendRate; //rate from command
+
+    //TODO: will be used when constructing packets to be sent
     private MacAddress nodeMacAddress;
     private Inet4Address nodeIp;
-
-    public int getPacketLoss() {
-        return packetLoss;
-    }
-
-    private int packetLoss;
-
-    public MachineNode(int machineID)
+    public MachineNode(int id)
     {
-        MachineID = machineID;
+        machineInfo = new MachineInfo(id);
     }
     public int getMachineID() {
-        return MachineID;
-    }
-    public void setMachineID(int machineID) {
-        MachineID = machineID;
-    }
-    public float getRate() {
-        return sendRate;
-    }
-    public void setRate(float rate) {
-        this.sendRate = rate;
+        return machineInfo.machineID;
     }
 }
 

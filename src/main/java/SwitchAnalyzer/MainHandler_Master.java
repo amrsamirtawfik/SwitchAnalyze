@@ -30,7 +30,7 @@ public class MainHandler_Master
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        master = new MasterOfHPC(0,2);// needs to be adjusted by setting these values from the config file and setting it children nodes
+        master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
         master.childNodes.add(new MachineNode(0));
         master.childNodes.add(new MachineNode(1));
 
