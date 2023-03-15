@@ -25,7 +25,7 @@ public class ProduceData_Master
     {
         //TODO : this logic code be removed from here and put in the masterHandler and pass the result to produceData
         Map<String, String> results = MasterConsumer.consume();
-        master.hpcInfo.map = (HashMap<String, String>) results;
+        master.hpcInfo.map = results;
         GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
         JSONConverter jsonConverter = new JSONConverter();
         String json = JSONConverter.toJSON(master.hpcInfo);

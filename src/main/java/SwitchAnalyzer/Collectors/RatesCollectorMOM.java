@@ -32,6 +32,7 @@ public class RatesCollectorMOM implements Collector {
                 overAllRateString = masterOfMasters.HPCs.get(i).hpcInfo.map.get(NamingConventions.rates);
                 OverallRate += Float.parseFloat(overAllRateString);
             }
+        System.out.println("overall rates at MOM" + OverallRate);
             return String.valueOf(OverallRate);
     }
 

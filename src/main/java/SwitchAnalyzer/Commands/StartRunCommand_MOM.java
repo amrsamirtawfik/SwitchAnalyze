@@ -24,6 +24,7 @@ public class StartRunCommand_MOM implements ICommandMOM
     @Override
     public void GenCmd(SwitchPort port)
     {
+        System.out.println(port.ID);
         StartRunCommand_Master command = new StartRunCommand_Master(port.ID, port.portConfig);
         String json = JSONConverter.toJSON(command);
         System.out.println("StartRunCommand_MOM: "+ json);

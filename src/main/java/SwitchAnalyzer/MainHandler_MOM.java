@@ -21,7 +21,7 @@ public class MainHandler_MOM {
     public static ArrayList<Class<? extends ICommandMOM>> commandClasses = new ArrayList<>();
     public static ArrayList<Collector> collectors = new ArrayList<>();
     static volatile int x;
-    public static MOM masterOfMasters;
+    public static volatile MOM masterOfMasters;
     //TODO: should have an object of MOM in order to be used by the collectors?
     public static void init()
     {
@@ -35,12 +35,15 @@ public class MainHandler_MOM {
             run the Mapping algorithm between ports and HPCs
          */
         server = new WebSocketServer(Ports.webSocketPort);
-
-        GlobalVariable.portHpcMap.put(1, new MasterOfHPC(0));
-        GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(0));
-        GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(1));
-        MOM masterOfMasters = new MOM();
-        masterOfMasters.HPCs.add(GlobalVariable.portHpcMap.get(0));
+        MasterOfHPC master = new MasterOfHPC(0);
+        GlobalVariable.portHpcMap.put(1, master);
+//        GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(0));
+        master.childNodes.add(new MachineNode(0));
+        masterOfMasters = new MOM();
+        masterOfMasters.HPCs.add(master);
+        System.out.println(masterOfMasters.HPCs.get(0).getHPCID());
+        System.out.println(masterOfMasters.HPCs.get(0));
+        System.out.println(GlobalVariable.portHpcMap.get(1));
         commandClasses.add(StartRunCommand_MOM.class);
         commandClasses.add(RetrieveCmd_MOM.class);
         collectors.add(new RatesCollectorMOM());
@@ -62,5 +65,6 @@ public class MainHandler_MOM {
             ICommand c = commands.poll();
             ProcessCmd.processCmd(c);
         }
+
     }
 }

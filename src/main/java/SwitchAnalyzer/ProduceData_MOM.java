@@ -14,16 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static SwitchAnalyzer.MainHandler_MOM.masterOfMasters;
-import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class ProduceData_MOM
 {
     public static void produceData()
     {
         Map<String, String> results = MOMConsumer.consume();
-        masterOfMasters.HPCs.get(0).hpcInfo.map = (HashMap<String, String>) results;
+        masterOfMasters.HPCs.get(0).hpcInfo.map =  results;
         JSONConverter jsonConverter = new JSONConverter();
-        String json = JSONConverter.toJSON(master.hpcInfo);
+        String json = JSONConverter.toJSON(masterOfMasters.HPCs.get(0).hpcInfo);
         System.out.println("ProduceData_MOM: " + json);
         UserRequestHandler.writeToUser(MainHandler_MOM.server,json.getBytes());
     }
