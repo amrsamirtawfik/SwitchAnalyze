@@ -31,10 +31,12 @@ public class MainHandler_Master
     public static void init()
     {
         //read from config text file and construct HPC object from this config file
-        master = new MasterOfHPC(1,3,100); // needs to be adjusted by setting these values from the config file and setting it children nodes
-        //and also add mac and ip address in the constructor
-        //Logger logger = LoggerFactory.getLogger(MasterHPC.class.getName());
-        //replaced by string MasterHPC directly needs to be checked by  zoz
+        master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
+//        master.childNodes.add(new MachineNode(0));
+        master.childNodes.add(new MachineNode(1));
+
+        GlobalVariable.portHpcMap.put(1, master);
+
         Logger logger = LoggerFactory.getLogger("MasterHPC");
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromMOM);

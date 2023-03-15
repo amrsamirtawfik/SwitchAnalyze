@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static SwitchAnalyzer.MainHandler_MOM.masterOfMasters;
 import static SwitchAnalyzer.MainHandler_Master.master;
+import static SwitchAnalyzer.MainHandler_MOM.collectors;
 
 /**
  * this class will consume the overall info (for now rates+packet loss) information coming from HPCs through kafka
@@ -26,10 +27,10 @@ import static SwitchAnalyzer.MainHandler_Master.master;
  */
 
 public class MOMConsumer {
-    static GenericConsumer consumer;
     static String consumerGroup = "MOMCollector";
+    static GenericConsumer consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);;
+
     //arraylist of collectors
-    public static ArrayList<Collector> collectors = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
 //    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
 
@@ -38,34 +39,37 @@ public class MOMConsumer {
     * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
      */
     static Map<String, String> results = new ConcurrentHashMap<>();
-    public MOMConsumer() {
-        this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
-        consumer.selectTopic(Topics.ratesFromHPCs);
-    }
 
     public static Map<String, String> consume() {
+        consumer.selectTopic(Topics.ratesFromHPCs);
         /*
         TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
          */
-//        while (true) {
+        while (true) {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
                 String json = record.value();
+                System.out.println(json);
                 HPC_INFO hpcInfo = JSONConverter.fromJSON(json, HPC_INFO.class);
-
+                System.out.println("hpcid : "  + hpcInfo.HPCID);
+                System.out.println(masterOfMasters);
                 // TODO: we need to add the machines first to the list of machines
                 masterOfMasters.HPCs.get(hpcInfo.HPCID).hpcInfo = hpcInfo;
             }
+            if(records.count() > 0)
+                break;
+        }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();
-
+        System.out.println("the size of the collectors: " + collectors.size());
         for (int i = 0; i < collectors.size(); i++) {
             final int index = i; // Make a copy of i
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     String res = collectors.get(index).collect();
+                    System.out.println("result returned from collectos:" + res);
                     results.put(collectors.get(index).getName(), res);
                 }
             });

@@ -1,6 +1,8 @@
 package SwitchAnalyzer.Machines;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * this is the information thats going to be produced into kafka
@@ -9,10 +11,10 @@ import java.util.HashMap;
 
 public class HPC_INFO {
     public int HPCID;
-    public HashMap<String,String> map;
+    public Map<String,String> map;
     public HPC_INFO(int id )
     {
         this.HPCID = id;
-        map =new HashMap<String, String>();
+        map =new ConcurrentHashMap<>();
     }
 }

@@ -1,5 +1,6 @@
 package SwitchAnalyzer.miscellaneous;
 
+import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import java.util.HashMap;
@@ -11,5 +12,6 @@ public class GlobalVariable {
     public static String interfaceName = "enp2s0";
     public static int webSocketPort = 9099;
     public static int webSocketMaxMessages = 100000;
+    public static GenericProducer producer ;
 
 }

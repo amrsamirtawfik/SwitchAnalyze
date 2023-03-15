@@ -13,7 +13,7 @@ import SwitchAnalyzer.miscellaneous.JSONConverter;
 import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class RetrieveCmd_Master extends ICommandMaster{
-    GenericProducer producer;
+
     public static Thread listeningThread;
 
     public RetrieveCmd_Master(int portID)
@@ -25,12 +25,14 @@ public class RetrieveCmd_Master extends ICommandMaster{
     public void processCmd()
     {
         GlobalVariable.retrieveDataFromNode = true;
-        producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
+        GlobalVariable.producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
         for (MachineNode node : master.childNodes)
         {
             GenCmd(node.getMachineID());
         }
-        producer.close();
+        GlobalVariable.producer.close();
+        MasterConsumer.addCollector(MainHandler_Master.collectors.get(0));
+        MasterConsumer.addCollector(MainHandler_Master.collectors.get(1));
         listeningThread = new Thread (() ->
         {
            while(GlobalVariable.retrieveDataFromNode)
@@ -46,6 +48,7 @@ public class RetrieveCmd_Master extends ICommandMaster{
         RetrieveCmd_Node command = new RetrieveCmd_Node(machineID);
         String json = JSONConverter.toJSON(command);
         //dont forget to add number at the beginning of the json to indicate the type of the command
-        producer.send(Topics.cmdFromHpcMaster, json);
+        json = "1"+json;
+        GlobalVariable.producer.send(Topics.cmdFromHpcMaster, json);
     }
 }
