@@ -1,5 +1,6 @@
 package SwitchAnalyzer.Commands;
 
+import SwitchAnalyzer.Collectors.MOMConsumer;
 import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
@@ -28,8 +29,8 @@ public class RetrieveCmd_MOM implements ICommandMOM
     {
         GlobalVariable.retrieveDataFromNode = true;
         GenCmd(new SwitchPort(id));
-        MasterConsumer.addCollector(MainHandler_MOM.collectors.get(0));
-        MasterConsumer.addCollector(MainHandler_MOM.collectors.get(1));
+        MOMConsumer.addCollector(MainHandler_MOM.collectors.get(0));
+        MOMConsumer.addCollector(MainHandler_MOM.collectors.get(1));
         listeningThread = new Thread (() ->
         {
             while(GlobalVariable.retrieveDataFromNode)

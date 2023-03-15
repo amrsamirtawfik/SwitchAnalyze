@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static SwitchAnalyzer.MainHandler_MOM.masterOfMasters;
 import static SwitchAnalyzer.MainHandler_Master.master;
-import static SwitchAnalyzer.MainHandler_MOM.collectors;
 
 /**
  * this class will consume the overall info (for now rates+packet loss) information coming from HPCs through kafka
@@ -29,7 +28,7 @@ import static SwitchAnalyzer.MainHandler_MOM.collectors;
 public class MOMConsumer {
     static String consumerGroup = "MOMCollector";
     static GenericConsumer consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);;
-
+    public static ArrayList<Collector> collectors = new ArrayList<>();
     //arraylist of collectors
     //not needed because MasterOfHPC already has a list of machines
 //    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
