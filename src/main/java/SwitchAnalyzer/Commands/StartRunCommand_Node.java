@@ -61,6 +61,5 @@ public class StartRunCommand_Node extends ICommandNode
                 //store p in kafka or database
             }
         }
-
     }
 }

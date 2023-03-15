@@ -1,5 +1,6 @@
 package SwitchAnalyzer;
 
+import SwitchAnalyzer.Commands.ICommandMaster;
 import SwitchAnalyzer.Network.Observer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
@@ -8,6 +9,7 @@ import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.util.concurrent.ExecutionException;
 
@@ -19,6 +21,7 @@ import static SwitchAnalyzer.MainHandler_Node.node;
  */
 public class ProduceData_Node {
     private static GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
+
     public static void produceData()
     {
             if(GlobalVariable.retrieveDataFromNode)
@@ -37,5 +40,10 @@ public class ProduceData_Node {
                 }
                 catch (Exception e) { e.printStackTrace(); }
             }
+    }
+    public static void produce(Object o, String topic)
+    {
+        String json = JSONConverter.toJSON(o);
+        producer.send(topic,json);
     }
 }

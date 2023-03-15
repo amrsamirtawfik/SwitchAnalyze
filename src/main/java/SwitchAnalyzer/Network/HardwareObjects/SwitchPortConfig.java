@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SwitchPortConfig {
    public ArrayList<PacketInfoGui> packetInfos;
-    public ArrayList<Utilities> utilities;
+   public ArrayList<Utilities> utilities;
    public int rate;
 
    public String mode; // sender or receiver

@@ -37,7 +37,6 @@ public class MainHandler_MOM {
         server = new WebSocketServer(Ports.webSocketPort);
         MasterOfHPC master = new MasterOfHPC(0);
         GlobalVariable.portHpcMap.put(1, master);
-//        GlobalVariable.portHpcMap.get(1).childNodes.add(new MachineNode(0));
         master.childNodes.add(new MachineNode(0));
         masterOfMasters = new MOM();
         masterOfMasters.HPCs.add(master);
