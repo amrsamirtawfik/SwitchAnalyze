@@ -36,4 +36,9 @@ public class GenericProducer {
         producer.flush();
         this.producer.close();
     }
+
+    public void flush()
+    {
+        producer.flush();
+    }
 }

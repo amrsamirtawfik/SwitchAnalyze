@@ -35,9 +35,15 @@ public class MOMConsumer {
      *the key will be the collector name and the value will be the result
      * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
      */
-    static Map<String, String> results = new ConcurrentHashMap<>();
+    public static Map<String, String> results = new ConcurrentHashMap<>();
 
-    public static Map<String, String> consume()
+    public static void setRequestedData()
+    {
+        updateHpcInfo();
+        reduce();
+    }
+
+    public static void updateHpcInfo()
     {
         consumer.selectTopic(Topics.ratesFromHPCs);
         while (true)
@@ -54,7 +60,10 @@ public class MOMConsumer {
             if(records.count() > 0)
                 break;
         }
+    }
 
+    public static void reduce()
+    {
         //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < collectors.size(); i++)
@@ -78,11 +87,8 @@ public class MOMConsumer {
             try { thread.join(); }
             catch (InterruptedException e) { System.out.printf("in MasterConsumer: %s%n", e.getMessage()); }
         }
-        return results;
     }
-    //add collectors to the arraylist
     public static void addCollector(Collector collectorMaster){ collectors.add(collectorMaster); }
-    //remove collectors from the arraylist
     public static void removeCollector(Collector collectorMaster){ collectors.remove(collectorMaster); }
     public static Map<String, String> getResults() { return results; }
 }

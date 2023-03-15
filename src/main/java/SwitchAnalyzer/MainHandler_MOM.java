@@ -3,8 +3,10 @@ package SwitchAnalyzer;
 import SwitchAnalyzer.Collectors.*;
 import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Commands.ICommand;
+import SwitchAnalyzer.Kafka.Producer;
 import SwitchAnalyzer.Machines.MOM;
 import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
 import SwitchAnalyzer.Sockets.WebSocketServer;
@@ -21,6 +23,7 @@ public class MainHandler_MOM {
     public static Queue<ICommand> commands = new LinkedList<>();
     public static ArrayList<Class<? extends ICommandMOM>> commandClasses = new ArrayList<>();
     public static HashMap<String,Collector> collectors = new HashMap<>();
+    public static Producer cmdProducer = new Producer(IP.ip1);
     static volatile int x;
     public static volatile MOM masterOfMasters;
 

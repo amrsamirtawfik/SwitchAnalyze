@@ -2,6 +2,7 @@ package SwitchAnalyzer.Commands;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
+import SwitchAnalyzer.Kafka.Producer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
@@ -12,10 +13,11 @@ import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import java.util.ArrayList;
 
+import static SwitchAnalyzer.MainHandler_MOM.cmdProducer;
+
 
 public class RetrieveCmd_MOM implements ICommandMOM
 {
-    public int id;
     public static Thread listeningThread;
     public ArrayList<String> retrievals;
     public ArrayList<Integer> ids;
@@ -33,7 +35,7 @@ public class RetrieveCmd_MOM implements ICommandMOM
         {
             while(GlobalVariable.retrieveDataFromNode)
             {
-                ProduceData_MOM.produceData();
+                ProduceData_MOM.produceData(ids);
             }
         });
         listeningThread.start();
@@ -53,8 +55,8 @@ public class RetrieveCmd_MOM implements ICommandMOM
         RetrieveCmd_Master command = new RetrieveCmd_Master(port.ID);
         String json = JSONConverter.toJSON(command);
         json = "1" + json;
-        GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
-        producer.send(Topics.cmdFromMOM, json);
-        producer.close();
+        cmdProducer.produce(json, Topics.cmdFromMOM);
+        cmdProducer.produce(Topics.cmdFromMOM, json);
+        cmdProducer.flush();
     }
 }

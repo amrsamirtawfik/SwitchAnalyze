@@ -1,27 +1,26 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
-import SwitchAnalyzer.Collectors.MasterConsumer;
-import SwitchAnalyzer.Kafka.GenericProducer;
-import SwitchAnalyzer.Kafka.Topics;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
-import SwitchAnalyzer.Sockets.WebSocketServer;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.ArrayList;
 import static SwitchAnalyzer.MainHandler_MOM.masterOfMasters;
 
 public class ProduceData_MOM
 {
-    public static void produceData()
+    public static void produceData(ArrayList<Integer> ids)
     {
-        masterOfMasters.HPCs.get(0).hpcInfo.map = MOMConsumer.consume();
-        String json = JSONConverter.toJSON(masterOfMasters.HPCs.get(0).hpcInfo);
-        System.out.println("ProduceData_MOM: " + json);
-        UserRequestHandler.writeToUser(MainHandler_MOM.server,json.getBytes());
+        MOMConsumer.setRequestedData();
+        String json;
+        for (int id : ids)
+        {
+            json = JSONConverter.toJSON(masterOfMasters.HPCs.get(id).hpcInfo);
+            UserRequestHandler.writeToUser(MainHandler_MOM.server,json.getBytes());
+        }
+        if (!MOMConsumer.getResults().isEmpty())
+        {
+            json = JSONConverter.toJSON(MOMConsumer.getResults());
+            UserRequestHandler.writeToUser(MainHandler_MOM.server, json.getBytes());
+        }
     }
 }
