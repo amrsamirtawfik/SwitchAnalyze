@@ -12,6 +12,7 @@ import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -19,9 +20,10 @@ public class MainHandler_MOM {
     public static WebSocketServer server;
     public static Queue<ICommand> commands = new LinkedList<>();
     public static ArrayList<Class<? extends ICommandMOM>> commandClasses = new ArrayList<>();
-    public static ArrayList<Collector> collectors = new ArrayList<>();
+    public static HashMap<String,Collector> collectors = new HashMap<>();
     static volatile int x;
     public static volatile MOM masterOfMasters;
+
     //TODO: should have an object of MOM in order to be used by the collectors?
     public static void init()
     {
@@ -45,8 +47,8 @@ public class MainHandler_MOM {
         System.out.println(GlobalVariable.portHpcMap.get(1));
         commandClasses.add(StartRunCommand_MOM.class);
         commandClasses.add(RetrieveCmd_MOM.class);
-        collectors.add(new RatesCollectorMOM());
-        collectors.add(new PLossCollectorMOM());
+        collectors.put(NamingConventions.rates,new RatesCollectorMOM());
+        collectors.put(NamingConventions.packetLoss,new  PLossCollectorMOM());
     }
 
     public static void main(String[] args)
