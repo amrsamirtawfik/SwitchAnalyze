@@ -18,7 +18,8 @@ public class MapPacketInfo implements mapObjects
                         new PayloadBuilder(packetGuiInfo.payloadBuilder),
                         (TransportHeader) packetInfoMap.get(packetGuiInfo.transportHeader),
                         (NetworkHeader) packetInfoMap.get(packetGuiInfo.networkHeader),
-                        (DataLinkHeader) packetInfoMap.get(packetGuiInfo.dataLinkHeader)
+                        (DataLinkHeader) packetInfoMap.get(packetGuiInfo.dataLinkHeader),
+                        (ErrorDetectingAlgorithms) packetInfoMap.get(packetGuiInfo.errorDetectingAlgorithm)
                 );
         result.numberOfPackets = packetGuiInfo.numberOfPackets;
         result.packetSize = packetGuiInfo.packetSize;

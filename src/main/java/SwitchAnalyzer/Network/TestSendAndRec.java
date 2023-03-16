@@ -17,7 +17,10 @@ public class TestSendAndRec {
             System.out.println("couldn't make Ipv4 header");
         }
         EthernetHeader ethernetHeader = new EthernetHeader(Builder.buildMacAddress("00:00:00:00:00:01"), Builder.buildMacAddress("00:00:00:00:00:01"));
-        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader);
+
+        ErrorDetectingAlgorithms CRCbytes=new CRC("CRC");
+
+        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
 
         SendThreadsHandler.addToPacketInfoList(packetInf);
 

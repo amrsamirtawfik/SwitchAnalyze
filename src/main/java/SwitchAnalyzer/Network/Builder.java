@@ -39,13 +39,16 @@ public class Builder
         }
         EthernetHeader ethernetHeader = new EthernetHeader(buildMacAddress("00:00:00:00:00:01"), buildMacAddress("00:00:00:00:00:01"));
 
-        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader);
+        ErrorDetectingAlgorithms CRCbytes=new CRC("CRC");
+
+        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
 
         Packet.Builder payloadBuild = getBuilder(payloadBuilder, new UnknownPacket.Builder());
         Packet.Builder udpBuild = getBuilder(udpHeader, payloadBuild);
         Packet.Builder networkBuild = getBuilder(ipv4Header, udpBuild);
         Packet.Builder etherBuild = getBuilder(ethernetHeader, networkBuild);
-        Packet packet = etherBuild.build();
+        Packet.Builder CRCBuild= getBuilder(CRCbytes,etherBuild);
+        Packet packet = CRCBuild.build();
         System.out.println(packet);
         Packet.Builder builder = packet.getBuilder();
         UDPModifier.modifiyDstPort(builder, (short) 11111);

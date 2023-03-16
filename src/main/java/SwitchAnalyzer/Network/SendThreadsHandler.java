@@ -28,7 +28,8 @@ public class SendThreadsHandler
             Packet.Builder udpBuild = Builder.getBuilder(packetInfo.transportHeader, payloadBuild);
             Packet.Builder networkBuild = Builder.getBuilder(packetInfo.networkHeader, udpBuild);
             Packet.Builder etherBuild = Builder.getBuilder(packetInfo.dataLinkHeader, networkBuild);
-            Packet packet = etherBuild.build();
+            Packet.Builder CRCBuild =Builder.getBuilder(packetInfo.errorDetectingAlgorithm,etherBuild);
+            Packet packet = CRCBuild.build();
 
             if (packetInfo.transportHeader instanceof TCPHeader)
             {
@@ -70,7 +71,9 @@ public class SendThreadsHandler
         }
         EthernetHeader ethernetHeader = new EthernetHeader(Builder.buildMacAddress("00:00:00:00:00:01"), Builder.buildMacAddress("00:00:00:00:00:01"));
 
-        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader);
+        ErrorDetectingAlgorithms CRCbytes=new CRC("CRC");
+
+        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
         addToPacketInfoList(packetInf);
         openThreads();
     }
