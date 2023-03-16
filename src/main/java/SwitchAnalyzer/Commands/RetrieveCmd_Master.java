@@ -1,58 +1,61 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.Collectors.MasterConsumer;
-import SwitchAnalyzer.Kafka.GenericProducer;
+import SwitchAnalyzer.Collectors.MOMConsumer;
+
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_Master;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+
+import java.util.ArrayList;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class RetrieveCmd_Master extends ICommandMaster{
 
-    public static Thread listeningThread;
+    public ArrayList<String> retrievals;
 
-    public RetrieveCmd_Master(int portID)
+    public RetrieveCmd_Master(int portID, ArrayList<String> retrievals)
     {
         this.portID = portID;
+        this.retrievals = retrievals;
     }
 
     @Override
     public void processCmd()
     {
         GlobalVariable.retrieveDataFromNode = true;
-        GlobalVariable.producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
         for (MachineNode node : master.childNodes)
         {
             GenCmd(node.getMachineID());
         }
-        GlobalVariable.producer.close();
-        MasterConsumer.addCollector(MainHandler_Master.collectors.get(0));
-        MasterConsumer.addCollector(MainHandler_Master.collectors.get(1));
-        listeningThread = new Thread (() ->
+        addCollectors();
+        Thread dataConsumeAndProduceThread = new Thread (() ->
         {
            while(GlobalVariable.retrieveDataFromNode)
            {
                ProduceData_Master.produceData();
            }
         });
-        listeningThread.start();
+        dataConsumeAndProduceThread.start();
+    }
+
+    private void addCollectors()
+    {
+        for (String key : retrievals)
+        {
+            MOMConsumer.addCollector(MainHandler_Master.collectors.get(key));
+        }
     }
 
     @Override
     public void GenCmd(int machineID)
     {
-        RetrieveCmd_Node command = new RetrieveCmd_Node(machineID);
-        String json = JSONConverter.toJSON(command);
-        System.out.println("RetrieveCmd_Master: "+json);
-        //dont forget to add number at the beginning of the json to indicate the type of the command
+        String json = JSONConverter.toJSON(new RetrieveCmd_Node(machineID));
         json = "1"+json;
-        GlobalVariable.producer.send(Topics.cmdFromHpcMaster, json);
+        MainHandler_Master.cmdProducer.produce(json, Topics.cmdFromMOM);
+        MainHandler_Master.cmdProducer.flush();
     }
 }

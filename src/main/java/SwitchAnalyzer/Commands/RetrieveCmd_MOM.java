@@ -52,11 +52,10 @@ public class RetrieveCmd_MOM implements ICommandMOM
     @Override
     public void GenCmd(SwitchPort port)
     {
-        RetrieveCmd_Master command = new RetrieveCmd_Master(port.ID);
+        RetrieveCmd_Master command = new RetrieveCmd_Master(port.ID, this.retrievals);
         String json = JSONConverter.toJSON(command);
         json = "1" + json;
         cmdProducer.produce(json, Topics.cmdFromMOM);
-        cmdProducer.produce(Topics.cmdFromMOM, json);
         cmdProducer.flush();
     }
 }

@@ -5,6 +5,7 @@ import SwitchAnalyzer.Collectors.PLossCollectorMaster;
 import SwitchAnalyzer.Collectors.RatesCollectorMaster;
 import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Kafka.GenericConsumer;
+import SwitchAnalyzer.Kafka.Producer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
@@ -18,20 +19,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainHandler_Master
 {
     public static String consumerGroup = "command-consumer-group";
     public static ArrayList<Class<? extends ICommandMaster>> commandClasses = new ArrayList<>();
-    public static ArrayList<Collector> collectors = new ArrayList<>();
+    public static HashMap<String,Collector> collectors = new HashMap<>();
+    public static Producer cmdProducer = new Producer(IP.ip1);
+    public static Producer dataProducer = new Producer(IP.ip1);
     static GenericConsumer consumer;
     public static MasterOfHPC master;
 
     public static void init()
     {
-        //read from config text file and construct HPC object from this config file
         master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
-//        master.childNodes.add(new MachineNode(0));
         master.childNodes.add(new MachineNode(1));
         GlobalVariable.portHpcMap.put(1, master);
         Logger logger = LoggerFactory.getLogger("MasterHPC");
@@ -39,8 +41,8 @@ public class MainHandler_Master
         consumer.selectTopic(Topics.cmdFromMOM);
         commandClasses.add(StartRunCommand_Master.class);
         commandClasses.add(RetrieveCmd_Master.class);
-        collectors.add(new RatesCollectorMaster());
-        collectors.add(new PLossCollectorMaster());
+        collectors.put(NamingConventions.rates, new RatesCollectorMaster());
+        collectors.put(NamingConventions.packetLoss, new PLossCollectorMaster());
         PCAP.initialize();
     }
 

@@ -23,13 +23,9 @@ public class ProduceData_Master
 {
     public static void produceData()
     {
-        //TODO : this logic code be removed from here and put in the masterHandler and pass the result to produceData
-        Map<String, String> results = MasterConsumer.consume();
-        master.hpcInfo.map = results;
-        GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
-        JSONConverter jsonConverter = new JSONConverter();
+        master.hpcInfo.map = MasterConsumer.consume();
         String json = JSONConverter.toJSON(master.hpcInfo);
-        System.out.println("ProduceData_Master: "+json);
-        producer.send(Topics.ratesFromHPCs, json);
+        MainHandler_Master.dataProducer.produce(Topics.ratesFromHPCs,json);
+        MainHandler_Master.dataProducer.flush();
     }
 }
