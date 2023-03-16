@@ -1,15 +1,13 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Network.Observer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Network.IP;
+import SwitchAnalyzer.Network.Observer;
 import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
-
-import java.util.concurrent.ExecutionException;
 
 import static SwitchAnalyzer.MainHandler_Node.node;
 

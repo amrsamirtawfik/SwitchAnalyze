@@ -1,11 +1,9 @@
 package SwitchAnalyzer.Network;
 
-import org.pcap4j.packet.EthernetPacket;
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
+import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UdpPacket;
 import org.pcap4j.packet.UnknownPacket;
-import org.pcap4j.packet.namednumber.IpNumber;
-import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.MacAddress;
 
 import java.net.Inet4Address;
@@ -39,7 +37,7 @@ public class Builder
         }
         EthernetHeader ethernetHeader = new EthernetHeader(buildMacAddress("00:00:00:00:00:01"), buildMacAddress("00:00:00:00:00:01"));
 
-        ErrorDetectingAlgorithms CRCbytes=new CRC("CRC");
+        ErrorDetectingAlgorithms CRCbytes=new CRC(false);
 
         PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
 

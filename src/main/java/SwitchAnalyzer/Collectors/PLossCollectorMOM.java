@@ -3,7 +3,6 @@ package SwitchAnalyzer.Collectors;
 import SwitchAnalyzer.NamingConventions;
 
 import static SwitchAnalyzer.MainHandler_MOM.masterOfMasters;
-import static SwitchAnalyzer.MainHandler_Master.master;
 
 /**
  * this class is responsible for collecting the rates from the HPCs

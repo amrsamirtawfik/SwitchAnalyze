@@ -1,12 +1,14 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Commands.*;
+import SwitchAnalyzer.Commands.ICommandNode;
+import SwitchAnalyzer.Commands.ProcessCmd;
+import SwitchAnalyzer.Commands.RetrieveCmd_Node;
+import SwitchAnalyzer.Commands.StartRunCommand_Node;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.Machines.MasterOfHPC;
+import SwitchAnalyzer.Network.ErrorDetection.None;
 import SwitchAnalyzer.Network.*;
-import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.Time;
@@ -36,6 +38,8 @@ public class MainHandler_Node
         GlobalVariable.packetInfoMap.put("tcpHeader",new TCPHeader());
         GlobalVariable.packetInfoMap.put("ipv4Header",new IPV4Header());
         GlobalVariable.packetInfoMap.put("ipv4Header",new IPV6Header());
+        //GlobalVariable.packetInfoMap.put("CRC", new CRC());
+        GlobalVariable.packetInfoMap.put("None", new None());
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromHpcMaster);
         commandClasses.add(StartRunCommand_Node.class);

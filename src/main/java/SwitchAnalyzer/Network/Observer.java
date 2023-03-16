@@ -2,9 +2,6 @@ package SwitchAnalyzer.Network;
 
 
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
-import SwitchAnalyzer.Kafka.*;
-import SwitchAnalyzer.Machines.*;
-import SwitchAnalyzer.miscellaneous.*;
 
 public class Observer
 {

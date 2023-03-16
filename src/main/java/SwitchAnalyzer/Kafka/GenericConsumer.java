@@ -1,12 +1,12 @@
 package SwitchAnalyzer.Kafka;
 
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.Properties;
-
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Properties;
 
 public class GenericConsumer {
     private final KafkaConsumer<String, String> consumer;

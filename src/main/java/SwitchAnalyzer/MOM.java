@@ -1,4 +1,4 @@
-//package SwitchAnalyzer;
+package SwitchAnalyzer;//package SwitchAnalyzer;
 //
 //import SwitchAnalyzer.miscellaneous.GlobalVariable;
 //import SwitchAnalyzer.Kafka.*;

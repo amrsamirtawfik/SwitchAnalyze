@@ -1,17 +1,12 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.MapPacketInfo;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
-import SwitchAnalyzer.Network.Header;
 import SwitchAnalyzer.Network.PacketInfo;
 import SwitchAnalyzer.Network.PacketSniffer;
 import SwitchAnalyzer.Network.SendThreadsHandler;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
 import org.pcap4j.packet.Packet;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 

@@ -1,6 +1,7 @@
 package SwitchAnalyzer.Network;
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
+import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UnknownPacket;
 
 import java.util.ArrayList;
 
@@ -22,14 +23,9 @@ public class SendThreadsHandler
     public static void openThreads()
     {
         ArrayList<Thread> threads = new ArrayList<>();
-        for (PacketInfo packetInfo :packetInfos)
+        for (PacketInfo packetInfo : packetInfos)
         {
-            Packet.Builder payloadBuild = Builder.getBuilder(packetInfo.payloadBuilder, new UnknownPacket.Builder());
-            Packet.Builder udpBuild = Builder.getBuilder(packetInfo.transportHeader, payloadBuild);
-            Packet.Builder networkBuild = Builder.getBuilder(packetInfo.networkHeader, udpBuild);
-            Packet.Builder etherBuild = Builder.getBuilder(packetInfo.dataLinkHeader, networkBuild);
-            Packet.Builder CRCBuild =Builder.getBuilder(packetInfo.errorDetectingAlgorithm,etherBuild);
-            Packet packet = CRCBuild.build();
+            Packet packet = packetInfo.build();
 
             if (packetInfo.transportHeader instanceof TCPHeader)
             {
@@ -71,9 +67,10 @@ public class SendThreadsHandler
         }
         EthernetHeader ethernetHeader = new EthernetHeader(Builder.buildMacAddress("00:00:00:00:00:01"), Builder.buildMacAddress("00:00:00:00:00:01"));
 
-        ErrorDetectingAlgorithms CRCbytes=new CRC("CRC");
+        ErrorDetectingAlgorithms CRCbytes = new CRC(false);
 
         PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
+        packetInf.numberOfPackets = 10000;
         addToPacketInfoList(packetInf);
         openThreads();
     }

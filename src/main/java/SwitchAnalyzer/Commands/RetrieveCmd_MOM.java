@@ -1,23 +1,17 @@
 package SwitchAnalyzer.Commands;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
-import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
-import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_MOM;
-import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.ProduceData_MOM;
-import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
 import java.util.ArrayList;
-
-import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class RetrieveCmd_MOM implements ICommandMOM
 {

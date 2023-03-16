@@ -1,10 +1,13 @@
 package SwitchAnalyzer.Network;
-import org.pcap4j.packet.*;
+
+import org.pcap4j.packet.IpV4Packet;
+import org.pcap4j.packet.Packet;
+import org.pcap4j.packet.TcpPacket;
+import org.pcap4j.packet.UdpPacket;
 import org.pcap4j.packet.namednumber.IpNumber;
 import org.pcap4j.packet.namednumber.IpVersion;
 
 import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.util.Random;
 
 public class IPV4Header extends NetworkHeader

@@ -1,4 +1,4 @@
-package SwitchAnalyzer.Network;
+package SwitchAnalyzer.Network.ErrorDetection;
 
 import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.packet.IllegalRawDataException;
@@ -7,18 +7,19 @@ import org.pcap4j.packet.Packet;
 import java.util.Arrays;
 import java.util.zip.CRC32;
 
-public class CRC extends ErrorDetectingAlgorithms{
-    public CRC(String AlgorithmName) {
-        super(AlgorithmName);
+public class CRC extends ErrorDetectingAlgorithms {
+    public boolean injectError = false;
+    public CRC(boolean injectError)
+    {
+        this.injectError = injectError ;
     }
 
 
     @Override
-    public Packet.Builder buildHeader(Packet.Builder prevBuilder) {
-
-
+    public Packet.Builder buildHeader(Packet.Builder prevBuilder)
+    {
         byte[] packetBytes = prevBuilder.build().getRawData();
-        byte[] crcBytes=calculateCRC(packetBytes);
+        byte[] crcBytes =calculateCRC(packetBytes);
         byte[] packetBytesWithCrc=appendCRCbytes(packetBytes,crcBytes);
 
         EthernetPacket packetWithCrc = null;
@@ -29,10 +30,9 @@ public class CRC extends ErrorDetectingAlgorithms{
         }
 
         return packetWithCrc.getBuilder();
-
-
     }
-    public byte[] calculateCRC(byte[] packetBytes){
+    public byte[] calculateCRC(byte[] packetBytes)
+    {
         CRC32 crcOBJ = new CRC32();
         crcOBJ.update(packetBytes);
         int crc = (int) crcOBJ.getValue();
@@ -41,9 +41,16 @@ public class CRC extends ErrorDetectingAlgorithms{
         crcBytes[1] = (byte) ((crc >> 16) & 0xFF);
         crcBytes[2] = (byte) ((crc >> 8) & 0xFF);
         crcBytes[3] = (byte) (crc & 0xFF);
+        if (!injectError)
+        {
+            return crcBytes;
+        }
+         crcBytes[3] ^=1;
         return  crcBytes;
     }
-    public byte[] appendCRCbytes(byte[] packetBytes,byte[] crcBytes){
+
+    public byte[] appendCRCbytes(byte[] packetBytes,byte[] crcBytes)
+    {
         byte[] packetBytesWithCrc = new byte[packetBytes.length + crcBytes.length];
         System.arraycopy(packetBytes, 0, packetBytesWithCrc, 0, packetBytes.length);
         System.arraycopy(crcBytes, 0, packetBytesWithCrc, packetBytes.length, crcBytes.length);
@@ -51,7 +58,8 @@ public class CRC extends ErrorDetectingAlgorithms{
     }
 
     @Override
-    public boolean isAlgorithmCorrect(byte[] packet) {
+    public boolean isAlgorithmCorrect(byte[] packet)
+    {
         int crcOffset = packet.length - 4;
         byte[] packetWithoutCRC = new byte[crcOffset];
         byte[] recievedCRCbytes =new byte[4];

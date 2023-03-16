@@ -1,6 +1,5 @@
 package SwitchAnalyzer.Machines;
 
-import SwitchAnalyzer.NamingConventions;
 import org.pcap4j.util.MacAddress;
 
 import java.net.Inet4Address;

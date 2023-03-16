@@ -1,5 +1,4 @@
 package SwitchAnalyzer.Network;
-import org.pcap4j.packet.Packet;
 
 import java.net.Inet4Address;
 

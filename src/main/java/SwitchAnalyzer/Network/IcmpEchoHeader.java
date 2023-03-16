@@ -2,9 +2,6 @@ package SwitchAnalyzer.Network;
 
 import org.pcap4j.packet.IcmpV4EchoPacket;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UnknownPacket;
-
-import java.net.Inet4Address;
 
 public class IcmpEchoHeader extends NetworkHeader
 {

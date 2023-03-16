@@ -1,15 +1,16 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Collectors.*;
+import SwitchAnalyzer.Collectors.Collector;
+import SwitchAnalyzer.Collectors.PLossCollectorMOM;
+import SwitchAnalyzer.Collectors.RatesCollectorMOM;
 import SwitchAnalyzer.Commands.*;
-import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Machines.MOM;
 import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
 import SwitchAnalyzer.Sockets.WebSocketServer;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
-import SwitchAnalyzer.Machines.MasterOfHPC;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -3,7 +3,6 @@ package SwitchAnalyzer.Collectors;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.HPC_INFO;
-import SwitchAnalyzer.Machines.MachineInfo;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
@@ -17,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static SwitchAnalyzer.MainHandler_MOM.masterOfMasters;
-import static SwitchAnalyzer.MainHandler_Master.master;
 
 /**
  * this class will consume the overall info (for now rates+packet loss) information coming from HPCs through kafka

@@ -1,26 +1,14 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.Collectors.MasterConsumer;
-import SwitchAnalyzer.Collectors.PLossCollectorMaster;
-import SwitchAnalyzer.Collectors.RatesCollectorMaster;
-import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.MainHandler_Master;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
-import SwitchAnalyzer.miscellaneous.Time;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static SwitchAnalyzer.MainHandler_Master.main;
 import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class StartRunCommand_Master extends ICommandMaster

@@ -1,8 +1,5 @@
 package SwitchAnalyzer.Sockets;
 
-import SwitchAnalyzer.Network.*;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
-
 public class PacketInfoGui {
     public String dataLinkHeader;
     public String networkHeader;
@@ -12,8 +9,9 @@ public class PacketInfoGui {
     public String errorDetectingAlgorithm;
     public long packetSize;
     public long numberOfPackets;
+    public boolean injectErrors;
 
-    public PacketInfoGui(String dataLinkHeader, String networkHeader, String transportHeader, String payloadBuilder, String errorDetectingAlgorithm,long packetSize, long numberOfPackets) {
+    public PacketInfoGui(String dataLinkHeader, String networkHeader, String transportHeader, String payloadBuilder, String errorDetectingAlgorithm,long packetSize, long numberOfPackets,boolean injectErrors) {
         this.dataLinkHeader = dataLinkHeader;
         this.networkHeader = networkHeader;
         this.transportHeader = transportHeader;
@@ -21,5 +19,6 @@ public class PacketInfoGui {
         this.errorDetectingAlgorithm=errorDetectingAlgorithm;
         this.packetSize = packetSize;
         this.numberOfPackets = numberOfPackets;
+        this.injectErrors = injectErrors;
     }
 }

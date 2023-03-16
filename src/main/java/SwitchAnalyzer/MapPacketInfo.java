@@ -1,9 +1,8 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Network.*;
+import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
-import org.pcap4j.packet.Packet;
 
 import static SwitchAnalyzer.miscellaneous.GlobalVariable.packetInfoMap;
 
@@ -23,7 +22,7 @@ public class MapPacketInfo implements mapObjects
                 );
         result.numberOfPackets = packetGuiInfo.numberOfPackets;
         result.packetSize = packetGuiInfo.packetSize;
-
+        result.insertErrors = packetGuiInfo.injectErrors;
         return result;
     }
 }

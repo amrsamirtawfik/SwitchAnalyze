@@ -1,4 +1,8 @@
 package SwitchAnalyzer.Network;
+
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
+import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
+
 public class TestSendAndRec {
     public static void main(String[] args)
     {
@@ -18,7 +22,7 @@ public class TestSendAndRec {
         }
         EthernetHeader ethernetHeader = new EthernetHeader(Builder.buildMacAddress("00:00:00:00:00:01"), Builder.buildMacAddress("00:00:00:00:00:01"));
 
-        ErrorDetectingAlgorithms CRCbytes=new CRC("CRC");
+        ErrorDetectingAlgorithms CRCbytes=new CRC(false);
 
         PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
 

@@ -1,16 +1,12 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Collectors.MasterConsumer;
-import SwitchAnalyzer.Collectors.PLossCollectorMaster;
-import SwitchAnalyzer.Collectors.RatesCollectorMaster;
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static SwitchAnalyzer.MainHandler_Master.master;

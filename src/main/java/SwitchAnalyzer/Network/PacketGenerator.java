@@ -1,21 +1,19 @@
 package SwitchAnalyzer.Network;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Random;
-
-import org.pcap4j.core.NotOpenException;
+import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import org.pcap4j.core.PcapHandle;
-import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.*;
-import org.pcap4j.packet.namednumber.*;
+import org.pcap4j.packet.namednumber.EtherType;
+import org.pcap4j.packet.namednumber.IpNumber;
+import org.pcap4j.packet.namednumber.IpVersion;
+import org.pcap4j.packet.namednumber.UdpPort;
 import org.pcap4j.util.MacAddress;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
 
-import javax.crypto.Mac;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+import java.util.Random;
 
 public class PacketGenerator {
     private static final String COUNT_KEY = PacketGenerator.class.getName() + ".count";
