@@ -18,7 +18,6 @@ import static SwitchAnalyzer.MainHandler_MOM.cmdProducer;
 
 public class RetrieveCmd_MOM implements ICommandMOM
 {
-    public static Thread listeningThread;
     public ArrayList<String> retrievals;
     public ArrayList<Integer> ids;
 
@@ -31,22 +30,7 @@ public class RetrieveCmd_MOM implements ICommandMOM
             GenCmd(new SwitchPort(i));
         }
         addCollectors();
-        listeningThread = new Thread (() ->
-        {
-            while(GlobalVariable.retrieveDataFromNode)
-            {
-                ProduceData_MOM.produceData(ids);
-            }
-        });
-        listeningThread.start();
-    }
-
-    private void addCollectors()
-    {
-        for (String key : retrievals)
-        {
-            MOMConsumer.addCollector(MainHandler_MOM.collectors.get(key));
-        }
+        openConsumeAndProduceThread();
     }
 
     @Override
@@ -57,5 +41,25 @@ public class RetrieveCmd_MOM implements ICommandMOM
         json = "1" + json;
         cmdProducer.produce(json, Topics.cmdFromMOM);
         cmdProducer.flush();
+    }
+
+    private void openConsumeAndProduceThread()
+    {
+        Thread dataConsumeAndProduceThread = new Thread (() ->
+        {
+            while(GlobalVariable.retrieveDataFromNode)
+            {
+                ProduceData_MOM.produceData(ids);
+            }
+        });
+        dataConsumeAndProduceThread.start();
+    }
+
+    private void addCollectors()
+    {
+        for (String key : retrievals)
+        {
+            MOMConsumer.addCollector(MainHandler_MOM.collectors.get(key));
+        }
     }
 }

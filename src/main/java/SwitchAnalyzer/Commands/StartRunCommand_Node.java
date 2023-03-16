@@ -1,24 +1,23 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.Machines.MasterOfHPC;
+import SwitchAnalyzer.MainHandler_Node;
 import SwitchAnalyzer.MapPacketInfo;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
-import SwitchAnalyzer.Network.Header;
 import SwitchAnalyzer.Network.PacketInfo;
 import SwitchAnalyzer.Network.PacketSniffer;
 import SwitchAnalyzer.Network.SendThreadsHandler;
+import SwitchAnalyzer.ProduceData_MOM;
+import SwitchAnalyzer.ProduceData_Node;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
+import SwitchAnalyzer.UtilityExecution.UtilityExecutor;
+import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import org.pcap4j.packet.Packet;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class StartRunCommand_Node extends ICommandNode
 {
-
-
     SwitchPortConfig config;
 
     StartRunCommand_Node (SwitchPortConfig config, int ID)
@@ -35,10 +34,37 @@ public class StartRunCommand_Node extends ICommandNode
             packetInfo.numberOfPackets = packetInfo.numberOfPackets / master.getNoOfChilNodes();
         }
     }
+
     @Override
     public void processCmd()
     {
-        //send or receive
+        addUtils();
+        openProduceThread();
+        openSendAndRecThreads();
+    }
+
+    public void addUtils()
+    {
+        for (String key : config.utilities)
+        {
+            UtilityExecutor.executors.add(MainHandler_Node.executorHashMap.get(key));
+        }
+    }
+
+    public void openProduceThread()
+    {
+        Thread executeUtilitiesThread = new Thread (() ->
+        {
+            while(GlobalVariable.retrieveDataFromNode)
+            {
+                ProduceData_Node.produceData();
+            }
+        });
+        executeUtilitiesThread.start();
+    }
+
+    public void openSendAndRecThreads()
+    {
         if (config.mode.equals("sender"))
         {
             for (PacketInfoGui packetInfo :config.packetInfos)
@@ -59,7 +85,9 @@ public class StartRunCommand_Node extends ICommandNode
             {
                 p = sniffer.readPacket();
                 //store p in kafka or database
+                count++;
             }
         }
     }
+
 }

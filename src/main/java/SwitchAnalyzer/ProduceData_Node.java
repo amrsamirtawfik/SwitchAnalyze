@@ -7,6 +7,7 @@ import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.Network.Ports;
+import SwitchAnalyzer.UtilityExecution.UtilityExecutor;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import com.google.gson.internal.bind.util.ISO8601Utils;
@@ -20,30 +21,20 @@ import static SwitchAnalyzer.MainHandler_Node.node;
  * so that the master could collect them and send them to the MOM
  */
 public class ProduceData_Node {
-    private static GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
 
     public static void produceData()
     {
-            if(GlobalVariable.retrieveDataFromNode)
+        UtilityExecutor.executeUtils();
+        node.machineInfo.map = UtilityExecutor.result;
+        if(GlobalVariable.retrieveDataFromNode)
+        {
+            try
             {
-                try
-                {
-                    node.machineInfo.map.put(NamingConventions.rates, Float.toString(Observer.getRate()));
-                    // TODO : get the packet loss from the node
-                    PacketLossCalculate packetLossCalculate = new PacketLossCalculate();
-                    packetLossCalculate.startPacketLossTest();
-                    node.machineInfo.map.put(NamingConventions.packetLoss,
-                            String.valueOf((packetLossCalculate.COUNT - packetLossCalculate.recievedPacketCount)));
-                    String json = JSONConverter.toJSON(node.machineInfo);
-                    System.out.println("ProduceData_Node: "+json);
-                    producer.send(Topics.ratesFromMachines, json);
-                }
-                catch (Exception e) { e.printStackTrace(); }
+                String json = JSONConverter.toJSON(node.machineInfo);
+                MainHandler_Node.dataProducer.produce(json, Topics.ratesFromMachines);
+                MainHandler_Node.dataProducer.flush();
             }
-    }
-    public static void produce(Object o, String topic)
-    {
-        String json = JSONConverter.toJSON(o);
-        producer.send(topic,json);
+            catch (Exception e) { e.printStackTrace(); }
+        }
     }
 }

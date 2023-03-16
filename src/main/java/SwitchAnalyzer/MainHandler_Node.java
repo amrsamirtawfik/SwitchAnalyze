@@ -2,11 +2,14 @@ package SwitchAnalyzer;
 
 import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Kafka.GenericConsumer;
+import SwitchAnalyzer.Kafka.Producer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.*;
 import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
+import SwitchAnalyzer.UtilityExecution.IExecutor;
+import SwitchAnalyzer.UtilityExecution.RateExecutor;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.Time;
@@ -16,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainHandler_Node
 {
@@ -24,18 +28,18 @@ public class MainHandler_Node
     static ArrayList<Class<? extends ICommandNode>> commandClasses = new ArrayList<>();
     static GenericConsumer consumer;
     public static MachineNode node;
+    public static Producer dataProducer = new Producer(IP.ip1);
+    public static HashMap<String, IExecutor> executorHashMap= new HashMap<>();
 
     public static void init()
     {
-        //read from config text file and construct HPC object from this config file
         node = new MachineNode(0);
-        // needs to be adjusted by setting these values from the config file and setting it children nodes
-        //and also add mac and ip address in the constructor
         Logger logger = LoggerFactory.getLogger("MasterHPC");
         GlobalVariable.packetInfoMap.put("udpHeader",new UDPHeader());
         GlobalVariable.packetInfoMap.put("tcpHeader",new TCPHeader());
         GlobalVariable.packetInfoMap.put("ipv4Header",new IPV4Header());
         GlobalVariable.packetInfoMap.put("ipv4Header",new IPV6Header());
+        executorHashMap.put(NamingConventions.rates, new RateExecutor());
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromHpcMaster);
         commandClasses.add(StartRunCommand_Node.class);
@@ -47,18 +51,6 @@ public class MainHandler_Node
     {
         init();
         int commandTypeIndex;
-        /*
-            Open Utilites Threads
-         */
-        Thread utilitiesThread = new Thread(() ->
-        {
-            while (true)
-            {
-                ProduceData_Node.produceData();
-            }
-        });
-        utilitiesThread.start();
-
         while (true)
         {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
