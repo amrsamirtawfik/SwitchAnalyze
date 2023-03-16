@@ -1,20 +1,16 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.MainHandler_Node;
+import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.MapPacketInfo;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.PacketInfo;
 import SwitchAnalyzer.Network.PacketSniffer;
 import SwitchAnalyzer.Network.SendThreadsHandler;
-import SwitchAnalyzer.ProduceData_MOM;
 import SwitchAnalyzer.ProduceData_Node;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
 import SwitchAnalyzer.UtilityExecution.UtilityExecutor;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
+import SwitchAnalyzer.miscellaneous.SystemMaps;
 import org.pcap4j.packet.Packet;
-
-
-import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class StartRunCommand_Node extends ICommandNode
 {
@@ -29,9 +25,10 @@ public class StartRunCommand_Node extends ICommandNode
 
     public void distNoPackets()
     {
-        config.rate = config.rate/master.getNoOfChilNodes();
-        for (PacketInfoGui packetInfo : config.packetInfos) {
-            packetInfo.numberOfPackets = packetInfo.numberOfPackets / master.getNoOfChilNodes();
+        config.rate = config.rate/ MainHandler_Master.master.getNoOfChilNodes();
+        for (PacketInfoGui packetInfo : config.packetInfos)
+        {
+            packetInfo.numberOfPackets = packetInfo.numberOfPackets / MainHandler_Master.master.getNoOfChilNodes();
         }
     }
 
@@ -47,7 +44,7 @@ public class StartRunCommand_Node extends ICommandNode
     {
         for (String key : config.utilities)
         {
-            UtilityExecutor.executors.add(MainHandler_Node.executorHashMap.get(key));
+            UtilityExecutor.executors.add(SystemMaps.executorHashMap.get(key));
         }
     }
 
@@ -55,12 +52,12 @@ public class StartRunCommand_Node extends ICommandNode
     {
         Thread executeUtilitiesThread = new Thread (() ->
         {
-            while(GlobalVariable.retrieveDataFromNode)
+            while(!UtilityExecutor.executors.isEmpty())
             {
                 ProduceData_Node.produceData();
             }
         });
-        executeUtilitiesThread.start();
+        if(!UtilityExecutor.executors.isEmpty()) { executeUtilitiesThread.start(); }
     }
 
     public void openSendAndRecThreads()
@@ -84,7 +81,7 @@ public class StartRunCommand_Node extends ICommandNode
             while (count < numPackets)
             {
                 p = sniffer.readPacket();
-                //store p in kafka or database
+                System.out.println(p);
                 count++;
             }
         }

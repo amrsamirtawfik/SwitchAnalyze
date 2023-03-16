@@ -83,7 +83,9 @@ public class MasterConsumer {
         }
         return results;
     }
+    public static void clearResults() { results.clear(); }
     public static void addCollector(Collector collectorMaster){ collectors.add(collectorMaster); }
     public static void removeCollector(Collector collectorMaster){ collectors.remove(collectorMaster); }
+    public static void clearCollectors() { collectors.clear(); }
     public static Map<String, String> getResults() { return results; }
 }

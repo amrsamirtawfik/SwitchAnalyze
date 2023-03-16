@@ -12,6 +12,7 @@ import SwitchAnalyzer.UtilityExecution.IExecutor;
 import SwitchAnalyzer.UtilityExecution.RateExecutor;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+import SwitchAnalyzer.miscellaneous.SystemMaps;
 import SwitchAnalyzer.miscellaneous.Time;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -25,25 +26,16 @@ public class MainHandler_Node
 {
 
     public static String consumerGroup = "command-consumer-group";
-    static ArrayList<Class<? extends ICommandNode>> commandClasses = new ArrayList<>();
     static GenericConsumer consumer;
     public static MachineNode node;
     public static Producer dataProducer = new Producer(IP.ip1);
-    public static HashMap<String, IExecutor> executorHashMap= new HashMap<>();
 
     public static void init()
     {
+        SystemMaps.initMapsNode();
         node = new MachineNode(0);
-        Logger logger = LoggerFactory.getLogger("MasterHPC");
-        GlobalVariable.packetInfoMap.put("udpHeader",new UDPHeader());
-        GlobalVariable.packetInfoMap.put("tcpHeader",new TCPHeader());
-        GlobalVariable.packetInfoMap.put("ipv4Header",new IPV4Header());
-        GlobalVariable.packetInfoMap.put("ipv4Header",new IPV6Header());
-        executorHashMap.put(NamingConventions.rates, new RateExecutor());
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromHpcMaster);
-        commandClasses.add(StartRunCommand_Node.class);
-        commandClasses.add(RetrieveCmd_Node.class);
         PCAP.initialize();
     }
 
@@ -60,7 +52,7 @@ public class MainHandler_Node
                 commandTypeIndex = Character.getNumericValue(json.charAt(0));
                 json = json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
                 System.out.println("MainHandlerNode: "+ json);
-                ICommandNode command = JSONConverter.fromJSON(json, commandClasses.get(commandTypeIndex));
+                ICommandNode command = JSONConverter.fromJSON(json, SystemMaps.commandClassesNode.get(commandTypeIndex));
                 //we need to re check mapping ,how to make it global in all masters and MOM or what should we do ?
                 if (command.machineID == node.getMachineID())
                 {

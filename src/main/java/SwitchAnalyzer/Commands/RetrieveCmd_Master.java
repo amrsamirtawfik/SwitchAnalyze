@@ -8,6 +8,7 @@ import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+import SwitchAnalyzer.miscellaneous.SystemMaps;
 
 import java.util.ArrayList;
 
@@ -32,22 +33,7 @@ public class RetrieveCmd_Master extends ICommandMaster{
             GenCmd(node.getMachineID());
         }
         addCollectors();
-        Thread dataConsumeAndProduceThread = new Thread (() ->
-        {
-           while(GlobalVariable.retrieveDataFromNode)
-           {
-               ProduceData_Master.produceData();
-           }
-        });
-        dataConsumeAndProduceThread.start();
-    }
-
-    private void addCollectors()
-    {
-        for (String key : retrievals)
-        {
-            MOMConsumer.addCollector(MainHandler_Master.collectors.get(key));
-        }
+        openConsumeAndProduceThread();
     }
 
     @Override
@@ -57,5 +43,25 @@ public class RetrieveCmd_Master extends ICommandMaster{
         json = "1"+json;
         MainHandler_Master.cmdProducer.produce(json, Topics.cmdFromMOM);
         MainHandler_Master.cmdProducer.flush();
+    }
+
+    private void addCollectors()
+    {
+        for (String key : retrievals)
+        {
+            MOMConsumer.addCollector(SystemMaps.collectors.get(key));
+        }
+    }
+
+    private void openConsumeAndProduceThread()
+    {
+        Thread dataConsumeAndProduceThread = new Thread (() ->
+        {
+            while(GlobalVariable.retrieveDataFromNode)
+            {
+                ProduceData_Master.produceData();
+            }
+        });
+        dataConsumeAndProduceThread.start();
     }
 }

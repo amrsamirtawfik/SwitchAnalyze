@@ -1,10 +1,8 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
+import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
 import java.util.ArrayList;
@@ -24,14 +22,9 @@ public class StartRunCommand_MOM implements ICommandMOM
     @Override
     public void GenCmd(SwitchPort port)
     {
-        System.out.println(port.ID);
-        StartRunCommand_Master command = new StartRunCommand_Master(port.ID, port.portConfig);
-        String json = JSONConverter.toJSON(command);
-        System.out.println("StartRunCommand_MOM: "+ json);
-        //dont forget to add number at the beginning of the json to indicate the type of the comman
+        String json = JSONConverter.toJSON(new StartRunCommand_Master(port.ID, port.portConfig));
         json = "0"+json;
-        GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
-        producer.send(Topics.cmdFromMOM, json);
-        producer.close();
+        MainHandler_MOM.cmdProducer.produce(json,Topics.cmdFromMOM);
+        MainHandler_MOM.cmdProducer.flush();
     }
 }
