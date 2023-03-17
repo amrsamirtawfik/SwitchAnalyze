@@ -24,9 +24,12 @@ public class MainHandler_Node
     static ArrayList<Class<? extends ICommandNode>> commandClasses = new ArrayList<>();
     static GenericConsumer consumer;
     public static MachineNode node;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainHandler_Master.class.getName());
+
 
     public static void init()
     {
+        logger.info("MainHandlerNode: init");
         //read from config text file and construct HPC object from this config file
         node = new MachineNode(0);
         // needs to be adjusted by setting these values from the config file and setting it children nodes
@@ -41,10 +44,13 @@ public class MainHandler_Node
         commandClasses.add(StartRunCommand_Node.class);
         commandClasses.add(RetrieveCmd_Node.class);
         PCAP.initialize();
+        logger.info("MainHandlerNode: init finished");
     }
 
     public static void main(String[] args)
     {
+        logger.setLevel(GlobalVariable.level);
+        logger.info("MainHandlerNode: main");
         init();
         int commandTypeIndex;
         /*
@@ -58,12 +64,13 @@ public class MainHandler_Node
             }
         });
         utilitiesThread.start();
-
+        logger.info("MainHandlerNode: started utilities thread");
         while (true)
         {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records)
             {
+                logger.info("MainHandlerNode: received command");
                 String json = record.value();
                 commandTypeIndex = Character.getNumericValue(json.charAt(0));
                 json = json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex

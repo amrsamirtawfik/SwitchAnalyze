@@ -7,6 +7,7 @@ import SwitchAnalyzer.Network.Header;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class GlobalVariable {
     public static volatile boolean retrieveDataFromNode;
@@ -16,5 +17,10 @@ public class GlobalVariable {
     public static int webSocketPort = 9099;
     public static int webSocketMaxMessages = 100000;
     public static GenericProducer producer ;
-
+    /**
+     * thie variable is used to turn on/off the logging in the entire system
+     * turn on : Level.AlL
+     * turn off : Level.OFF
+     */
+    public static Level level = Level.ALL;
 }

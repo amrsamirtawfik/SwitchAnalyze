@@ -26,9 +26,10 @@ public class MainHandler_Master
     public static ArrayList<Collector> collectors = new ArrayList<>();
     static GenericConsumer consumer;
     public static MasterOfHPC master;
-
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainHandler_Master.class.getName());
     public static void init()
     {
+        logger.info("MainHandlerMaster: init");
         //read from config text file and construct HPC object from this config file
         master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
 //        master.childNodes.add(new MachineNode(0));
@@ -42,10 +43,13 @@ public class MainHandler_Master
         collectors.add(new RatesCollectorMaster());
         collectors.add(new PLossCollectorMaster());
         PCAP.initialize();
+        logger.info("MainHandlerMaster: init finished");
     }
 
     public static void main(String[] args)
     {
+        logger.setLevel(GlobalVariable.level);
+        logger.info("MainHandlerMaster: main");
         init();
         int commandTypeIndex;
         while (true)
@@ -53,10 +57,10 @@ public class MainHandler_Master
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records)
             {
+                logger.info("MainHandlerMaster: " + record.value());
                 String json = record.value();
                 commandTypeIndex = Character.getNumericValue(json.charAt(0));
                 json = json.replaceFirst("[0-9]*",""); //removing the number indicating the command type using regex
-                System.out.println("MainHandlerMaster: "+json);
                 ICommandMaster command = JSONConverter.fromJSON(json, commandClasses.get(commandTypeIndex));
                 //we need to re check mapping ,how to make it global in all masters and MOM or what should we do ?!
                 if (GlobalVariable.portHpcMap.get(command.portID).getHPCID() == master.getHPCID())

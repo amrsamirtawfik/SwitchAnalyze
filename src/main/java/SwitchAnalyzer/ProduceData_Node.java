@@ -21,11 +21,15 @@ import static SwitchAnalyzer.MainHandler_Node.node;
  */
 public class ProduceData_Node {
     private static GenericProducer producer = new GenericProducer(IP.ip1 + ":" + Ports.port1);
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProduceData_Node.class.getName());
 
     public static void produceData()
     {
+
             if(GlobalVariable.retrieveDataFromNode)
             {
+                logger.setLevel(GlobalVariable.level);
+                logger.info("ProduceData_Node: produceData");
                 try
                 {
                     node.machineInfo.map.put(NamingConventions.rates, Float.toString(Observer.getRate()));
@@ -35,7 +39,7 @@ public class ProduceData_Node {
                     node.machineInfo.map.put(NamingConventions.packetLoss,
                             String.valueOf((packetLossCalculate.COUNT - packetLossCalculate.recievedPacketCount)));
                     String json = JSONConverter.toJSON(node.machineInfo);
-                    System.out.println("ProduceData_Node: "+json);
+                    logger.info("ProduceData_Node: "+json);
                     producer.send(Topics.ratesFromMachines, json);
                 }
                 catch (Exception e) { e.printStackTrace(); }
