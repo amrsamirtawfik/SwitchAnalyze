@@ -33,13 +33,8 @@ public class SendThreadsHandler
             }
             else
             {
-                Sender sender;
-                if(packetInfo.isDurationPacket){
-                    sender = new DurationSender(packet , packetInfo.duration);
-                }else{
-                    sender = new NormalSender(packet , packetInfo.numberOfPackets);
+                Sender sender = new NormalSender(packet , packetInfo.numberOfPackets, 0, 1);
 
-                }
                 threads.add (new Thread(sender));
                 threads.get(threads.size()-1).start();
             }
@@ -76,9 +71,8 @@ public class SendThreadsHandler
         ErrorDetectingAlgorithms CRCbytes = new CRC(false);
 
         PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
-        packetInf.numberOfPackets = 10000;
-        packetInf.duration=10000;// 10 seconds
-        packetInf.isDurationPacket=true;
+        packetInf.numberOfPackets = 60;
+
         addToPacketInfoList(packetInf);
         openThreads();
     }

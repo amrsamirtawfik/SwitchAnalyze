@@ -8,18 +8,17 @@ public abstract class Sender implements Runnable
     long numPackets;
 
     long duration;//this time is in milli seconds
+    
+    long sendingRate;
 
-    public Sender(Packet packet , long numPackets,long duration)
+    public Sender(Packet packet , long numPackets,long duration,long sendingRate)
     {
         this.packet = packet;
         this.numPackets = numPackets;
         this.duration=duration;
+        this.sendingRate=sendingRate;
     }
-    public Sender(Packet packet , long numPackets)
-    {
-        this.packet = packet;
-        this.numPackets = numPackets;
-    }
+
 
 
     public abstract void send ();

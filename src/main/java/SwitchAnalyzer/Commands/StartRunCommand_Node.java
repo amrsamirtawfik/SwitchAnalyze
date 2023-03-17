@@ -25,7 +25,7 @@ public class StartRunCommand_Node extends ICommandNode
 
     public void distNoPackets()
     {
-        config.rate = config.rate/master.getNoOfChilNodes();
+        config.sendingRate = config.sendingRate/master.getNoOfChilNodes();
         for (PacketInfoGui packetInfo : config.packetInfos) {
             packetInfo.numberOfPackets = packetInfo.numberOfPackets / master.getNoOfChilNodes();
         }
