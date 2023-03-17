@@ -17,6 +17,10 @@ public class PacketInfo
     public long packetSize;
     public long numberOfPackets;
 
+    public long duration;
+
+    public boolean isDurationPacket;
+
     public PacketInfo(PayloadBuilder payloadBuilder, TransportHeader transportHeader, NetworkHeader networkHeader,DataLinkHeader dataLinkHeader,ErrorDetectingAlgorithms errorDetectingAlgorithm)
     {
         this.payloadBuilder = payloadBuilder;
