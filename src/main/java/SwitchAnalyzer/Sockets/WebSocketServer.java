@@ -66,7 +66,7 @@ public class WebSocketServer {
 //                System.out.println();
 
                 //It's Sec-WebSocket-Key in other formats
-                Matcher match = Pattern.compile("sec-websocket-key: (.*)").matcher(data);
+                Matcher match = Pattern.compile("Sec-WebSocket-Key: (.*)").matcher(data);
                 match.find();
                 byte[] response = ("HTTP/1.1 101 Switching Protocols\r\n"
                         + "Connection: Upgrade\r\n"
@@ -89,8 +89,10 @@ public class WebSocketServer {
 
     public byte[] readFromSocket(int maxMessageLength) {
         byte[] messageReceived = new byte[maxMessageLength];
+
         try {
             in.read(messageReceived, 0, maxMessageLength);
+
 
 
             //Checking if client is disconnecting
@@ -105,6 +107,7 @@ public class WebSocketServer {
 
             //Decode
             byte[] payLoadDecoded = decode(messageReceived, tempPayLoadLength);
+            System.out.println(new String(payLoadDecoded) );
 
             return (payLoadDecoded);
 

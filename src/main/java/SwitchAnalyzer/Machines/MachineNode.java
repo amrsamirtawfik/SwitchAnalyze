@@ -3,59 +3,22 @@ package SwitchAnalyzer.Machines;
 import org.pcap4j.util.MacAddress;
 
 import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 
+/**
+ * any information thats not needed to be put into kafka but is related to the machine node should be here
+ */
 public class MachineNode {
     public MachineInfo machineInfo;
-    private int MachineID;
-    private float rate;
-    private MacAddress nodeMacAddress =MacAddress.getByName("D0:DF:9A:89:E5:6C");
+
+    //TODO: will be used when constructing packets to be sent
+    private MacAddress nodeMacAddress;
     private Inet4Address nodeIp;
-
-    public int getPacketLoss() {
-        return packetLoss;
-    }
-
-    private int packetLoss;
-            public MachineNode(){
-//                try {
-//                    InetAddress ipAddress = InetAddress.getLocalHost();
-//                    NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ipAddress);
-//                    byte[] macAddressBytes = networkInterface.getHardwareAddress();
-//                    if (macAddressBytes != null) {
-//                        nodeMacAddress =MacAddress.getByAddress(macAddressBytes);
-//                    }
-//
-//                    /*
-//                    get ip address and set it
-//                     */
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-
-            }
-    public MacAddress getMyMacAddress() {
-        return nodeMacAddress;
-    }
-
-
-
-    public MachineNode(int machineID, float rate) {
-        MachineID = machineID;
-        this.rate = rate;
+    public MachineNode(int id)
+    {
+        machineInfo = new MachineInfo(id);
     }
     public int getMachineID() {
-        return MachineID;
-    }
-    public void setMachineID(int machineID) {
-        MachineID = machineID;
-    }
-    public float getRate() {
-        return rate;
-    }
-    public void setRate(float rate) {
-        this.rate = rate;
+        return machineInfo.machineID;
     }
 }
 

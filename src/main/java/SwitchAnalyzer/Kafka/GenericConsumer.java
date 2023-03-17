@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
@@ -17,6 +18,8 @@ public class GenericConsumer {
         props.put("group.id", groupId);
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        //TODO: note this must be removed it is just for testing
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         this.consumer = new KafkaConsumer<>(props);
 
     }

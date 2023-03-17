@@ -24,9 +24,12 @@ public class StartRunCommand_MOM implements ICommandMOM
     @Override
     public void GenCmd(SwitchPort port)
     {
+        System.out.println(port.ID);
         StartRunCommand_Master command = new StartRunCommand_Master(port.ID, port.portConfig);
         String json = JSONConverter.toJSON(command);
-        //dont forget to add number at the beginning of the json to indicate the type of the command
+        System.out.println("StartRunCommand_MOM: "+ json);
+        //dont forget to add number at the beginning of the json to indicate the type of the comman
+        json = "0"+json;
         GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
         producer.send(Topics.cmdFromMOM, json);
         producer.close();

@@ -1,6 +1,7 @@
 package SwitchAnalyzer.Collectors;
 
 import SwitchAnalyzer.Kafka.GenericConsumer;
+import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineInfo;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Network.IP;
@@ -24,27 +25,25 @@ import static SwitchAnalyzer.MainHandler_Master.master;
  */
 
 public class MasterConsumer {
-    static GenericConsumer consumer;
     static String consumerGroup = "Collectors";
+    static GenericConsumer consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);;
+
     //arraylist of collectors
     public static ArrayList<Collector> collectors = new ArrayList<>();
     //not needed because MasterOfHPC already has a list of machines
-//    public static ArrayList<MachineNode> sharedList = new ArrayList<>();
-
     //this map will contain the results of the collectors
     /*the key will be the collector name and the value will be the result
     * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
      */
     static Map<String, String> results = new ConcurrentHashMap<>();
-    public MasterConsumer() {
-        this.consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
-    }
-
-    public static Map<String, String> consume() {
+    public static Map<String, String> consume()
+    {
+        consumer.selectTopic(Topics.ratesFromMachines);
         /*
         TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
          */
-//        while (true) {
+        while (true)
+        {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
             for (ConsumerRecord<String, String> record : records) {
                 // Convert the JSON string to a Command object
@@ -54,14 +53,20 @@ public class MasterConsumer {
                 // TODO: we need to add the machines first to the list of machines
                 master.childNodes.get(machineInfo.machineID).machineInfo = machineInfo;
             }
+            if(records.count() > 0)
+                break;
+        }
             //loop through the arraylist of collectors and create a thread for each one to call the collect method
         List<Thread> threads = new ArrayList<>();
 
-        for (int i = 0; i < collectors.size(); i++) {
+        for (int i = 0; i < collectors.size(); i++)
+        {
             final int index = i; // Make a copy of i
-            Thread thread = new Thread(new Runnable() {
+            Thread thread = new Thread(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     String res = collectors.get(index).collect();
                     results.put(collectors.get(index).getName(), res);
                 }
@@ -71,27 +76,19 @@ public class MasterConsumer {
         }
 
 // Wait for all threads to finish
-        for (Thread thread : threads) {
-            try {
+        for (Thread thread : threads)
+        {
+            try
+            {
                 thread.join();
-            } catch (InterruptedException e) {
-                System.out.printf("in MasterConsumer: %s%n", e.getMessage());
-            }
+            } catch (InterruptedException e) {System.out.printf("in MasterConsumer: %s%n", e.getMessage());}
         }
-
-//        }
         return results;
     }
     //add collectors to the arraylist
-    public static void addCollector(Collector collectorMaster){
-        collectors.add(collectorMaster);
-    }
+    public static void addCollector(Collector collectorMaster){ collectors.add(collectorMaster); }
     //remove collectors from the arraylist
-    public static void removeCollector(Collector collectorMaster){
-        collectors.remove(collectorMaster);
-    }
+    public static void removeCollector(Collector collectorMaster){ collectors.remove(collectorMaster); }
 
-    public static Map<String, String> getResults() {
-        return results;
-    }
+    public static Map<String, String> getResults() { return results; }
 }

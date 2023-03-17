@@ -13,4 +13,6 @@ public abstract class DataLinkHeader extends Header
         this.srcMac = srcMac;
         this.dstMac = dstMac;
     }
+
+
 }
