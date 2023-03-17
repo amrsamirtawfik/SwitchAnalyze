@@ -10,7 +10,7 @@ public class MachineNode {
     public MachineInfo machineInfo;
     private int MachineID;
     private float rate;
-    private MacAddress nodeMacAddress;
+    private MacAddress nodeMacAddress =MacAddress.getByName("D0:DF:9A:89:E5:6C");
     private Inet4Address nodeIp;
 
     public int getPacketLoss() {
@@ -19,20 +19,20 @@ public class MachineNode {
 
     private int packetLoss;
             public MachineNode(){
-                try {
-                    InetAddress ipAddress = InetAddress.getLocalHost();
-                    NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ipAddress);
-                    byte[] macAddressBytes = networkInterface.getHardwareAddress();
-                    if (macAddressBytes != null) {
-                        nodeMacAddress =MacAddress.getByAddress(macAddressBytes);
-                    }
-
-                    /*
-                    get ip address and set it
-                     */
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    InetAddress ipAddress = InetAddress.getLocalHost();
+//                    NetworkInterface networkInterface = NetworkInterface.getByInetAddress(ipAddress);
+//                    byte[] macAddressBytes = networkInterface.getHardwareAddress();
+//                    if (macAddressBytes != null) {
+//                        nodeMacAddress =MacAddress.getByAddress(macAddressBytes);
+//                    }
+//
+//                    /*
+//                    get ip address and set it
+//                     */
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
 
             }
     public MacAddress getMyMacAddress() {

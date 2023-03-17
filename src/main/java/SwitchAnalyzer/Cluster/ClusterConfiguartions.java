@@ -8,7 +8,7 @@ public class ClusterConfiguartions {
 
     String cluster_Id;
     //the mapped port id to a specific HPC
-    //String port_id;
+    String port_id;
     public ArrayList<MachineConfigurations> machines;
 
     public String getCluster_name() {
@@ -17,5 +17,9 @@ public class ClusterConfiguartions {
 
     public int getCluster_Id() {
         return Integer.parseInt(cluster_Id);
+    }
+
+    public String getPort_id() {
+        return port_id;
     }
 }

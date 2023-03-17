@@ -1,12 +1,13 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Cluster.ClusterConfiguartions;
+
 import SwitchAnalyzer.Cluster.MachineConfigurations;
+import SwitchAnalyzer.Cluster.MoMConfigurations;
 import SwitchAnalyzer.Kafka.GenericConsumer;
-import SwitchAnalyzer.Machines.HPC_INFO;
+
 import SwitchAnalyzer.Machines.MachineNode;
+
 import SwitchAnalyzer.Machines.MasterOfHPC;
-import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
@@ -15,20 +16,23 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 
 public class Main {
 
-    static String consumerConfigurationGroup = "1";
+    static String consumerConfigurationGroup = "A";
 
     public static void main(String[] args) {
         MachineNode myNode=new MachineNode();
-
-        GenericConsumer MainConsumer = new GenericConsumer(IP.ConfigurationsIP+ ":" + Ports.port1, consumerConfigurationGroup);
-
+            String ip="192.168.1.244";
+        GenericConsumer MainConsumer = new GenericConsumer("localhost:9092", consumerConfigurationGroup);
+MainConsumer.selectTopic("json");
 
         while (true) {
             ConsumerRecords<String, String> records = MainConsumer.consume(100);
             for (ConsumerRecord<String, String> record : records) {
-                ClusterConfiguartions ClusterConfig = JSONConverter.fromJSON(record.value(), ClusterConfiguartions.class);
+                MoMConfigurations momConfigurations = JSONConverter.fromJSON(record.value(), MoMConfigurations.class);
 
-                for (MachineConfigurations machineConfig:ClusterConfig.machines){
+
+
+                for (MachineConfigurations machineConfig:momConfigurations.cluster.get(0).machines){
+
                     if (machineConfig.getMac().equals(myNode.getMyMacAddress())) {
 
                         //set machine node
@@ -36,8 +40,9 @@ public class Main {
 
                         Thread HandlerThread;
                         if (machineConfig.Is_master()) {
-                            MasterOfHPC master=new MasterOfHPC(ClusterConfig.getCluster_Id(),ClusterConfig.machines.size(),100,myNode);
-                            master.setArrayListOfMachines(ClusterConfig.machines);
+
+                            MasterOfHPC master=new MasterOfHPC(momConfigurations.cluster.get(0).getCluster_Id(),momConfigurations.cluster.get(0).machines.size(),100,myNode);
+                            master.setArrayListOfMachines(momConfigurations.cluster.get(0).machines);
                             //port number must be sent with the cluster configuration
                             GlobalVariable.portHpcMap.put(Ports.HPCportNumber,master);
                             HandlerThread= new Thread(() -> MainHandler_Master.main(null));
@@ -49,6 +54,7 @@ public class Main {
                             HandlerThread.start();
                         }
 
+                        }
                     }
                 }
 
@@ -58,4 +64,3 @@ public class Main {
         }
 
     }
-}
