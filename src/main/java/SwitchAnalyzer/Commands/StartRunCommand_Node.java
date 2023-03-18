@@ -15,20 +15,24 @@ import org.pcap4j.packet.Packet;
 public class StartRunCommand_Node extends ICommandNode
 {
     SwitchPortConfig config;
+    public int toPortID;
 
-    StartRunCommand_Node (SwitchPortConfig config, int ID)
+    StartRunCommand_Node (SwitchPortConfig config, int ID, int toPortID)
     {
         machineID = ID;
         this.config = config ;
+        this.toPortID = toPortID;
         distNoPackets();
     }
 
     public void distNoPackets()
     {
         config.rate = config.rate/ MainHandler_Master.master.getNoOfChilNodes();
+        long num;
         for (PacketInfoGui packetInfo : config.packetInfos)
         {
-            packetInfo.numberOfPackets = packetInfo.numberOfPackets / MainHandler_Master.master.getNoOfChilNodes();
+            num = packetInfo.numberOfPackets;
+            packetInfo.numberOfPackets = num / MainHandler_Master.master.getNoOfChilNodes();
         }
     }
 
@@ -68,7 +72,7 @@ public class StartRunCommand_Node extends ICommandNode
             {
                 SendThreadsHandler.addToPacketInfoList((PacketInfo) new MapPacketInfo().map(packetInfo));
             }
-            SendThreadsHandler.openThreads();
+            SendThreadsHandler.sendToSelectedPort(toPortID);
         }
         else
         {

@@ -49,4 +49,13 @@ public class SystemMaps
         commandClassesNode.add(RetrieveCmd_Node.class);
         commandClassesNode.add(StopRetrieveCmd_Node.class);
     }
+
+    public static void initPortInfoMap(Map <String , Header> map)
+    {
+        map.put("udp",new UDPHeader());
+        map.put("tcp",new TCPHeader());
+        map.put("ipv4",new IPV4Header());
+        map.put("ipv6",new IPV6Header());
+        map.put("Ethernet" ,new EthernetHeader());
+    }
 }

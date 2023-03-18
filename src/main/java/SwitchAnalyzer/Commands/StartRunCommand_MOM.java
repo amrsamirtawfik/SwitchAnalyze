@@ -3,26 +3,26 @@ package SwitchAnalyzer.Commands;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
+import SwitchAnalyzer.Network.HardwareObjects.SwitchPortPair;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
 import java.util.ArrayList;
 
 public class StartRunCommand_MOM implements ICommandMOM
 {
-    ArrayList<SwitchPort> ports= new ArrayList<>();
+    ArrayList<SwitchPortPair> ports= new ArrayList<>();
     @Override
     public void processCmd()
     {
-        for (SwitchPort switchPort : ports)
+        for (SwitchPortPair switchPort : ports)
         {
            GenCmd(switchPort);
         }
     }
 
-    @Override
-    public void GenCmd(SwitchPort port)
+    public void GenCmd(SwitchPortPair portPair)
     {
-        String json = JSONConverter.toJSON(new StartRunCommand_Master(port.ID, port.portConfig));
+        String json = JSONConverter.toJSON(new StartRunCommand_Master(portPair));
         json = "0"+json;
         MainHandler_MOM.cmdProducer.produce(json,Topics.cmdFromMOM);
         MainHandler_MOM.cmdProducer.flush();

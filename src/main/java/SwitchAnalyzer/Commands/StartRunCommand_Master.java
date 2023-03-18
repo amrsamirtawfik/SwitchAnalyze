@@ -4,17 +4,17 @@ import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
+import SwitchAnalyzer.Network.HardwareObjects.SwitchPortPair;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class StartRunCommand_Master extends ICommandMaster
 {
-    public SwitchPortConfig portConfig;
+    public SwitchPortPair portPair;
 
-    public StartRunCommand_Master(int portID , SwitchPortConfig portConfig)
+    public StartRunCommand_Master(SwitchPortPair portPair)
     {
-        this.portID = portID;
-        this.portConfig = portConfig;
+        this.portPair = portPair ;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class StartRunCommand_Master extends ICommandMaster
     @Override
     public void GenCmd(int id)
     {
-        String json = JSONConverter.toJSON(new StartRunCommand_Node(portConfig , id));
+        String json = JSONConverter.toJSON(new StartRunCommand_Node(portPair.fromPort.portConfig, id ,portPair.toPort));
         json = "0"+json;
         MainHandler_Master.cmdProducer.produce(json,Topics.cmdFromHpcMaster);
         MainHandler_Master.cmdProducer.flush();

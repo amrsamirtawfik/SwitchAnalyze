@@ -30,7 +30,6 @@ public class RetrieveCmd_MOM implements ICommandMOM
         openConsumeAndProduceThread();
     }
 
-    @Override
     public void GenCmd(SwitchPort port)
     {
         String json = JSONConverter.toJSON(new RetrieveCmd_Master(port.ID, this.retrievals));
