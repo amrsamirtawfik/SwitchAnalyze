@@ -2,7 +2,6 @@ package SwitchAnalyzer.miscellaneous;
 
 import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Machines.MasterOfHPC;
-import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 import SwitchAnalyzer.Network.Header;
 
 import java.util.HashMap;

@@ -3,9 +3,13 @@ package SwitchAnalyzer.Commands;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_Master;
+import SwitchAnalyzer.Kafka.GenericProducer;
+import SwitchAnalyzer.Kafka.Topics;
+import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortConfig;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPortPair;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+
 import static SwitchAnalyzer.MainHandler_Master.master;
 
 public class StartRunCommand_Master extends ICommandMaster

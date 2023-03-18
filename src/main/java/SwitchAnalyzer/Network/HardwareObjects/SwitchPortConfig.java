@@ -9,6 +9,7 @@ public class SwitchPortConfig {
    public ArrayList<PacketInfoGui> packetInfos;
    public ArrayList<String> utilities;
    public int rate;
+   public  long duration;
 
    public String mode; // sender or receiver
 

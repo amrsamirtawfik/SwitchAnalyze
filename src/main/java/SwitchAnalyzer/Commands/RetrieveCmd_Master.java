@@ -6,6 +6,8 @@ import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_Master;
+import SwitchAnalyzer.Network.IP;
+import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;

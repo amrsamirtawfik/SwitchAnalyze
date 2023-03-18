@@ -1,12 +1,16 @@
 package SwitchAnalyzer.Network;
-import org.pcap4j.core.*;
+
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
+import org.pcap4j.core.BpfProgram;
+import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.namednumber.DataLinkType;
+
 import java.net.Inet4Address;
 
 
-public class PacketSniffer{
-    private BpfProgram pr;
+public class PacketSniffer
+{
     public PacketSniffer(){}
     public PacketSniffer(String s)
     {
@@ -16,13 +20,13 @@ public class PacketSniffer{
     {
         try
         {
-            pr = Pcaps.compileFilter(2048 ,new DataLinkType(1, "Ethernet"),
-                    expr,BpfProgram.BpfCompileMode.NONOPTIMIZE, (Inet4Address) PCAP.nif.getAddresses().get(0).getNetmask());
+            BpfProgram pr = Pcaps.compileFilter(2048, new DataLinkType(1, "Ethernet"),
+                    expr, BpfProgram.BpfCompileMode.NONOPTIMIZE, (Inet4Address) PCAP.nif.getAddresses().get(0).getNetmask());
             PCAP.handle.setFilter(pr);
         }
         catch (Exception e)
         {
-            System.out.println("COULDNT SET FILTER");
+            System.out.println("COULDN'T SET FILTER!!!!!!!!");
         }
     }
     public Packet readPacket()
@@ -49,9 +53,10 @@ public class PacketSniffer{
     }
     public static void  main(String [] args)
     {
-        PacketSniffer sniffer = new PacketSniffer();
         PCAP.initialize();
+        PacketSniffer sniffer = new PacketSniffer("dst port 12345");
+        CRC c = new CRC(false);
         for(int i = 0; i < 10; ++i)
-            System.out.println(sniffer.readPacket());
+            System.out.println(c.isAlgorithmCorrect(sniffer.readPacket().getRawData()));
     }
 }

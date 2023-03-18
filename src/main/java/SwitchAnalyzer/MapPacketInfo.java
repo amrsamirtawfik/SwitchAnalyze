@@ -1,6 +1,7 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Network.*;
+import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
 
@@ -23,11 +24,13 @@ public class MapPacketInfo implements mapObjects
                         new PayloadBuilder(packetGuiInfo.payloadBuilder),
                         (TransportHeader) map.get(packetGuiInfo.transportHeader),
                         (NetworkHeader) map.get(packetGuiInfo.networkHeader),
-                        (DataLinkHeader) map.get(packetGuiInfo.dataLinkHeader)
+                        (DataLinkHeader) map.get(packetGuiInfo.dataLinkHeader),
+                        (ErrorDetectingAlgorithms) packetInfoMap.get(packetGuiInfo.errorDetectingAlgorithm)
                 );
         result.numberOfPackets = packetGuiInfo.numberOfPackets;
         result.packetSize = packetGuiInfo.packetSize;
         result.payloadBuilder.payload = packetGuiInfo.payloadBuilder;
+        result.insertErrors = packetGuiInfo.injectErrors;
         return result;
     }
 }

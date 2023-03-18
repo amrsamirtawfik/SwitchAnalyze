@@ -7,7 +7,6 @@ import org.pcap4j.core.*;
 import org.pcap4j.packet.*;
 import org.pcap4j.util.MacAddress;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,7 +63,7 @@ public class PacketLossCalculate {
                     recievedPacketCount++;
                 }
             };
-            PacketLossCalculate.Task t = new PacketLossCalculate.Task(handle, listener);
+            Task t = new Task(handle, listener);
             pool.execute(t);
         }
         catch (Exception ignored){}

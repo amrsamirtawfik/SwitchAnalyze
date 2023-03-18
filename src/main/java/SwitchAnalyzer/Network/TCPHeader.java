@@ -3,8 +3,6 @@ import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.TcpPacket;
 import org.pcap4j.packet.namednumber.TcpPort;
 
-import java.security.PublicKey;
-
 public class TCPHeader extends TransportHeader
 {
     public TCPHeader()

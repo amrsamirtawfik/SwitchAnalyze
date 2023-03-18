@@ -2,8 +2,9 @@ package SwitchAnalyzer.Network;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.MainHandler_Node;
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
+import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import org.pcap4j.packet.Packet;
-import org.pcap4j.packet.UnknownPacket;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class SendThreadsHandler
     public static void openThreads(int toPort , MachineNode node)
     {
         ArrayList<Thread> threads = new ArrayList<>();
-        for (PacketInfo packetInfo :packetInfos)
+        for (PacketInfo packetInfo : packetInfos)
         {
 
             packetInfo.transportHeader.srcPort =12345;
@@ -85,7 +86,11 @@ public class SendThreadsHandler
         }
         EthernetHeader ethernetHeader = new EthernetHeader(Builder.buildMacAddress("00:00:00:00:00:01"), Builder.buildMacAddress("00:00:00:00:00:01"));
 
-        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader);
+        ErrorDetectingAlgorithms CRCbytes = new CRC(false);
+
+        PacketInfo packetInf = new PacketInfo(payloadBuilder, udpHeader, ipv4Header, ethernetHeader,CRCbytes);
+        packetInf.numberOfPackets = 60;
+
         addToPacketInfoList(packetInf);
     }
 }

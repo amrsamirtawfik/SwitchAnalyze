@@ -3,7 +3,6 @@ package SwitchAnalyzer.Collectors;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineInfo;
-import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.Network.IP;
 import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.miscellaneous.JSONConverter;

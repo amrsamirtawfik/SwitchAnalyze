@@ -1,10 +1,16 @@
-package com.example.kafka;
+package SwitchAnalyzer.Kafka;
 
-import java.util.*;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.CreateTopicsResult;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.config.TopicConfig;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-
-import org.apache.kafka.clients.admin.*;
-import org.apache.kafka.common.config.*;
 
 public class TopicCreator {
     public void createTopic (String brokersAddresses , String topicName , int numberOfPartitions , int repFactor){

@@ -1,6 +1,7 @@
 package SwitchAnalyzer.Commands;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
+import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
@@ -10,8 +11,6 @@ import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
 
 import java.util.ArrayList;
-
-
 
 public class RetrieveCmd_MOM implements ICommandMOM
 {

@@ -1,5 +1,5 @@
 package SwitchAnalyzer.Network;
-import org.pcap4j.packet.Packet;
+
 import org.pcap4j.util.MacAddress;
 
 public abstract class DataLinkHeader extends Header
