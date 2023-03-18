@@ -28,9 +28,6 @@ public class MainHandler_Master
     public static void init()
     {
         SystemMaps.initMapsMaster();
-        master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
-        master.childNodes.add(new MachineNode(1));
-        GlobalVariable.portHpcMap.put(1, master);
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromMOM);
         PCAP.initialize();

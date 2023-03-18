@@ -2,28 +2,17 @@ package SwitchAnalyzer;
 
 import SwitchAnalyzer.Commands.ICommandNode;
 import SwitchAnalyzer.Commands.ProcessCmd;
-import SwitchAnalyzer.Commands.RetrieveCmd_Node;
-import SwitchAnalyzer.Commands.StartRunCommand_Node;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Producer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.Network.ErrorDetection.None;
 import SwitchAnalyzer.Network.*;
-import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
-import SwitchAnalyzer.UtilityExecution.IExecutor;
-import SwitchAnalyzer.UtilityExecution.RateExecutor;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
 import SwitchAnalyzer.miscellaneous.Time;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainHandler_Node
 {
@@ -36,7 +25,6 @@ public class MainHandler_Node
     public static void init()
     {
         SystemMaps.initMapsNode();
-        node = new MachineNode(0);
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromHpcMaster);
         PCAP.initialize();
