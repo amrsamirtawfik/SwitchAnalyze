@@ -1,0 +1,41 @@
+1)Start Run Command: 
+0{
+  "pairs": [
+    {
+      "toPort": 1,
+      "fromPort": {
+        "portConfig": {
+          "packetInfos": [
+            {
+              "dataLinkHeader": "Ethernet",
+              "networkHeader": "ipv4",
+              "transportHeader": "udp",
+              "payloadBuilder": "5555555",
+              "packetSize": 1000,
+              "numberOfPackets": 500,
+              "errorDetectingAlgorithm" : "CRC", 
+              "injectErrors" : false
+            }
+          ],
+          "utilities": ["Rates", "PacketLoss"],
+          "rate": 80,
+          "mode": "sender"
+        },
+        "id": 1
+      }
+    }
+  ]
+}
+
+2)Retrieve Command 
+1{"ids" : [1], "retrievals" : ["Rates", "PacketLoss"]} 
+
+3)StopRetrieve Command 
+2{"ids" : [1]} 
+
+4)StopRun Command 
+3{"ids" : [1]} 
+
+5)ResumeRun Command 
+4{"ids" : [1]} 
+
