@@ -1,7 +1,6 @@
 package SwitchAnalyzer.Network.PacketLoss;
 
 import SwitchAnalyzer.Network.PacketGenerator;
-import SwitchAnalyzer.Network.Ping;
 import org.pcap4j.packet.EthernetPacket;
 
 import java.net.UnknownHostException;

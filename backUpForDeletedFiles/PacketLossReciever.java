@@ -1,6 +1,5 @@
 package SwitchAnalyzer.Network.PacketLoss;
 
-import SwitchAnalyzer.Network.EchoPacket;
 import SwitchAnalyzer.Network.PacketGenerator;
 import SwitchAnalyzer.Network.PacketSniffer;
 import org.pcap4j.packet.Packet;
