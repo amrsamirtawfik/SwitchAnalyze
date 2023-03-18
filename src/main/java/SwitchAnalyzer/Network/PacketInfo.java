@@ -4,7 +4,7 @@ public class PacketInfo
     DataLinkHeader dataLinkHeader;
     NetworkHeader networkHeader;
     TransportHeader transportHeader;
-    PayloadBuilder payloadBuilder;
+    public PayloadBuilder payloadBuilder;
     public long packetSize;
     public long numberOfPackets;
 

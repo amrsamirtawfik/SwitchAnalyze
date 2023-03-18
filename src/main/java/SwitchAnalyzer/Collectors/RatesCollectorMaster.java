@@ -26,7 +26,8 @@ public class RatesCollectorMaster implements Collector {
             // this variable is made because the result from is the map is a string
             String overAllRateString;
             OverallRate= 0;
-            for (int i = 0; i < master.childNodes.size(); i++) {
+            for (int i = 0; i < master.childNodes.size(); i++)
+            {
                 //convert the string to a float
                 overAllRateString = master.childNodes.get(i).machineInfo.map.get(NamingConventions.rates);
                 OverallRate += Float.parseFloat(overAllRateString);

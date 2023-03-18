@@ -30,18 +30,16 @@ public class MasterConsumer {
 
     //arraylist of collectors
     public static ArrayList<Collector> collectors = new ArrayList<>();
-    //not needed because MasterOfHPC already has a list of machines
-    //this map will contain the results of the collectors
-    /*the key will be the collector name and the value will be the result
+    /**
+    * this map will contain the results of the collectors
+    *the key will be the collector name and the value will be the result
     * it is concurrent because it is accessed by multiple threads so it needs to be thread safe
-     */
+    */
     static Map<String, String> results = new ConcurrentHashMap<>();
-    public static Map<String, String> consume()
+
+    public static void updateMachineInfo()
     {
         consumer.selectTopic(Topics.ratesFromMachines);
-        /*
-        TODO: there was an infinite loop here but i removed it because it should be made in the caller not here
-         */
         while (true)
         {
             ConsumerRecords<String, String> records = consumer.consume(Time.waitTime);
@@ -56,9 +54,13 @@ public class MasterConsumer {
             if(records.count() > 0)
                 break;
         }
-            //loop through the arraylist of collectors and create a thread for each one to call the collect method
-        List<Thread> threads = new ArrayList<>();
+    }
 
+    public static Map<String, String> consume()
+    {
+        updateMachineInfo();
+        //loop through the arraylist of collectors and create a thread for each one to call the collect method
+        List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < collectors.size(); i++)
         {
             final int index = i; // Make a copy of i
@@ -74,21 +76,16 @@ public class MasterConsumer {
             threads.add(thread);
             thread.start();
         }
-
-// Wait for all threads to finish
         for (Thread thread : threads)
         {
-            try
-            {
-                thread.join();
-            } catch (InterruptedException e) {System.out.printf("in MasterConsumer: %s%n", e.getMessage());}
+            try { thread.join(); }
+            catch (InterruptedException e) {System.out.printf("in MasterConsumer: %s%n", e.getMessage());}
         }
         return results;
     }
-    //add collectors to the arraylist
+    public static void clearResults() { results.clear(); }
     public static void addCollector(Collector collectorMaster){ collectors.add(collectorMaster); }
-    //remove collectors from the arraylist
     public static void removeCollector(Collector collectorMaster){ collectors.remove(collectorMaster); }
-
+    public static void clearCollectors() { collectors.clear(); }
     public static Map<String, String> getResults() { return results; }
 }

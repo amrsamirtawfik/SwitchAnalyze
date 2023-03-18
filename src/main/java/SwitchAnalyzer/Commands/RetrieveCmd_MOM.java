@@ -1,56 +1,60 @@
 package SwitchAnalyzer.Commands;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
-import SwitchAnalyzer.Collectors.MasterConsumer;
-import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
-import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_MOM;
-import SwitchAnalyzer.MainHandler_Master;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.Ports;
 import SwitchAnalyzer.ProduceData_MOM;
-import SwitchAnalyzer.ProduceData_Master;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
+import SwitchAnalyzer.miscellaneous.SystemMaps;
 
 import java.util.ArrayList;
 
-import static SwitchAnalyzer.MainHandler_Master.master;
+
 
 public class RetrieveCmd_MOM implements ICommandMOM
 {
-    public int id;
-    public static Thread listeningThread;
-    ArrayList<SwitchPort> ports= new ArrayList<>();
+    public ArrayList<String> retrievals;
+    public ArrayList<Integer> ids;
+
     @Override
     public void processCmd()
     {
         GlobalVariable.retrieveDataFromNode = true;
-        GenCmd(new SwitchPort(id));
-        MOMConsumer.addCollector(MainHandler_MOM.collectors.get(0));
-        MOMConsumer.addCollector(MainHandler_MOM.collectors.get(1));
-        listeningThread = new Thread (() ->
+        for (int i : ids)
+        {
+            GenCmd(new SwitchPort(i));
+        }
+        addCollectors();
+        openConsumeAndProduceThread();
+    }
+
+    public void GenCmd(SwitchPort port)
+    {
+        String json = JSONConverter.toJSON(new RetrieveCmd_Master(port.ID, this.retrievals));
+        json = "1" + json;
+        MainHandler_MOM.cmdProducer.produce(json, Topics.cmdFromMOM);
+        MainHandler_MOM.cmdProducer.flush();
+    }
+
+    private void addCollectors()
+    {
+        for (String key : retrievals)
+        {
+            MOMConsumer.addCollector(SystemMaps.collectors.get(key));
+        }
+    }
+
+    private void openConsumeAndProduceThread()
+    {
+        Thread dataConsumeAndProduceThread = new Thread (() ->
         {
             while(GlobalVariable.retrieveDataFromNode)
             {
-                ProduceData_MOM.produceData();
+                ProduceData_MOM.produceData(ids);
             }
         });
-        listeningThread.start();
-    }
-
-    @Override
-    public void GenCmd(SwitchPort port)
-    {
-        RetrieveCmd_Master command = new RetrieveCmd_Master(port.ID);
-        String json = JSONConverter.toJSON(command);
-        System.out.println("RetrieveCmd_MOM: "+ json);
-        //dont forget to add number at the beginning of the json to indicate the type of the command
-        json = "1" + json;
-        GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
-        producer.send(Topics.cmdFromMOM, json);
-        producer.close();
+        dataConsumeAndProduceThread.start();
     }
 }

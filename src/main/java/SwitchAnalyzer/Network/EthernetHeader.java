@@ -8,10 +8,8 @@ import org.pcap4j.util.MacAddress;
 
 public class EthernetHeader extends DataLinkHeader
 {
-    public EthernetHeader(MacAddress srcMac, MacAddress dstMac)
-    {
-        super(srcMac, dstMac);
-    }
+    public EthernetHeader(){}
+    public EthernetHeader(MacAddress srcMac, MacAddress dstMac) { super(srcMac, dstMac); }
 
     public Packet.Builder buildHeader(Packet.Builder prevBuilder)
     {

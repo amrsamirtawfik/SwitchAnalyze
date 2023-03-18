@@ -4,7 +4,4 @@ import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
 
 import java.util.ArrayList;
 
-public interface ICommandMOM extends ICommand
-{
-    void GenCmd(SwitchPort port);
-}
+public interface ICommandMOM extends ICommand {}

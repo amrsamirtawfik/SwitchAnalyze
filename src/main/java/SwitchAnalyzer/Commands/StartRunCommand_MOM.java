@@ -1,37 +1,30 @@
 package SwitchAnalyzer.Commands;
 
-import SwitchAnalyzer.Kafka.GenericProducer;
 import SwitchAnalyzer.Kafka.Topics;
+import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.Network.HardwareObjects.SwitchPort;
-import SwitchAnalyzer.Network.IP;
-import SwitchAnalyzer.Network.Ports;
+import SwitchAnalyzer.Network.HardwareObjects.SwitchPortPair;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 
 import java.util.ArrayList;
 
 public class StartRunCommand_MOM implements ICommandMOM
 {
-    ArrayList<SwitchPort> ports= new ArrayList<>();
+    ArrayList<SwitchPortPair> ports= new ArrayList<>();
     @Override
     public void processCmd()
     {
-        for (SwitchPort switchPort : ports)
+        for (SwitchPortPair switchPort : ports)
         {
            GenCmd(switchPort);
         }
     }
 
-    @Override
-    public void GenCmd(SwitchPort port)
+    public void GenCmd(SwitchPortPair portPair)
     {
-        System.out.println(port.ID);
-        StartRunCommand_Master command = new StartRunCommand_Master(port.ID, port.portConfig);
-        String json = JSONConverter.toJSON(command);
-        System.out.println("StartRunCommand_MOM: "+ json);
-        //dont forget to add number at the beginning of the json to indicate the type of the comman
+        String json = JSONConverter.toJSON(new StartRunCommand_Master(portPair));
         json = "0"+json;
-        GenericProducer producer = new GenericProducer(IP.ip1+":"+ Ports.port1);
-        producer.send(Topics.cmdFromMOM, json);
-        producer.close();
+        MainHandler_MOM.cmdProducer.produce(json,Topics.cmdFromMOM);
+        MainHandler_MOM.cmdProducer.flush();
     }
 }
