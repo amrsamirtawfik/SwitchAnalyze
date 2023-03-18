@@ -12,7 +12,7 @@ import SwitchAnalyzer.UtilityExecution.UtilityExecutor;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
 import org.pcap4j.packet.Packet;
 
-import static SwitchAnalyzer.MainHandler_Master.master;
+
 
 public class StartRunCommand_Node extends ICommandNode
 {
