@@ -4,7 +4,7 @@ import org.pcap4j.packet.UnknownPacket;
 
 public class PayloadBuilder extends Header{
 
-    String payload;
+    public String payload;
     public PayloadBuilder(String payload)
     {
         this.payload = payload;

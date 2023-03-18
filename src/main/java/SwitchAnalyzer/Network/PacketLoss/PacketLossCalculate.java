@@ -1,5 +1,7 @@
 package SwitchAnalyzer.Network.PacketLoss;
 
+import SwitchAnalyzer.Machines.MasterOfHPC;
+import SwitchAnalyzer.MainHandler_Node;
 import SwitchAnalyzer.Network.*;
 import org.pcap4j.core.*;
 import org.pcap4j.packet.*;
@@ -72,6 +74,7 @@ public class PacketLossCalculate {
     {
         init();
         startEchoLisitner();
+        MasterOfHPC selectedHPC = PortSelector.selectRandomly();
         try
         {
             Packet.Builder payloadBuild = Builder.getBuilder(new PayloadBuilder(echoData), new UnknownPacket.Builder());
@@ -79,12 +82,12 @@ public class PacketLossCalculate {
             Packet.Builder icmpCommonBuilder = Builder.getBuilder(new IcmpV4CommonHeader(), icmpBuilder);
             Packet.Builder networkBuild = Builder.getBuilder
                     (
-                            new IPV4Header(Builder.buildIpV4Address(strSrcIpAddress),Builder.buildIpV4Address(strDstIpAddress)),
+                            new IPV4Header(MainHandler_Node.node.nodeIp,selectedHPC.HPCIp),
                             icmpCommonBuilder
                     );
             Packet.Builder etherBuild = Builder.getBuilder
                     (
-                            new EthernetHeader(Builder.buildMacAddress(strSrcMacAddress), Builder.buildMacAddress(strDstMacAddress)),
+                            new EthernetHeader(MainHandler_Node.node.nodeMacAddress, selectedHPC.HPCMacAddr),
                             networkBuild
                     );
             for (int i = 0; i < COUNT; i++)

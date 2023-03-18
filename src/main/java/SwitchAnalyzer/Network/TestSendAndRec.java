@@ -29,7 +29,7 @@ public class TestSendAndRec {
 
         Runnable myThread2 = () ->
         {
-            SendThreadsHandler.openThreads();
+            //SendThreadsHandler.openThreads();
         };
 
         Thread t1 = new Thread(myThread1);
