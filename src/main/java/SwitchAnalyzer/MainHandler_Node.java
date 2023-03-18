@@ -4,9 +4,7 @@ import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
-import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.Network.*;
-import SwitchAnalyzer.Network.PacketLoss.PacketLossCalculate;
 import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.Time;
@@ -27,10 +25,11 @@ public class MainHandler_Node
 
     public static void init()
     {
-        //read from config text file and construct HPC object from this config file
-        node = new MachineNode(0);
-        // needs to be adjusted by setting these values from the config file and setting it children nodes
-        //and also add mac and ip address in the constructor
+//        read from config text file and construct HPC object from this config file
+//        node = new MachineNode(0);
+//         needs to be adjusted by setting these values from the config file and setting it children nodes
+//        and also add mac and ip address in the constructor
+
         Logger logger = LoggerFactory.getLogger("MasterHPC");
         GlobalVariable.packetInfoMap.put("udpHeader",new UDPHeader());
         GlobalVariable.packetInfoMap.put("tcpHeader",new TCPHeader());
@@ -43,7 +42,7 @@ public class MainHandler_Node
         PCAP.initialize();
     }
 
-    public static void main(String[] args)
+    public static void start()
     {
         init();
         int commandTypeIndex;
@@ -77,5 +76,10 @@ public class MainHandler_Node
                 }
             }
         }
+    }
+
+    //temp main for testing
+    public static void main(String[] args){
+        start();
     }
 }

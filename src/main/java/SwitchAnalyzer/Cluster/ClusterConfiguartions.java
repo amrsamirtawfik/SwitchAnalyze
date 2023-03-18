@@ -19,7 +19,7 @@ public class ClusterConfiguartions {
         return Integer.parseInt(cluster_Id);
     }
 
-    public String getPort_id() {
-        return port_id;
+    public int getPort_id() {
+        return Integer.parseInt(port_id);
     }
 }

@@ -29,11 +29,12 @@ public class MainHandler_Master
 
     public static void init()
     {
-        //read from config text file and construct HPC object from this config file
-        master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
+//        read from config text file and construct HPC object from this config file
+//        master = new MasterOfHPC(0);// needs to be adjusted by setting these values from the config file and setting it children nodes
 //        master.childNodes.add(new MachineNode(0));
-        master.childNodes.add(new MachineNode(1));
-        GlobalVariable.portHpcMap.put(1, master);
+//        master.childNodes.add(new MachineNode(1));
+//        GlobalVariable.portHpcMap.put(1, master);
+
         Logger logger = LoggerFactory.getLogger("MasterHPC");
         consumer = new GenericConsumer(IP.ip1 + ":" + Ports.port1, consumerGroup);
         consumer.selectTopic(Topics.cmdFromMOM);
@@ -44,7 +45,7 @@ public class MainHandler_Master
         PCAP.initialize();
     }
 
-    public static void main(String[] args)
+    public static void start()
     {
         init();
         int commandTypeIndex;
@@ -66,6 +67,11 @@ public class MainHandler_Master
                 }
             }
         }
+    }
+
+    //temp main for testing
+    public static void main(String[] args){
+        start();
     }
 }
 

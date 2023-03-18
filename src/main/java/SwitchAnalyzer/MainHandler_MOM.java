@@ -28,6 +28,14 @@ public class MainHandler_MOM {
         /*
             read the config text file and initialize the Global variables.
          */
+        //        MasterOfHPC master = new MasterOfHPC(0);
+//        GlobalVariable.portHpcMap.put(1, master);
+//        master.childNodes.add(new MachineNode(0));
+//        masterOfMasters = new MOM();
+//        masterOfMasters.HPCs.add(master);
+//        System.out.println(masterOfMasters.HPCs.get(0).getHPCID());
+//        System.out.println(masterOfMasters.HPCs.get(0));
+//        System.out.println(GlobalVariable.portHpcMap.get(1));
         /*
         TODO: should initialize MOM and add all HPCs to it?
          */
@@ -35,21 +43,13 @@ public class MainHandler_MOM {
             run the Mapping algorithm between ports and HPCs
          */
         server = new WebSocketServer(Ports.webSocketPort);
-        MasterOfHPC master = new MasterOfHPC(0);
-        GlobalVariable.portHpcMap.put(1, master);
-        master.childNodes.add(new MachineNode(0));
-        masterOfMasters = new MOM();
-        masterOfMasters.HPCs.add(master);
-        System.out.println(masterOfMasters.HPCs.get(0).getHPCID());
-        System.out.println(masterOfMasters.HPCs.get(0));
-        System.out.println(GlobalVariable.portHpcMap.get(1));
         commandClasses.add(StartRunCommand_MOM.class);
         commandClasses.add(RetrieveCmd_MOM.class);
         collectors.add(new RatesCollectorMOM());
         collectors.add(new PLossCollectorMOM());
     }
 
-    public static void main(String[] args)
+    public static void start()
     {
         init();
         Thread t1 = new Thread(() -> UserRequestHandler.readCommands(server, Ports.webSocketPort,
@@ -65,5 +65,10 @@ public class MainHandler_MOM {
             ProcessCmd.processCmd(c);
         }
 
+    }
+
+    //temp main for testing
+    public static void main(String[] args){
+        start();
     }
 }
