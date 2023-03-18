@@ -30,7 +30,7 @@ public class StopRetrieveCmd_Master extends ICommandMaster
     {
         String json = JSONConverter.toJSON(new StopRetrieveCmd_Node(machineID));
         json = "2" + json;
-        MainHandler_Master.cmdProducer.produce(json, Topics.cmdFromMOM);
+        MainHandler_Master.cmdProducer.produce(json, Topics.cmdFromHpcMaster);
         MainHandler_Master.cmdProducer.flush();
     }
 

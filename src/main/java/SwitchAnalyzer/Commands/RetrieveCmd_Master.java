@@ -2,6 +2,7 @@ package SwitchAnalyzer.Commands;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
 
+import SwitchAnalyzer.Collectors.MasterConsumer;
 import SwitchAnalyzer.Kafka.Topics;
 import SwitchAnalyzer.Machines.MachineNode;
 import SwitchAnalyzer.MainHandler_Master;
@@ -41,7 +42,7 @@ public class RetrieveCmd_Master extends ICommandMaster{
     {
         String json = JSONConverter.toJSON(new RetrieveCmd_Node(machineID));
         json = "1"+json;
-        MainHandler_Master.cmdProducer.produce(json, Topics.cmdFromMOM);
+        MainHandler_Master.cmdProducer.produce(json, Topics.cmdFromHpcMaster);
         MainHandler_Master.cmdProducer.flush();
     }
 
@@ -49,7 +50,7 @@ public class RetrieveCmd_Master extends ICommandMaster{
     {
         for (String key : retrievals)
         {
-            MOMConsumer.addCollector(SystemMaps.collectors.get(key));
+            MasterConsumer.addCollector(SystemMaps.collectors.get(key));
         }
     }
 

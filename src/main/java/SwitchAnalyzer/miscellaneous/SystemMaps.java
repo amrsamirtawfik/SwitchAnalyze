@@ -33,7 +33,7 @@ public class SystemMaps
     {
         commandClassesMaster.add(StartRunCommand_Master.class);
         commandClassesMaster.add(RetrieveCmd_Master.class);
-        commandClasses.add(StopRetrieveCmd_Master.class);
+        commandClassesMaster.add(StopRetrieveCmd_Master.class);
         collectors.put(NamingConventions.rates, new RatesCollectorMaster());
         collectors.put(NamingConventions.packetLoss, new PLossCollectorMaster());
     }
@@ -47,6 +47,6 @@ public class SystemMaps
         executorHashMap.put(NamingConventions.rates, new RateExecutor());
         commandClassesNode.add(StartRunCommand_Node.class);
         commandClassesNode.add(RetrieveCmd_Node.class);
-        commandClasses.add(StopRetrieveCmd_Node.class);
+        commandClassesNode.add(StopRetrieveCmd_Node.class);
     }
 }
