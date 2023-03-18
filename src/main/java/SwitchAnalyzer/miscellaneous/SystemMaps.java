@@ -34,6 +34,8 @@ public class SystemMaps
         commandClasses.add(StartRunCommand_MOM.class);
         commandClasses.add(RetrieveCmd_MOM.class);
         commandClasses.add(StopRetrieveCmd_MOM.class);
+        commandClasses.add(StopRunCmd_MOM.class);
+        commandClasses.add(ResumeRunCmd_MOM.class);
 
         MOMinitStub();
     }
@@ -61,6 +63,8 @@ public class SystemMaps
         commandClassesMaster.add(StartRunCommand_Master.class);
         commandClassesMaster.add(RetrieveCmd_Master.class);
         commandClassesMaster.add(StopRetrieveCmd_Master.class);
+        commandClassesMaster.add(StopRunCmdMaster.class);
+        commandClassesMaster.add(ResumeRunCmd_Master.class);
         collectors.put(NamingConventions.rates, new RatesCollectorMaster());
         collectors.put(NamingConventions.packetLoss, new PLossCollectorMaster());
 
