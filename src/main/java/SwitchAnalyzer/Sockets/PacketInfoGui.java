@@ -3,7 +3,6 @@ package SwitchAnalyzer.Sockets;
 public class PacketInfoGui {
     public String dataLinkHeader;
     public String networkHeader;
-
     public String transportHeader;
     public String payloadBuilder;
     public String errorDetectingAlgorithm;

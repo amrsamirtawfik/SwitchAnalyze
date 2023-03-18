@@ -167,7 +167,6 @@ public class SystemMaps
         MainHandler_Node.node = machine1;
     }
 
-
     public static void initPortInfoMap(Map <String , Header> map)
     {
         map.put("udp",new UDPHeader());

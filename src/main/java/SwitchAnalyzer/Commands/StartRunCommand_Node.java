@@ -10,9 +10,6 @@ import SwitchAnalyzer.ProduceData_Node;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
 import SwitchAnalyzer.UtilityExecution.UtilityExecutor;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
-import org.pcap4j.packet.Packet;
-
-
 
 public class StartRunCommand_Node extends ICommandNode
 {
@@ -78,18 +75,8 @@ public class StartRunCommand_Node extends ICommandNode
         }
         else
         {
-            long  numPackets = 0;
-            long count = 0;
-            Packet p;
-            PacketSniffer sniffer = new PacketSniffer("port 777");
-            for (PacketInfoGui packetInfo :config.packetInfos)
-                numPackets+=packetInfo.numberOfPackets;
-            while (count < numPackets)
-            {
-                p = sniffer.readPacket();
-                System.out.println(p);
-                count++;
-            }
+            for (PacketInfoGui packetInfo :config.packetInfos) { PacketSniffer.addToPacketInfoList(packetInfo); }
+            PacketSniffer.openThreads();
         }
     }
 

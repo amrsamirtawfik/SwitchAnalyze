@@ -1,19 +1,14 @@
 package SwitchAnalyzer.Sockets;
 
-
 import SwitchAnalyzer.Commands.ICommand;
-import SwitchAnalyzer.MainHandler_MOM;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.util.ArrayList;
 import java.util.Queue;
+
 public class UserRequestHandler
 {
-
-    static volatile int x = 0;
-    static ArrayList<Class<? extends ICommand>> classes = new ArrayList<>();
     public static void readCommands(WebSocketServer webSocketServer,int portNumber, int maxMessageLength, Queue<ICommand> cmdQueue)
     {
         while (true)

@@ -18,21 +18,19 @@ public class PCAP {
             List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
             nif = allDevs.get(0);
         }
-        catch (Exception ex)
-        {
-            System.out.println("Problem in setting pcap network device");
-        }
+        catch (Exception ex) { System.out.println("Problem in setting pcap network device"); }
+        handle = createHandle();
+    }
+
+    public static PcapHandle createHandle()
+    {
+        PcapHandle newHandle = null;
         int snapLen = 2048;
         PcapNetworkInterface.PromiscuousMode mode = PcapNetworkInterface.PromiscuousMode.NONPROMISCUOUS;
         int timeout = 100;
-        try
-        {
-            handle = nif.openLive(snapLen, mode, timeout);
-        }
-        catch (Exception ex)
-        {
-            System.out.println("Problem in opening session");
-        }
+        try {newHandle = nif.openLive(snapLen, mode, timeout); }
+        catch (Exception e){ System.out.println("Couldn't create handle"); }
+        return newHandle;
     }
     static void close_session()
     {
