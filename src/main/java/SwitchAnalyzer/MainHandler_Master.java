@@ -1,12 +1,7 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Collectors.Collector;
-import SwitchAnalyzer.Collectors.PLossCollectorMaster;
-import SwitchAnalyzer.Collectors.RatesCollectorMaster;
 import SwitchAnalyzer.Commands.ICommandMaster;
 import SwitchAnalyzer.Commands.ProcessCmd;
-import SwitchAnalyzer.Commands.RetrieveCmd_Master;
-import SwitchAnalyzer.Commands.StartRunCommand_Master;
 import SwitchAnalyzer.Kafka.GenericConsumer;
 import SwitchAnalyzer.Kafka.Producer;
 import SwitchAnalyzer.Kafka.Topics;
@@ -21,11 +16,6 @@ import SwitchAnalyzer.miscellaneous.SystemMaps;
 import SwitchAnalyzer.miscellaneous.Time;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainHandler_Master
 {
