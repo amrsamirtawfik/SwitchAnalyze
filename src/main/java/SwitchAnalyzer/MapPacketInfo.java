@@ -2,10 +2,9 @@ package SwitchAnalyzer;
 
 import SwitchAnalyzer.Network.*;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
-import SwitchAnalyzer.miscellaneous.GlobalVariable;
-import org.pcap4j.packet.Packet;
 
-import static SwitchAnalyzer.miscellaneous.GlobalVariable.packetInfoMap;
+
+import static SwitchAnalyzer.miscellaneous.SystemMaps.packetInfoMap;
 
 public class MapPacketInfo implements mapObjects
 {

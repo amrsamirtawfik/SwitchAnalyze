@@ -1,6 +1,5 @@
 package SwitchAnalyzer;
 
-import SwitchAnalyzer.Collectors.*;
 import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.Commands.ICommand;
 import SwitchAnalyzer.Kafka.Producer;
@@ -14,8 +13,7 @@ import SwitchAnalyzer.miscellaneous.GlobalVariable;
 import SwitchAnalyzer.Machines.MasterOfHPC;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
