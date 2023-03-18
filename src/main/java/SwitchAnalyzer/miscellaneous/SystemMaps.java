@@ -7,8 +7,8 @@ import SwitchAnalyzer.Network.*;
 import SwitchAnalyzer.Network.ErrorDetection.CRC;
 import SwitchAnalyzer.Network.ErrorDetection.None;
 import SwitchAnalyzer.UtilityExecution.IExecutor;
+import SwitchAnalyzer.UtilityExecution.PacketLossExecutor;
 import SwitchAnalyzer.UtilityExecution.RateExecutor;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +42,7 @@ public class SystemMaps
     public static void initMapsNode()
     {
         executorHashMap.put(NamingConventions.rates, new RateExecutor());
+        executorHashMap.put(NamingConventions.packetLoss, new PacketLossExecutor());
         commandClassesNode.add(StartRunCommand_Node.class);
         commandClassesNode.add(RetrieveCmd_Node.class);
         commandClassesNode.add(StopRetrieveCmd_Node.class);

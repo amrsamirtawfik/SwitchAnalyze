@@ -5,8 +5,6 @@ import SwitchAnalyzer.MainHandler_Node;
 import SwitchAnalyzer.Network.*;
 import org.pcap4j.core.*;
 import org.pcap4j.packet.*;
-import org.pcap4j.util.MacAddress;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,29 +15,12 @@ public class PacketLossCalculate {
     public static final int COUNT = 10;
     private static final int READ_TIMEOUT = 10; //IN MS
     private static final int SNAPLEN = 65536;
-    public  String strSrcIpAddress;
-    public  String strSrcMacAddress;
-    public  String strDstIpAddress;
-    public  String strDstMacAddress;
     public  String echoData;
     public int recievedPacketCount = 0;
     private PcapHandle handle;
     private PcapHandle sendHandle;
     private final ExecutorService pool = Executors.newSingleThreadExecutor();
 
-
-
-    public PacketLossCalculate(){};
-
-    public PacketLossCalculate(String strSrcIpAddress, String strSrcMacAddress,
-                               String strDstIpAddress, String strDstMacAddress, MacAddress srcMacAddr, String echoData)
-    {
-        this.strSrcIpAddress = strSrcIpAddress;
-        this.strSrcMacAddress = strSrcMacAddress;
-        this.strDstIpAddress = strDstIpAddress;
-        this.strDstMacAddress = strDstMacAddress;
-        this.echoData = echoData;
-    }
 
     private void init()
     {
@@ -50,26 +31,19 @@ public class PacketLossCalculate {
         }
         catch (Exception ignored){}
     }
-    public void startEchoLisitner() throws PcapNativeException
+    public void startEchoLisitner()
     {
         try
         {
-            handle.setFilter("icmp and ether dst " + Pcaps.toBpfString(Builder.buildMacAddress(strSrcMacAddress)), BpfProgram.BpfCompileMode.OPTIMIZE);
-            PacketListener listener = new PacketListener()
-            {
-                @Override
-                public void gotPacket(PcapPacket packet)
-                {
-                    recievedPacketCount++;
-                }
-            };
+            handle.setFilter("icmp and ether dst " + Pcaps.toBpfString(MainHandler_Node.node.nodeMacAddress), BpfProgram.BpfCompileMode.OPTIMIZE);
+            PacketListener listener = packet -> recievedPacketCount++;
             Task t = new Task(handle, listener);
             pool.execute(t);
         }
         catch (Exception ignored){}
     }
 
-    public void startPacketLossTest() throws PcapNativeException
+    public void claculatePacketLoss()
     {
         init();
         startEchoLisitner();
@@ -81,13 +55,13 @@ public class PacketLossCalculate {
             Packet.Builder icmpCommonBuilder = Builder.getBuilder(new IcmpV4CommonHeader(), icmpBuilder);
             Packet.Builder networkBuild = Builder.getBuilder
                     (
-                            new IPV4Header(MainHandler_Node.node.nodeIp,selectedHPC.HPCIp),
-                            icmpCommonBuilder
+                        new IPV4Header(MainHandler_Node.node.nodeIp,selectedHPC.HPCIp),
+                        icmpCommonBuilder
                     );
             Packet.Builder etherBuild = Builder.getBuilder
                     (
-                            new EthernetHeader(MainHandler_Node.node.nodeMacAddress, selectedHPC.HPCMacAddr),
-                            networkBuild
+                        new EthernetHeader(MainHandler_Node.node.nodeMacAddress, selectedHPC.HPCMacAddr),
+                        networkBuild
                     );
             for (int i = 0; i < COUNT; i++)
             {
@@ -108,19 +82,25 @@ public class PacketLossCalculate {
             if (handle != null && handle.isOpen())
             {
                 try { handle.breakLoop(); }
-                catch (NotOpenException noe) {}
+                catch (NotOpenException ignored) {}
                 try { Thread.sleep(1000); }
-                catch (InterruptedException e) {}
+                catch (InterruptedException ignored) {}
                 handle.close();
             }
             if (sendHandle != null && sendHandle.isOpen()) { sendHandle.close(); }
-            if (pool != null && !pool.isShutdown()) { pool.shutdown(); }
+            if (!pool.isShutdown()) { pool.shutdown(); }
         }
+    }
+
+    public static float startPacketLossTest()
+    {
+        PacketLossCalculate packetLossCalculate = new PacketLossCalculate();
+        packetLossCalculate.claculatePacketLoss();
+        return (((float)COUNT - packetLossCalculate.recievedPacketCount)/COUNT) * 100;
     }
 
     private static class Task implements Runnable
     {
-
         private final PcapHandle handle;
         private final PacketListener listener;
 
@@ -137,5 +117,4 @@ public class PacketLossCalculate {
             catch (InterruptedException ignored) {}
         }
     }
-
 }
