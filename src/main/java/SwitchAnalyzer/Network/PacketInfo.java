@@ -1,19 +1,18 @@
 package SwitchAnalyzer.Network;
 
+import SwitchAnalyzer.Machines.MachineNode;
+import SwitchAnalyzer.MainHandler_Node;
 import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import org.pcap4j.packet.Packet;
 import org.pcap4j.packet.UnknownPacket;
 
 public class PacketInfo
 {
-    DataLinkHeader dataLinkHeader;
-    NetworkHeader networkHeader;
-    TransportHeader transportHeader;
+    public DataLinkHeader dataLinkHeader;
+    public NetworkHeader networkHeader;
+    public TransportHeader transportHeader;
     public PayloadBuilder payloadBuilder;
-
-    ErrorDetectingAlgorithms errorDetectingAlgorithm;
-
-    public boolean insertErrors;
+    public ErrorDetectingAlgorithms errorDetectingAlgorithm;
     public long packetSize;
     public long numberOfPackets;
 
@@ -36,5 +35,25 @@ public class PacketInfo
         Packet.Builder etherBuild = Builder.getBuilder(this.dataLinkHeader, networkBuild);
         Packet.Builder CRCBuild = Builder.getBuilder(this.errorDetectingAlgorithm,etherBuild);
         return CRCBuild.build();
+    }
+
+    public void setHeaderValues(MachineNode dstNode)
+    {
+        setAddresses(dstNode);
+        setPortsDefValue();
+    }
+
+    private void setAddresses(MachineNode dstNode)
+    {
+        this.networkHeader.srcIPADDR = MainHandler_Node.node.nodeIp;
+        this.dataLinkHeader.srcMac = MainHandler_Node.node.nodeMacAddress;
+        this.networkHeader.dstIPPADDR = dstNode.nodeIp;
+        this.dataLinkHeader.dstMac = dstNode.nodeMacAddress;
+    }
+
+    private void setPortsDefValue()
+    {
+        this.transportHeader.srcPort = (short)12345;
+        this.transportHeader.dstPort = (short)54321;
     }
 }

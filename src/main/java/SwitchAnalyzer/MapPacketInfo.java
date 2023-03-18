@@ -1,15 +1,13 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Network.*;
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
 import SwitchAnalyzer.Network.ErrorDetection.ErrorDetectingAlgorithms;
 import SwitchAnalyzer.Sockets.PacketInfoGui;
 import SwitchAnalyzer.miscellaneous.SystemMaps;
-
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static SwitchAnalyzer.miscellaneous.SystemMaps.packetInfoMap;
 
 public class MapPacketInfo implements mapObjects
 {
@@ -25,12 +23,15 @@ public class MapPacketInfo implements mapObjects
                         (TransportHeader) map.get(packetGuiInfo.transportHeader),
                         (NetworkHeader) map.get(packetGuiInfo.networkHeader),
                         (DataLinkHeader) map.get(packetGuiInfo.dataLinkHeader),
-                        (ErrorDetectingAlgorithms) packetInfoMap.get(packetGuiInfo.errorDetectingAlgorithm)
+                        (ErrorDetectingAlgorithms) map.get(packetGuiInfo.errorDetectingAlgorithm)
                 );
         result.numberOfPackets = packetGuiInfo.numberOfPackets;
         result.packetSize = packetGuiInfo.packetSize;
         result.payloadBuilder.payload = packetGuiInfo.payloadBuilder;
-        result.insertErrors = packetGuiInfo.injectErrors;
+        if(result.errorDetectingAlgorithm instanceof CRC)
+        {
+            ((CRC)(result.errorDetectingAlgorithm)).injectError = packetGuiInfo.injectErrors;
+        }
         return result;
     }
 }

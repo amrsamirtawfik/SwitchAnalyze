@@ -4,6 +4,8 @@ import SwitchAnalyzer.Collectors.*;
 import SwitchAnalyzer.Commands.*;
 import SwitchAnalyzer.NamingConventions;
 import SwitchAnalyzer.Network.*;
+import SwitchAnalyzer.Network.ErrorDetection.CRC;
+import SwitchAnalyzer.Network.ErrorDetection.None;
 import SwitchAnalyzer.UtilityExecution.IExecutor;
 import SwitchAnalyzer.UtilityExecution.RateExecutor;
 
@@ -18,7 +20,6 @@ public class SystemMaps
     public static HashMap<String, Collector> collectors = new HashMap<>();
     public static ArrayList<Class<? extends ICommandNode>> commandClassesNode = new ArrayList<>();
     public static HashMap<String, IExecutor> executorHashMap= new HashMap<>();
-    public static Map<String, Header> packetInfoMap = new HashMap<>();
 
     public static void initMapsMOM()
     {
@@ -40,10 +41,6 @@ public class SystemMaps
 
     public static void initMapsNode()
     {
-        packetInfoMap.put("udp",new UDPHeader());
-        packetInfoMap.put("tcp",new TCPHeader());
-        packetInfoMap.put("ipv4",new IPV4Header());
-        packetInfoMap.put("ipv6",new IPV6Header());
         executorHashMap.put(NamingConventions.rates, new RateExecutor());
         commandClassesNode.add(StartRunCommand_Node.class);
         commandClassesNode.add(RetrieveCmd_Node.class);
@@ -57,5 +54,7 @@ public class SystemMaps
         map.put("ipv4",new IPV4Header());
         map.put("ipv6",new IPV6Header());
         map.put("Ethernet" ,new EthernetHeader());
+        map.put("CRC", new CRC());
+        map.put("None", new None());
     }
 }

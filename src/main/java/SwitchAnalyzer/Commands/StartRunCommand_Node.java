@@ -21,8 +21,8 @@ public class StartRunCommand_Node extends ICommandNode
 
     StartRunCommand_Node (SwitchPortConfig config, int ID, int toPortID)
     {
-        machineID = ID;
-        this.config = config ;
+        this.machineID = ID;
+        this.config = config;
         this.toPortID = toPortID;
         distNoPackets();
     }
@@ -74,7 +74,7 @@ public class StartRunCommand_Node extends ICommandNode
             {
                 SendThreadsHandler.addToPacketInfoList((PacketInfo) new MapPacketInfo().map(packetInfo));
             }
-            SendThreadsHandler.sendToSelectedPort(toPortID);
+            SendThreadsHandler.sendToSelectedPort(toPortID, config.rate, config.duration);
         }
         else
         {

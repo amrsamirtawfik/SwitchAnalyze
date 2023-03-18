@@ -9,10 +9,8 @@ import java.util.zip.CRC32;
 
 public class CRC extends ErrorDetectingAlgorithms {
     public boolean injectError = false;
-    public CRC(boolean injectError)
-    {
-        this.injectError = injectError ;
-    }
+    public CRC(boolean injectError) { this.injectError = injectError ; }
+    public CRC(){}
 
 
     @Override
@@ -20,15 +18,11 @@ public class CRC extends ErrorDetectingAlgorithms {
     {
         byte[] packetBytes = prevBuilder.build().getRawData();
         byte[] crcBytes =calculateCRC(packetBytes);
-        byte[] packetBytesWithCrc=appendCRCbytes(packetBytes,crcBytes);
+        byte[] packetBytesWithCrc=appendCRCbytes(packetBytes, crcBytes);
 
-        EthernetPacket packetWithCrc = null;
-        try {
-            packetWithCrc = EthernetPacket.newPacket(packetBytesWithCrc,0,packetBytesWithCrc.length);
-        } catch (IllegalRawDataException e) {
-            throw new RuntimeException(e);
-        }
-
+        EthernetPacket packetWithCrc;
+        try { packetWithCrc = EthernetPacket.newPacket(packetBytesWithCrc, 0, packetBytesWithCrc.length); }
+        catch (IllegalRawDataException e) { throw new RuntimeException(e); }
         return packetWithCrc.getBuilder();
     }
     public byte[] calculateCRC(byte[] packetBytes)

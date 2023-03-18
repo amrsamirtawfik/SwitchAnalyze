@@ -6,7 +6,7 @@ import java.net.Inet4Address;
 import java.util.ArrayList;
 
 public class MasterOfHPC {
-    public  ArrayList<MachineNode> childNodes = new ArrayList<MachineNode>();
+    public  ArrayList<MachineNode> childNodes = new ArrayList<>();
     public HPC_INFO hpcInfo;
     public MacAddress HPCMacAddr;
     public Inet4Address HPCIp;
