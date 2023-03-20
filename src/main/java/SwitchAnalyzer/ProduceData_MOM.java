@@ -1,6 +1,7 @@
 package SwitchAnalyzer;
 
 import SwitchAnalyzer.Collectors.MOMConsumer;
+import SwitchAnalyzer.Sockets.JettyWebSocketServer;
 import SwitchAnalyzer.Sockets.UserRequestHandler;
 import SwitchAnalyzer.miscellaneous.JSONConverter;
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ public class ProduceData_MOM
         for (int id : ids)
         {
             json = JSONConverter.toJSON(masterOfMasters.HPCs.get(id).hpcInfo);
-            UserRequestHandler.writeToUser(MainHandler_MOM.server,json.getBytes());
+            JettyWebSocketServer.writeMessage(json);
         }
         if (!MOMConsumer.getResults().isEmpty())
         {
             json = JSONConverter.toJSON(MOMConsumer.getResults());
-            UserRequestHandler.writeToUser(MainHandler_MOM.server, json.getBytes());
+            JettyWebSocketServer.writeMessage(json);
         }
     }
 }
