@@ -1,4 +1,5 @@
 package SwitchAnalyzer.Network;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.packet.Packet;
@@ -41,18 +42,22 @@ public class NormalSender extends Sender implements Runnable
     }
     public void rateSending()
     {
-        long differenceTime=1000/sendingRate;//in milli
+        double differenceTime=1e9/(double)sendingRate;//in milli
         for (int i = 0; i < numPackets; i++)
         {
             try
             {
-                long startTime=System.currentTimeMillis();
+                long startTime=System.nanoTime();
                 PCAP.handle.sendPacket(packet);
-                long endTime =System.currentTimeMillis();
+                long endTime =System.nanoTime();
                 if(sendingRate > 0)
-                Thread.sleep(differenceTime-(endTime-startTime));
+                {
+                    long currTime = System.nanoTime();
+                    while (System.nanoTime() <= currTime+ (differenceTime -(endTime - startTime)));
+                }
+
             }
-            catch (PcapNativeException | NotOpenException | InterruptedException e) { throw new RuntimeException(e); }
+            catch (PcapNativeException | NotOpenException e) { throw new RuntimeException(e); }
         }
     }
 }
