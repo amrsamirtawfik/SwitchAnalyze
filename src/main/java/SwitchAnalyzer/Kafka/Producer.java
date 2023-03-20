@@ -6,7 +6,7 @@ import SwitchAnalyzer.miscellaneous.JSONConverter;
 public class Producer
 {
     GenericProducer producer;
-    public Producer(String ip) { GenericProducer producer = new GenericProducer(ip + ":" + Ports.port1); }
+    public Producer(String ip) {  producer = new GenericProducer(ip + ":" + Ports.port1); }
     public void produce(String o, String topic)
     {
         producer.send(topic,o);

@@ -45,12 +45,12 @@ public class SystemMaps
         MasterOfHPC master1 = new MasterOfHPC(0);
         MasterOfHPC master2 = new MasterOfHPC(1);
         GlobalVariable.portHpcMap.put(1, master1);
-        GlobalVariable.portHpcMap.put(2, master1);
+        GlobalVariable.portHpcMap.put(2, master2);
 
         master1.childNodes.add(new MachineNode(0));
-        master1.childNodes.add(new MachineNode(1));
+//        master1.childNodes.add(new MachineNode(1));
         master2.childNodes.add(new MachineNode(0));
-        master2.childNodes.add(new MachineNode(1));
+//        master2.childNodes.add(new MachineNode(1));
 
         MainHandler_MOM.masterOfMasters = new MOM();
         MainHandler_MOM.masterOfMasters.HPCs.add(master1);
