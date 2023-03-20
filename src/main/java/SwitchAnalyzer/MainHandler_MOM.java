@@ -32,11 +32,15 @@ public class MainHandler_MOM
     public static void main(String[] args)
     {
         init();
-        while (commands.peek() == null)
+        while(true)
         {
-            x++;
+            while (commands.peek() == null)
+            {
+                x++;
+            }
+            ICommand c = commands.poll();
+            ProcessCmd.processCmd(c);
         }
-        ICommand c = commands.poll();
-        ProcessCmd.processCmd(c);
+
     }
 }
