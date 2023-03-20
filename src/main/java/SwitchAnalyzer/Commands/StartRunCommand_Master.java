@@ -19,6 +19,7 @@ public class StartRunCommand_Master extends ICommandMaster
     public StartRunCommand_Master(SwitchPortPair portPair)
     {
         this.portPair = portPair ;
+        this.portID = portPair.fromPort.ID;
     }
 
     @Override
